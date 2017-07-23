@@ -1,5 +1,8 @@
 ﻿namespace VideoManager.Enums
 {
+    /// <summary>
+    /// Действия камеры
+    /// </summary>
     public enum CAM_ACTION
     {
         CHECKIN,
