@@ -1,5 +1,8 @@
 ﻿namespace VideoManager.Enums
 {
+    /// <summary>
+    /// Действия лога
+    /// </summary>
     public enum LOG_ACTION
     {
         LOGON,

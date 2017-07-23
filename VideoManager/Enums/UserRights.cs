@@ -2,6 +2,9 @@
 
 namespace VideoManager.Enums
 {
+    /// <summary>
+    /// Пользовательские права
+    /// </summary>
     [Flags]
     public enum UserRights
     {
