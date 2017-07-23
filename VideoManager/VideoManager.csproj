@@ -46,15 +46,71 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\CAM_ACTION.cs" />
+    <Compile Include="Enums\EmailType.cs" />
+    <Compile Include="Enums\HASH_ALGORITHM.cs" />
+    <Compile Include="Enums\INV_ACTION.cs" />
+    <Compile Include="Enums\LOG_ACTION.cs" />
+    <Compile Include="Enums\SECURITY.cs" />
+    <Compile Include="Enums\SYSTEM_ROLE.cs" />
+    <Compile Include="Enums\UserRights.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\FIleCamera.cs" />
-    <Compile Include="Model\SearchFileDate.cs" />
-    <Compile Include="Model\VideoFile.cs" />
+    <Compile Include="Model\Account\Account.cs" />
+    <Compile Include="Model\Account\AccountAccountGroup.cs" />
+    <Compile Include="Model\Account\AccountGroup.cs" />
+    <Compile Include="Model\Account\AccountLog.cs" />
+    <Compile Include="Model\AlertEmail.cs" />
+    <Compile Include="Model\Alias.cs" />
+    <Compile Include="Model\AppExt.cs" />
+    <Compile Include="Model\Camera\CameraFolder.cs" />
+    <Compile Include="Model\Camera\CameraLog.cs" />
+    <Compile Include="Model\Case\Case.cs" />
+    <Compile Include="Model\Case\CaseAddress.cs" />
+    <Compile Include="Model\Case\CaseMemo.cs" />
+    <Compile Include="Model\Case\CaseMetaData.cs" />
+    <Compile Include="Model\Case\CaseVehicles.cs" />
+    <Compile Include="Model\CatalogFilter.cs" />
+    <Compile Include="Model\Classification.cs" />
+    <Compile Include="Model\Country.cs" />
+    <Compile Include="Model\DataFile.cs" />
+    <Compile Include="Model\DBProfileData.cs" />
+    <Compile Include="Model\Department.cs" />
+    <Compile Include="Model\DFClass.cs" />
+    <Compile Include="Model\DomainConfig.cs" />
+    <Compile Include="Model\Evidence.cs" />
+    <Compile Include="Model\File\FileExt.cs" />
+    <Compile Include="Model\File\FileMemo.cs" />
+    <Compile Include="Model\File\FileType.cs" />
+    <Compile Include="Model\GlobalConfig.cs" />
+    <Compile Include="Model\Incident.cs" />
+    <Compile Include="Model\Inventory\Inventory.cs" />
+    <Compile Include="Model\Inventory\InventoryLog.cs" />
+    <Compile Include="Model\License.cs" />
+    <Compile Include="Model\Manufacturer.cs" />
+    <Compile Include="Model\MetaData.cs" />
+    <Compile Include="Model\Person\Person.cs" />
+    <Compile Include="Model\Person\PersonAddress.cs" />
+    <Compile Include="Model\Person\PersonMemo.cs" />
+    <Compile Include="Model\Person\PersonRole.cs" />
+    <Compile Include="Model\Person\PersonVehicle.cs" />
+    <Compile Include="Model\Inventory\Product.cs" />
+    <Compile Include="Model\Race.cs" />
+    <Compile Include="Model\RedactedVideo.cs" />
+    <Compile Include="Model\Report.cs" />
+    <Compile Include="Model\RightsProfile.cs" />
+    <Compile Include="Model\RMA.cs" />
+    <Compile Include="Model\Snapshot.cs" />
+    <Compile Include="Model\StateProvince.cs" />
+    <Compile Include="Model\Substation.cs" />
+    <Compile Include="Model\SysDiagram.cs" />
+    <Compile Include="Model\SystemLog.cs" />
+    <Compile Include="Model\UserRank.cs" />
+    <Compile Include="Model\VideoTag.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
