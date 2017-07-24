@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace VideoManager.Model
 {
-    class Manufacturer
+    public class Manufacturer
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

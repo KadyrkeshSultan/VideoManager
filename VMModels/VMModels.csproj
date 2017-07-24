@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{447DDD44-3D68-44EC-822B-4242E66E9924}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VMModels</RootNamespace>
+    <AssemblyName>VMModels</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enums\CAM_ACTION.cs" />
+    <Compile Include="Enums\EmailType.cs" />
+    <Compile Include="Enums\HASH_ALGORITHM.cs" />
+    <Compile Include="Enums\INV_ACTION.cs" />
+    <Compile Include="Enums\LOG_ACTION.cs" />
+    <Compile Include="Enums\SECURITY.cs" />
+    <Compile Include="Enums\SYSTEM_ROLE.cs" />
+    <Compile Include="Enums\UserRights.cs" />
+    <Compile Include="Model\Account\Account.cs" />
+    <Compile Include="Model\Account\AccountAccountGroup.cs" />
+    <Compile Include="Model\Account\AccountGroup.cs" />
+    <Compile Include="Model\Account\AccountLog.cs" />
+    <Compile Include="Model\AlertEmail.cs" />
+    <Compile Include="Model\Alias.cs" />
+    <Compile Include="Model\AppExt.cs" />
+    <Compile Include="Model\Camera\CameraFolder.cs" />
+    <Compile Include="Model\Camera\CameraLog.cs" />
+    <Compile Include="Model\Case\Case.cs" />
+    <Compile Include="Model\Case\CaseAddress.cs" />
+    <Compile Include="Model\Case\CaseMemo.cs" />
+    <Compile Include="Model\Case\CaseMetaData.cs" />
+    <Compile Include="Model\Case\CaseVehicles.cs" />
+    <Compile Include="Model\CatalogFilter.cs" />
+    <Compile Include="Model\Classification.cs" />
+    <Compile Include="Model\Country.cs" />
+    <Compile Include="Model\DataFile.cs" />
+    <Compile Include="Model\DBProfileData.cs" />
+    <Compile Include="Model\Department.cs" />
+    <Compile Include="Model\DFClass.cs" />
+    <Compile Include="Model\DomainConfig.cs" />
+    <Compile Include="Model\Evidence.cs" />
+    <Compile Include="Model\File\FileExt.cs" />
+    <Compile Include="Model\File\FileMemo.cs" />
+    <Compile Include="Model\File\FileType.cs" />
+    <Compile Include="Model\GlobalConfig.cs" />
+    <Compile Include="Model\Incident.cs" />
+    <Compile Include="Model\Inventory\Inventory.cs" />
+    <Compile Include="Model\Inventory\InventoryLog.cs" />
+    <Compile Include="Model\Inventory\Product.cs" />
+    <Compile Include="Model\License.cs" />
+    <Compile Include="Model\Manufacturer.cs" />
+    <Compile Include="Model\MetaData.cs" />
+    <Compile Include="Model\Person\Person.cs" />
+    <Compile Include="Model\Person\PersonAddress.cs" />
+    <Compile Include="Model\Person\PersonMemo.cs" />
+    <Compile Include="Model\Person\PersonRole.cs" />
+    <Compile Include="Model\Person\PersonVehicle.cs" />
+    <Compile Include="Model\Race.cs" />
+    <Compile Include="Model\RedactedVideo.cs" />
+    <Compile Include="Model\Report.cs" />
+    <Compile Include="Model\RightsProfile.cs" />
+    <Compile Include="Model\RMA.cs" />
+    <Compile Include="Model\Snapshot.cs" />
+    <Compile Include="Model\StateProvince.cs" />
+    <Compile Include="Model\Substation.cs" />
+    <Compile Include="Model\SysDiagram.cs" />
+    <Compile Include="Model\SystemLog.cs" />
+    <Compile Include="Model\UserRank.cs" />
+    <Compile Include="Model\VideoTag.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

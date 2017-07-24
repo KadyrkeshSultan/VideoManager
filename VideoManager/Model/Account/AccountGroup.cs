@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace VideoManager.Model
 {
-    class AccountGroup
+    public class AccountGroup
     {
         public Guid Id { get; set; }
 

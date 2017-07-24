@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class Classification
+    public class Classification
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

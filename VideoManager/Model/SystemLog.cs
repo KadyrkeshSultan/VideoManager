@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class SystemLog
+    public class SystemLog
     {
         public Guid Id { get; set; }
         public DateTime? LogTimestamp { get; set; }

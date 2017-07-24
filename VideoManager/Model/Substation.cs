@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class Substation
+    public class Substation
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

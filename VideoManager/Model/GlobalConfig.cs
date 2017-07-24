@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class GlobalConfig
+    public class GlobalConfig
     {
         public Guid Id { get; set; }
         public string Key { get; set; }

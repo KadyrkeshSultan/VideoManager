@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class CaseMetaData
+    public class CaseMetaData
     {
         public Guid Id { get; set; }
         public string DataType { get; set; }

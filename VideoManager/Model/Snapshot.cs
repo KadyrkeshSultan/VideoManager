@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class Snapshot
+    public class Snapshot
     {
         public Guid Id { get; set; }
         public Guid DataField { get; set; }

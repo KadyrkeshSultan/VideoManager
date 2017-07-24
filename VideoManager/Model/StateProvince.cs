@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class StateProvince
+    public class StateProvince
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

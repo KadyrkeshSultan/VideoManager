@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class Report
+    public class Report
     {
         public Guid Id { get; set; }
         public bool IsEnabled { get; set; }

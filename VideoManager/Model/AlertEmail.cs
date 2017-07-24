@@ -3,7 +3,7 @@ using VideoManager.Enums;
 
 namespace VideoManager.Model
 {
-    class AlertEmail
+    public class AlertEmail
     {
         public Guid Id { get; set; }
         public bool IsEnabled { get; set; }

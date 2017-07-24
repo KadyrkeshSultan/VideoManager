@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class VideoTag
+    public class VideoTag
     {
         public Guid Id { get; set; }
         public long StartFrame { get; set; }

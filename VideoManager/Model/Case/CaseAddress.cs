@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class CaseAddress
+    public class CaseAddress
     {
         public Guid Id { get; set; }
         public bool IsPrimary { get; set; }

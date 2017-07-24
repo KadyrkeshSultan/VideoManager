@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class RedactedVideo
+    public class RedactedVideo
     {
         public Guid Id { get; set; }
         public Guid ParentID { get; set; }

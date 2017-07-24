@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class PersonMemo
+    public class PersonMemo
     {
         public Guid Id { get; set; }
         public Guid AccountId { get; set; }
