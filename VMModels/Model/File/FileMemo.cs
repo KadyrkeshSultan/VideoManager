@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class FileMemo
+    public class FileMemo
     {
         public Guid Id { get; set; }
         public string AccountName { get; set; }

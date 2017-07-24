@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class AccountLog
+    public class AccountLog
     {
         public Guid Id { get; set; }
         public Guid? AccountId { get; set; }

@@ -1,9 +1,9 @@
 ﻿using System;
 using VMModels.Enums;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class InventoryLog
+    public class InventoryLog
     {
         public Guid Id { get; set; }
         public Guid InvIdx { get; set; }

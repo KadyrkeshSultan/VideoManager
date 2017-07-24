@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class SysDiagram
+    public class SysDiagram
     {
         public string Id { get; set; }
         public DateTime LogTimestamp { get; set; }

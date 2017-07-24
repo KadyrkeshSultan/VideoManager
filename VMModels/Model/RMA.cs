@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class RMA
+    public class RMA
     {
         public Guid Id { get; set; }
         public string RMA_Number { get; set; }

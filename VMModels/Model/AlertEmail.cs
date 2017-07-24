@@ -1,9 +1,9 @@
 ﻿using System;
 using VMModels.Enums;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class AlertEmail
+    public class AlertEmail
     {
         public Guid Id { get; set; }
         public bool IsEnabled { get; set; }

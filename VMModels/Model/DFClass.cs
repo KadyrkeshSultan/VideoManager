@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class DFClass
+    public class DFClass
     {
         public Guid Id { get; set; }
         public Guid DataFieldId { get; set; }

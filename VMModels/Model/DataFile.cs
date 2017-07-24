@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using VMModels.Enums;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class DataFile
+    public class DataFile
     {
         public Guid Id { get; set; }
         public Guid AccountId { get; set; }

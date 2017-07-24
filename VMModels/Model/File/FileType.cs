@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class FileType
+    public class FileType
     {
         public Guid Id { get; set; }
         public string FileExt { get; set; }

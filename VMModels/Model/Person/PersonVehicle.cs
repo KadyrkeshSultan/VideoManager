@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class PersonVehicle
+    public class PersonVehicle
     {
         public Guid Id { get; set; }
         public string Make { get; set; }

@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6CC85F9F-A0E7-4DED-9E09-22DEC6D2CB5C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>VMInterfaces</RootNamespace>
+    <AssemblyName>VMInterfaces</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Interfaces\IAccount.cs" />
+    <Compile Include="Interfaces\IAccountGroup.cs" />
+    <Compile Include="Interfaces\IAlertEmail.cs" />
+    <Compile Include="Interfaces\IAppExt.cs" />
+    <Compile Include="Interfaces\IAsset.cs" />
+    <Compile Include="Interfaces\IAssets.cs" />
+    <Compile Include="Interfaces\ICamera.cs" />
+    <Compile Include="Interfaces\ICameraLog.cs" />
+    <Compile Include="Interfaces\IDataFiles.cs" />
+    <Compile Include="Interfaces\IDepartment.cs" />
+    <Compile Include="Interfaces\IDomainConfig.cs" />
+    <Compile Include="Interfaces\IFileExt.cs" />
+    <Compile Include="Interfaces\IFileType.cs" />
+    <Compile Include="Interfaces\IGeneralData.cs" />
+    <Compile Include="Interfaces\IGlobalConfig.cs" />
+    <Compile Include="Interfaces\IGroups.cs" />
+    <Compile Include="Interfaces\ILicense.cs" />
+    <Compile Include="Interfaces\ILogs.cs" />
+    <Compile Include="Interfaces\IProduct.cs" />
+    <Compile Include="Interfaces\IRightsProfile.cs" />
+    <Compile Include="Interfaces\ISnapshot.cs" />
+    <Compile Include="Interfaces\IUserRank.cs" />
+    <Compile Include="Interfaces\IVideoTag.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VMModels\VMModels.csproj">
+      <Project>{e29bf9ba-3e01-4e3c-9c28-b517075ce0b6}</Project>
+      <Name>VMModels</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

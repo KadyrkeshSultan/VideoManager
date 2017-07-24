@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class AppExt
+    public class AppExt
     {
         public Guid Id { get; set; }
         public string Ext { get; set; }

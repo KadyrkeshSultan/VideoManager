@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class Case
+    public class Case
     {
         public Guid Id { get; set; }
         public Guid Classification { get; set; }

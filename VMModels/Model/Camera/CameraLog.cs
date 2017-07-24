@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
     /// <summary>
     /// Класс для логирования действия камеры
     /// </summary>
-    class CameraLog
+    public class CameraLog
     {
         public Guid Id { get; set; }
 
