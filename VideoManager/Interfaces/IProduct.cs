@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VideoManager.Enums;
 using VideoManager.Model;
 
 namespace VideoManager.Interfaces

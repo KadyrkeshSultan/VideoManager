@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VideoManager.Model.Case
+namespace VideoManager.Model
 {
     class Case
     {
