@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class FileType
+    public class FileType
     {
         public Guid Id { get; set; }
         public string FileExt { get; set; }

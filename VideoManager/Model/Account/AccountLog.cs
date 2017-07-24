@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class AccountLog
+    public class AccountLog
     {
         public Guid Id { get; set; }
         public Guid? AccountId { get; set; }

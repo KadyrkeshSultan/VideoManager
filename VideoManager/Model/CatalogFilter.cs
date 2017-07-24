@@ -3,7 +3,7 @@ using VideoManager.Enums;
 
 namespace VideoManager.Model
 {
-    class CatalogFilter
+    public class CatalogFilter
     {
         public Guid Id { get; set; }
         public DateTime StartDate { get; set; }

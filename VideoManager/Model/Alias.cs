@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class Alias
+    public class Alias
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

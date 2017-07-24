@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class SysDiagram
+    public class SysDiagram
     {
         public string Id { get; set; }
         public DateTime LogTimestamp { get; set; }

@@ -5,7 +5,7 @@ using VideoManager.Enums;
 
 namespace VideoManager.Model
 {
-    class Account
+    public class Account
     {
         public Guid Id { get; set; }
         /// <summary>

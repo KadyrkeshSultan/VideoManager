@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class CameraFolder
+    public class CameraFolder
     {
         public Guid Id { get; set; }
 

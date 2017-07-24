@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class CaseVehicles
+    public class CaseVehicles
     {
         public Guid Id { get; set; }
         public string Make { get; set; }

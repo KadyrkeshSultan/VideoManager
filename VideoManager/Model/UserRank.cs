@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace VideoManager.Model
 {
-    class UserRank
+    public class UserRank
     {
         public Guid Id { get; set; }
         public string Rank { get; set; }

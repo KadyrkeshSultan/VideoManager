@@ -2,7 +2,7 @@
 
 namespace VideoManager.Model
 {
-    class Inventory
+    public class Inventory
     {
         public Guid Id { get; set; }
         public string TrackingID { get; set; }
