@@ -60,6 +60,29 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interfaces\IAccount.cs" />
+    <Compile Include="Interfaces\IAccountGroup.cs" />
+    <Compile Include="Interfaces\IAlertEmail.cs" />
+    <Compile Include="Interfaces\IAppExt.cs" />
+    <Compile Include="Interfaces\IAsset.cs" />
+    <Compile Include="Interfaces\IAssets.cs" />
+    <Compile Include="Interfaces\ICamera.cs" />
+    <Compile Include="Interfaces\ICameraLog.cs" />
+    <Compile Include="Interfaces\IDataFiles.cs" />
+    <Compile Include="Interfaces\IDepartment.cs" />
+    <Compile Include="Interfaces\IDomainConfig.cs" />
+    <Compile Include="Interfaces\IFileExt.cs" />
+    <Compile Include="Interfaces\IFileType.cs" />
+    <Compile Include="Interfaces\IGeneralData.cs" />
+    <Compile Include="Interfaces\IGlobalConfig.cs" />
+    <Compile Include="Interfaces\IGroups.cs" />
+    <Compile Include="Interfaces\ILicense.cs" />
+    <Compile Include="Interfaces\ILogs.cs" />
+    <Compile Include="Interfaces\IProduct.cs" />
+    <Compile Include="Interfaces\IRightsProfile.cs" />
+    <Compile Include="Interfaces\ISnapshot.cs" />
+    <Compile Include="Interfaces\IUserRank.cs" />
+    <Compile Include="Interfaces\IVideoTag.cs" />
     <Compile Include="Model\Account\Account.cs" />
     <Compile Include="Model\Account\AccountAccountGroup.cs" />
     <Compile Include="Model\Account\AccountGroup.cs" />
