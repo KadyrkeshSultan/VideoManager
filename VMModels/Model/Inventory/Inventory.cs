@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class Inventory
+    public class Inventory
     {
         public Guid Id { get; set; }
         public string TrackingID { get; set; }

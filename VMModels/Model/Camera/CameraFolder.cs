@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class CameraFolder
+    public class CameraFolder
     {
         public Guid Id { get; set; }
 

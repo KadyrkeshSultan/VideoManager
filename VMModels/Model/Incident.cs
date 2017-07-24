@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class Incident
+    public class Incident
     {
         public Guid Id { get; set; }
         public string Address { get; set; }

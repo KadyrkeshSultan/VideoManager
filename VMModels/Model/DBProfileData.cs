@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
     [Serializable]
-    class DBProfileData
+    public class DBProfileData
     {
         public string DefaultDBName { get; set; }
         public bool IsLocalDB { get; set; }

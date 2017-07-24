@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class Product
+    public class Product
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace VMModels
+﻿namespace VMModels.Model
 {
     public class AccountAccountGroup
     {

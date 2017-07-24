@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class RightsProfile
+    public class RightsProfile
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

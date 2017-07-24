@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class MetaData
+    public class MetaData
     {
         public Guid Id { get; set; }
         public string DataType { get; set; }

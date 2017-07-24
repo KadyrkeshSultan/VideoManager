@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class VideoTag
+    public class VideoTag
     {
         public Guid Id { get; set; }
         public long StartFrame { get; set; }

@@ -46,94 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enums\CAM_ACTION.cs" />
-    <Compile Include="Enums\EmailType.cs" />
-    <Compile Include="Enums\HASH_ALGORITHM.cs" />
-    <Compile Include="Enums\INV_ACTION.cs" />
-    <Compile Include="Enums\LOG_ACTION.cs" />
-    <Compile Include="Enums\SECURITY.cs" />
-    <Compile Include="Enums\SYSTEM_ROLE.cs" />
-    <Compile Include="Enums\UserRights.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Interfaces\IAccount.cs" />
-    <Compile Include="Interfaces\IAccountGroup.cs" />
-    <Compile Include="Interfaces\IAlertEmail.cs" />
-    <Compile Include="Interfaces\IAppExt.cs" />
-    <Compile Include="Interfaces\IAsset.cs" />
-    <Compile Include="Interfaces\IAssets.cs" />
-    <Compile Include="Interfaces\ICamera.cs" />
-    <Compile Include="Interfaces\ICameraLog.cs" />
-    <Compile Include="Interfaces\IDataFiles.cs" />
-    <Compile Include="Interfaces\IDepartment.cs" />
-    <Compile Include="Interfaces\IDomainConfig.cs" />
-    <Compile Include="Interfaces\IFileExt.cs" />
-    <Compile Include="Interfaces\IFileType.cs" />
-    <Compile Include="Interfaces\IGeneralData.cs" />
-    <Compile Include="Interfaces\IGlobalConfig.cs" />
-    <Compile Include="Interfaces\IGroups.cs" />
-    <Compile Include="Interfaces\ILicense.cs" />
-    <Compile Include="Interfaces\ILogs.cs" />
-    <Compile Include="Interfaces\IProduct.cs" />
-    <Compile Include="Interfaces\IRightsProfile.cs" />
-    <Compile Include="Interfaces\ISnapshot.cs" />
-    <Compile Include="Interfaces\IUserRank.cs" />
-    <Compile Include="Interfaces\IVideoTag.cs" />
-    <Compile Include="Model\Account\Account.cs" />
-    <Compile Include="Model\Account\AccountAccountGroup.cs" />
-    <Compile Include="Model\Account\AccountGroup.cs" />
-    <Compile Include="Model\Account\AccountLog.cs" />
-    <Compile Include="Model\AlertEmail.cs" />
-    <Compile Include="Model\Alias.cs" />
-    <Compile Include="Model\AppExt.cs" />
-    <Compile Include="Model\Camera\CameraFolder.cs" />
-    <Compile Include="Model\Camera\CameraLog.cs" />
-    <Compile Include="Model\Case\Case.cs" />
-    <Compile Include="Model\Case\CaseAddress.cs" />
-    <Compile Include="Model\Case\CaseMemo.cs" />
-    <Compile Include="Model\Case\CaseMetaData.cs" />
-    <Compile Include="Model\Case\CaseVehicles.cs" />
-    <Compile Include="Model\CatalogFilter.cs" />
-    <Compile Include="Model\Classification.cs" />
-    <Compile Include="Model\Country.cs" />
-    <Compile Include="Model\DataFile.cs" />
-    <Compile Include="Model\DBProfileData.cs" />
-    <Compile Include="Model\Department.cs" />
-    <Compile Include="Model\DFClass.cs" />
-    <Compile Include="Model\DomainConfig.cs" />
-    <Compile Include="Model\Evidence.cs" />
-    <Compile Include="Model\File\FileExt.cs" />
-    <Compile Include="Model\File\FileMemo.cs" />
-    <Compile Include="Model\File\FileType.cs" />
-    <Compile Include="Model\GlobalConfig.cs" />
-    <Compile Include="Model\Incident.cs" />
-    <Compile Include="Model\Inventory\Inventory.cs" />
-    <Compile Include="Model\Inventory\InventoryLog.cs" />
-    <Compile Include="Model\License.cs" />
-    <Compile Include="Model\Manufacturer.cs" />
-    <Compile Include="Model\MetaData.cs" />
-    <Compile Include="Model\Person\Person.cs" />
-    <Compile Include="Model\Person\PersonAddress.cs" />
-    <Compile Include="Model\Person\PersonMemo.cs" />
-    <Compile Include="Model\Person\PersonRole.cs" />
-    <Compile Include="Model\Person\PersonVehicle.cs" />
-    <Compile Include="Model\Inventory\Product.cs" />
-    <Compile Include="Model\Race.cs" />
-    <Compile Include="Model\RedactedVideo.cs" />
-    <Compile Include="Model\Report.cs" />
-    <Compile Include="Model\RightsProfile.cs" />
-    <Compile Include="Model\RMA.cs" />
-    <Compile Include="Model\Snapshot.cs" />
-    <Compile Include="Model\StateProvince.cs" />
-    <Compile Include="Model\Substation.cs" />
-    <Compile Include="Model\SysDiagram.cs" />
-    <Compile Include="Model\SystemLog.cs" />
-    <Compile Include="Model\UserRank.cs" />
-    <Compile Include="Model\VideoTag.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -157,6 +75,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VMInterfaces\VMInterfaces.csproj">
+      <Project>{6cc85f9f-a0e7-4ded-9e09-22dec6d2cb5c}</Project>
+      <Name>VMInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VMModels\VMModels.csproj">
+      <Project>{e29bf9ba-3e01-4e3c-9c28-b517075ce0b6}</Project>
+      <Name>VMModels</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

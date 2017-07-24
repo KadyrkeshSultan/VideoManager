@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using VMModels.Enums;
 
-namespace VMModels
+namespace VMModels.Model
 {
     public class Account
     {

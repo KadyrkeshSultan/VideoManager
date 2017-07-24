@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class DomainConfig
+    public class DomainConfig
     {
         public Guid Id { get; set; }
         public bool IsEnabled { get; set; }

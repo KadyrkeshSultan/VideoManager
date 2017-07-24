@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class PersonAddress
+    public class PersonAddress
     {
         public Guid Id { get; set; }
         public bool IsPrimary { get; set; }

@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace VMModels
+namespace VMModels.Model
 {
-    class AccountGroup
+    public class AccountGroup
     {
         public Guid Id { get; set; }
 
