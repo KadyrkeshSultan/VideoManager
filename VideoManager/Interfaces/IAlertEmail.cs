@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using VideoManager.Enums;
 using VideoManager.Model;
 
-namespace DAL
+namespace VideoManager.Interface
 {
     interface IAlertEmail : IDisposable
     {
