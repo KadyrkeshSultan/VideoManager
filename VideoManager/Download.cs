@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace VideoManager
@@ -8,6 +10,7 @@ namespace VideoManager
         private string FolderPath;
         private bool IsCancel;
         private DateTime StartTimestamp;
+        private Stopwatch stopwatch;
         private int FileCount;
         private string CameraDriveID;
         private Label lbl_DL_FileName;
@@ -25,11 +28,21 @@ namespace VideoManager
         public Guid Account_ID { get; set; }
 
 
-        public Download(string path, Guid accountId)
+        public Download(string path, Guid accountid)
         {
-            InitializeComponent();
             this.FolderPath = string.Empty;
             this.CameraDriveID = string.Empty;
+            InitializeComponent();
+            this.stopwatch = new Stopwatch();
+            this.stopwatch.Start();
+            this.StartTimestamp = DateTime.Now;
+
+            try
+            {
+                Guid accountId = new Assets().GetAccountID(Path.GetPathRoot(path));
+                this.Account_ID = !(accountId != Guid.Empty) ? accountid : accountId;
+                this.FolderPath = path;
+            }
         }
     }
 }

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Management;
-using VMInterfaces;
-using VMModels.Model;
-
 namespace VideoManager
 {
     public partial class Form1 : Form
     {
         private ManagementEventWatcher watcher = null;
-
+        
         public Form1()
         {
             InitializeComponent();

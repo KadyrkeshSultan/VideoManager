@@ -6,7 +6,7 @@ namespace VMModels.Model
     {
         public Guid Id { get; set; }
         public string AccountName { get; set; }
-        public string BudgeNumber { get; set; }
+        public string BadgeNumber { get; set; }
         public DateTime? Timestamp { get; set; }
         public string ShortDesc { get; set; }
         public string Memo { get; set; }

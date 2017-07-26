@@ -46,7 +46,7 @@ namespace VMModels.Model
         /// <summary>
         /// Номер жетона
         /// </summary>
-        public string BudgeNumber { get; set; }
+        public string BadgeNumber { get; set; }
 
         /// <summary>
         /// Количество заряда
