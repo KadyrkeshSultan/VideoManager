@@ -61,7 +61,7 @@
     <Compile Include="Model\Case\CaseAddress.cs" />
     <Compile Include="Model\Case\CaseMemo.cs" />
     <Compile Include="Model\Case\CaseMetaData.cs" />
-    <Compile Include="Model\Case\CaseVehicles.cs" />
+    <Compile Include="Model\Case\CaseVehicle.cs" />
     <Compile Include="Model\CatalogFilter.cs" />
     <Compile Include="Model\Classification.cs" />
     <Compile Include="Model\Country.cs" />

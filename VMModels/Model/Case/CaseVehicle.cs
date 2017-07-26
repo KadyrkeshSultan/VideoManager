@@ -2,7 +2,7 @@
 
 namespace VMModels.Model
 {
-    public class CaseVehicles
+    public class CaseVehicle
     {
         public Guid Id { get; set; }
         public string Make { get; set; }

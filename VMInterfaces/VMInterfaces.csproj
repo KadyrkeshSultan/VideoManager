@@ -30,8 +30,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,6 +51,54 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionTools.cs" />
+    <Compile Include="Entity_Configs\CFG_Account.cs" />
+    <Compile Include="Entity_Configs\CFG_AccountGroup.cs" />
+    <Compile Include="Entity_Configs\CFG_AccountLog.cs" />
+    <Compile Include="Entity_Configs\CFG_AlertEmail.cs" />
+    <Compile Include="Entity_Configs\CFG_Alias.cs" />
+    <Compile Include="Entity_Configs\CFG_AppExt.cs" />
+    <Compile Include="Entity_Configs\CFG_CameraFolder.cs" />
+    <Compile Include="Entity_Configs\CFG_CameraLog.cs" />
+    <Compile Include="Entity_Configs\CFG_Case.cs" />
+    <Compile Include="Entity_Configs\CFG_CaseAddress.cs" />
+    <Compile Include="Entity_Configs\CFG_CaseMemo.cs" />
+    <Compile Include="Entity_Configs\CFG_CaseMetaData.cs" />
+    <Compile Include="Entity_Configs\CFG_CaseVehicle.cs" />
+    <Compile Include="Entity_Configs\CFG_Classification.cs" />
+    <Compile Include="Entity_Configs\CFG_Country.cs" />
+    <Compile Include="Entity_Configs\CFG_DataFile.cs" />
+    <Compile Include="Entity_Configs\CFG_Department.cs" />
+    <Compile Include="Entity_Configs\CFG_DFClass.cs" />
+    <Compile Include="Entity_Configs\CFG_DomainConfig.cs" />
+    <Compile Include="Entity_Configs\CFG_Evidence.cs" />
+    <Compile Include="Entity_Configs\CFG_FileExt.cs" />
+    <Compile Include="Entity_Configs\CFG_FileMemo.cs" />
+    <Compile Include="Entity_Configs\CFG_FileType.cs" />
+    <Compile Include="Entity_Configs\CFG_GlobalConfig.cs" />
+    <Compile Include="Entity_Configs\CFG_Incident.cs" />
+    <Compile Include="Entity_Configs\CFG_Inventory.cs" />
+    <Compile Include="Entity_Configs\CFG_InventoryLog.cs" />
+    <Compile Include="Entity_Configs\CFG_License.cs" />
+    <Compile Include="Entity_Configs\CFG_Manufacturer.cs" />
+    <Compile Include="Entity_Configs\CFG_MetaData.cs" />
+    <Compile Include="Entity_Configs\CFG_Person.cs" />
+    <Compile Include="Entity_Configs\CFG_PersonAddress.cs" />
+    <Compile Include="Entity_Configs\CFG_PersonMemo.cs" />
+    <Compile Include="Entity_Configs\CFG_PersonRole.cs" />
+    <Compile Include="Entity_Configs\CFG_PersonVehicle.cs" />
+    <Compile Include="Entity_Configs\CFG_Product.cs" />
+    <Compile Include="Entity_Configs\CFG_Race.cs" />
+    <Compile Include="Entity_Configs\CFG_RedactedVideo.cs" />
+    <Compile Include="Entity_Configs\CFG_Report.cs" />
+    <Compile Include="Entity_Configs\CFG_RightsProfile.cs" />
+    <Compile Include="Entity_Configs\CFG_RMA.cs" />
+    <Compile Include="Entity_Configs\CFG_Snapshot.cs" />
+    <Compile Include="Entity_Configs\CFG_StateProvince.cs" />
+    <Compile Include="Entity_Configs\CFG_Substation.cs" />
+    <Compile Include="Entity_Configs\CFG_SystemLog.cs" />
+    <Compile Include="Entity_Configs\CFG_UserRank.cs" />
+    <Compile Include="Entity_Configs\CFG_VideoTag.cs" />
     <Compile Include="Interfaces\IAccount.cs" />
     <Compile Include="Interfaces\IAccountGroup.cs" />
     <Compile Include="Interfaces\IAlertEmail.cs" />
@@ -64,13 +123,24 @@
     <Compile Include="Interfaces\IUserRank.cs" />
     <Compile Include="Interfaces\IVideoTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VMContext.cs" />
+    <Compile Include="VMGlobal.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Unity\Unity.csproj">
+      <Project>{52730ad8-14b1-4d0f-8eed-a9aa18fc5cbb}</Project>
+      <Name>Unity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VMModels\VMModels.csproj">
       <Project>{e29bf9ba-3e01-4e3c-9c28-b517075ce0b6}</Project>
       <Name>VMModels</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
