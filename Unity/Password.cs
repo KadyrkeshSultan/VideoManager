@@ -1,0 +1,6 @@
+﻿namespace Unity
+{
+    class Password
+    {
+    }
+}
