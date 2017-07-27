@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Unity;
 using VMModels.Model;
 
@@ -66,6 +61,30 @@ namespace VMInterfaces
         public static void SetTestConnection(string conn)
         {
             VMGlobal.DBConnectionProfile = conn;
+        }
+
+        /// <summary>
+        /// Действия лога
+        /// </summary>
+        public enum LOG_ACTION
+        {
+            LOGON,
+            LOGOUT,
+            LOGON_FAILED,
+            LOGON_COUNT,
+            LIST,
+            VIEW,
+            SAVE,
+            UPDATE,
+            DELETE,
+            VIDEO,
+            IMAGE,
+            DVD,
+            EXPORT,
+            UPLOAD,
+            CODE_ERROR,
+            SYSTEM_ERROR,
+            PASSWORD,
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Infrastructure.Annotations;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq.Expressions;
 using VMModels.Model;
 
 namespace VMInterfaces.Entity_Configs
@@ -15,7 +12,7 @@ namespace VMInterfaces.Entity_Configs
             Property(dataFile => dataFile.UNCName).IsRequired().HasMaxLength(new int?(256));
             Property(dataFile => dataFile.UNCPath).IsRequired().HasMaxLength(new int?(256));
             Property(dataFile => dataFile.OriginalFileName).IsRequired().HasMaxLength(new int?(128));
-            Property(dataFile => dataFile.FileExtension1).IsRequired().HasMaxLength(new int?(8));
+            Property(dataFile => dataFile.FileExtension).IsRequired().HasMaxLength(new int?(8));
             Property(dataFile => dataFile.FileExtension2).HasMaxLength(new int?(8));
             Property(dataFile => dataFile.Thumbnail).HasColumnType("CFG_DataFile_unknown1");
             Property(dataFile => dataFile.GPS).HasMaxLength(new int?(64));
