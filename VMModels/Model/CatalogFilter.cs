@@ -5,7 +5,7 @@ namespace VMModels.Model
 {
     public class CatalogFilter
     {
-        public Guid Id { get; set; }
+        public Guid AccountID { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Classification { get; set; }

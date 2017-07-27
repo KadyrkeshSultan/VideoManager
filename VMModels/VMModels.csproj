@@ -44,7 +44,6 @@
     <Compile Include="Enums\EmailType.cs" />
     <Compile Include="Enums\HASH_ALGORITHM.cs" />
     <Compile Include="Enums\INV_ACTION.cs" />
-    <Compile Include="Enums\LOG_ACTION.cs" />
     <Compile Include="Enums\SECURITY.cs" />
     <Compile Include="Enums\SYSTEM_ROLE.cs" />
     <Compile Include="Enums\UserRights.cs" />

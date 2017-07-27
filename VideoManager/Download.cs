@@ -43,6 +43,10 @@ namespace VideoManager
                 this.Account_ID = !(accountId != Guid.Empty) ? accountid : accountId;
                 this.FolderPath = path;
             }
+            catch
+            {
+
+            }
         }
     }
 }

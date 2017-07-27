@@ -13,7 +13,7 @@ namespace VMModels.Model
         public string UNCName { get; set; }
         public string UNCPath { get; set; }
         public string OriginalFileName { get; set; }
-        public string FileExtension1 { get; set; }
+        public string FileExtension { get; set; }
         public string FileExtension2 { get; set; }
         public DateTime? FileTimestamp { get; set; }
         public DateTime? FileAddedTimestamp { get; set; }
