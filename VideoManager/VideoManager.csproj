@@ -45,14 +45,17 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="VIBlend.WinForms.Controls">
+      <HintPath>..\packages\VIBlend.WinForms.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="VIBlend.WinForms.DataGridView">
+      <HintPath>..\packages\VIBlend.WinForms.DataGridView.dll</HintPath>
+    </Reference>
+    <Reference Include="VIBlend.WinForms.Utilities">
+      <HintPath>..\packages\VIBlend.WinForms.Utilities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Download.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Download.Designer.cs">
-      <DependentUpon>Download.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,6 +88,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AppGlobal\AppGlobal.csproj">
+      <Project>{eb59aa2b-fa0e-4076-a69a-e4906846ab01}</Project>
+      <Name>AppGlobal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{5e4c3064-8b71-4c43-8db5-ca2328b19490}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Unity\Unity.csproj">
+      <Project>{52730ad8-14b1-4d0f-8eed-a9aa18fc5cbb}</Project>
+      <Name>Unity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VMInterfaces\VMInterfaces.csproj">
       <Project>{6cc85f9f-a0e7-4ded-9e09-22dec6d2cb5c}</Project>
       <Name>VMInterfaces</Name>

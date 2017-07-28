@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UploadCtrl", "UploadCtrl\Up
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity", "Unity\Unity.csproj", "{52730AD8-14B1-4D0F-8EED-A9AA18FC5CBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppGlobal", "AppGlobal\AppGlobal.csproj", "{EB59AA2B-FA0E-4076-A69A-E4906846AB01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{5E4C3064-8B71-4C43-8DB5-CA2328B19490}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{52730AD8-14B1-4D0F-8EED-A9AA18FC5CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52730AD8-14B1-4D0F-8EED-A9AA18FC5CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52730AD8-14B1-4D0F-8EED-A9AA18FC5CBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB59AA2B-FA0E-4076-A69A-E4906846AB01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB59AA2B-FA0E-4076-A69A-E4906846AB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB59AA2B-FA0E-4076-A69A-E4906846AB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB59AA2B-FA0E-4076-A69A-E4906846AB01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E4C3064-8B71-4C43-8DB5-CA2328B19490}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E4C3064-8B71-4C43-8DB5-CA2328B19490}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E4C3064-8B71-4C43-8DB5-CA2328B19490}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E4C3064-8B71-4C43-8DB5-CA2328B19490}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
