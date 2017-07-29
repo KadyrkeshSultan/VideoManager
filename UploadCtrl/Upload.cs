@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace UploadCtrl
 {
+    // TODO : Тут не все методы, многих элементов формы нету
     public class Upload
     {
         public bool IsRawName;
