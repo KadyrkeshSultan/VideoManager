@@ -42,7 +42,7 @@ namespace AppGlobal
             Guid SubstationID = Guid.Empty;
             using (RPM_Account rpmAccount = new RPM_Account())
                 SubstationID = rpmAccount.GetAccount(AccountID).SubStation_RecId;
-            StoreCheck.SetPath(SubstationID);
+            SetPath(SubstationID);
         }
     }
 }
