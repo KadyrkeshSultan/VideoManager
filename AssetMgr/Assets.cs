@@ -8,6 +8,7 @@ namespace AssetMgr
 {
     public class Assets
     {
+        // TODO : Надо будет поменять имя файла
         private const string ASSETFILE = "C3Sentinel.Dat";
 
         

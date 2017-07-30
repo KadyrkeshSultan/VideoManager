@@ -62,7 +62,7 @@ namespace FileShareCtrl
         private void ShareForm_Load(object sender, EventArgs e)
         {
             if (Global.IS_WOLFCOM)
-                HeaderPanel.BackgroundImage = (Image)System.Resources.topbar45;
+                HeaderPanel.BackgroundImage = (Image)Properties.Resources.topbar45;
             LangCtrl.reText(this);
             DisplayStats();
         }
@@ -281,7 +281,7 @@ namespace FileShareCtrl
             this.lbl_ShareFiles.Text = "ShareForm_25";
             this.lbl_ShareFiles.MouseDown += new MouseEventHandler(this.lbl_ShareFiles_MouseDown);
             this.picShare.BackColor = Color.Transparent;
-            this.picShare.Image = (Image)Resources.share;
+            this.picShare.Image = (Image)Properties.Resources.share;
             this.picShare.Location = new Point(6, 3);
             this.picShare.Name = "ShareForm_26";
             this.picShare.Size = new Size(34, 34);
