@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\AccountSecurity.cs" />
     <Compile Include="Enums\CAM_ACTION.cs" />
     <Compile Include="Enums\EmailType.cs" />
     <Compile Include="Enums\HASH_ALGORITHM.cs" />
@@ -99,6 +100,12 @@
     <Compile Include="Model\UserRank.cs" />
     <Compile Include="Model\VideoTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Unity\Unity.csproj">
+      <Project>{52730ad8-14b1-4d0f-8eed-a9aa18fc5cbb}</Project>
+      <Name>Unity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

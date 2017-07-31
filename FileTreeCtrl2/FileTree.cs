@@ -248,7 +248,6 @@ namespace FileTreeCtrl2
             this.vTree.VIBlendScrollBarsTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.vTree.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.vTree.NodeMouseUp += new vTreeViewMouseEventHandler(this.vTree_NodeMouseUp);
-            // TODO : Доделать ресурс файлы
             this.TreeImages.ImageStream = (ImageListStreamer)Resources.FileTree.Tree_ImageStream;
             this.TreeImages.TransparentColor = Color.Transparent;
             this.TreeImages.Images.SetKeyName(0, "FileTree2_22");
