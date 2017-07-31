@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B4ECAE20-0CDC-419B-9F5C-66EBCFB4F2D0}</ProjectGuid>
+    <ProjectGuid>{E4E4361E-A61E-4C99-86C5-22790170DCF1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AccountCtrl2</RootNamespace>
-    <AssemblyName>AccountCtrl2</AssemblyName>
+    <RootNamespace>VideoPlayer2</RootNamespace>
+    <AssemblyName>VideoPlayer2</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -29,11 +29,23 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <Win32Resource>
-    </Win32Resource>
-  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AxInterop.AXVLC">
+      <HintPath>..\packages\AxInterop.AXVLC.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.Core">
+      <HintPath>..\packages\GMap.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms">
+      <HintPath>..\packages\GMap.NET.WindowsForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.AXVLC">
+      <HintPath>..\packages\Interop.AXVLC.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="NReco.VideoConverter">
+      <HintPath>..\packages\NReco.VideoConverter.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -47,36 +59,26 @@
     <Reference Include="VIBlend.WinForms.Controls">
       <HintPath>..\packages\VIBlend.WinForms.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="VIBlend.WinForms.DataGridView">
-      <HintPath>..\packages\VIBlend.WinForms.DataGridView.dll</HintPath>
-    </Reference>
     <Reference Include="VIBlend.WinForms.Utilities">
       <HintPath>..\packages\VIBlend.WinForms.Utilities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AcctCtrl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="CmdAccountPickerEventArgs.cs" />
-    <Compile Include="NodeRecord.cs" />
-    <Compile Include="NodeType.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\AcctCtrl.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AcctCtrl.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppGlobal\AppGlobal.csproj">
       <Project>{eb59aa2b-fa0e-4076-a69a-e4906846ab01}</Project>
       <Name>AppGlobal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImgViewer\ImgViewer.csproj">
+      <Project>{88f3bbd1-8cd1-4498-843c-b18d25ff8e63}</Project>
+      <Name>ImgViewer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logger\Logger.csproj">
+      <Project>{5e4c3064-8b71-4c43-8db5-ca2328b19490}</Project>
+      <Name>Logger</Name>
     </ProjectReference>
     <ProjectReference Include="..\Unity\Unity.csproj">
       <Project>{52730ad8-14b1-4d0f-8eed-a9aa18fc5cbb}</Project>
@@ -90,20 +92,6 @@
       <Project>{e29bf9ba-3e01-4e3c-9c28-b517075ce0b6}</Project>
       <Name>VMModels</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\AcctCtrl.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>AcctCtrl.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

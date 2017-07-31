@@ -46,5 +46,12 @@ namespace VMModels.Model
         public virtual ICollection<FileMemo> FileMemos { get; set; }
         public virtual ICollection<VideoTag> VideoTags { get; set; }
         public virtual ICollection<DFClass> FileClasses { get; set; }
+
+        public DataFile()
+        {
+            VideoTags = new HashSet<VideoTag>();
+            FileMemos = new HashSet<FileMemo>();
+            FileClasses = new HashSet<DFClass>();
+        }
     }
 }

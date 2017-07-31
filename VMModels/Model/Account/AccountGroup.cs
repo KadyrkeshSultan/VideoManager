@@ -28,5 +28,10 @@ namespace VMModels.Model
         /// Коллекция аккаунтов
         /// </summary>
         public virtual ICollection<Account> Accounts { get; set; }
+
+        public AccountGroup()
+        {
+            Accounts = new HashSet<Account>();
+        }
     }
 }

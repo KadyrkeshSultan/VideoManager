@@ -13,5 +13,10 @@ namespace VMModels.Model
         public string Contact { get; set; }
         public string Web { get; set; }
         public virtual ICollection<Product> Products { get; set; }
+
+        public Manufacturer()
+        {
+            Products = new HashSet<Product>();
+        }
     }
 }

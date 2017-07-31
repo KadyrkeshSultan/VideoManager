@@ -14,5 +14,10 @@ namespace VMModels.Model
         public string Phone { get; set; }
         public Guid DomainCfgID { get; set; }
         public virtual Department Department { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("Model_Substation_1", Name, Address1, City, State, PostalCode);
+        }
     }
 }

@@ -16,5 +16,15 @@ namespace VMModels.Model
         public string Phone2 { get; set; }
         public byte[] Logo { get; set; }
         public virtual List<Substation> Substations { get; set; }
+
+        public Department()
+        {
+            Substations = new List<Substation>();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Model_Department_1", Name.Trim(), Address1.Trim(), City.Trim(), State.Trim(), PostalCode.Trim());
+        }
     }
 }
