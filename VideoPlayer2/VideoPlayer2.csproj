@@ -64,13 +64,69 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="FilePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Geodesy.cs" />
+    <Compile Include="ImageFile.cs" />
+    <Compile Include="ImageFilePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ImageFrame.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ImagePanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MapPanel2.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Mapper.cs" />
+    <Compile Include="MediaFile.cs" />
+    <Compile Include="MergeVideo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NoGPS.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\VideoForm.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>VideoForm.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SaveTag.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TagPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ThumbPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="VideoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppGlobal\AppGlobal.csproj">
       <Project>{eb59aa2b-fa0e-4076-a69a-e4906846ab01}</Project>
       <Name>AppGlobal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Compass\Compass.csproj">
+      <Project>{7bb1c1a5-78f9-467c-8fb1-6e0007f7c72f}</Project>
+      <Name>Compass</Name>
     </ProjectReference>
     <ProjectReference Include="..\ImgViewer\ImgViewer.csproj">
       <Project>{88f3bbd1-8cd1-4498-843c-b18d25ff8e63}</Project>
@@ -88,10 +144,34 @@
       <Project>{6cc85f9f-a0e7-4ded-9e09-22dec6d2cb5c}</Project>
       <Name>VMInterfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VMMapEngine\VMMapEngine.csproj">
+      <Project>{c97125b4-b5e2-4598-9102-af03cca6a998}</Project>
+      <Name>VMMapEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VMModels\VMModels.csproj">
       <Project>{e29bf9ba-3e01-4e3c-9c28-b517075ce0b6}</Project>
       <Name>VMModels</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\VideoForm.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>VideoForm.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

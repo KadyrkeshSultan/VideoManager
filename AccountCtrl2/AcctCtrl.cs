@@ -336,7 +336,6 @@ namespace AccountCtrl2
         
         private void InitializeComponent()
         {
-            // TODO: Сделать ресурсные файлы
             components = new Container();
             ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(AcctCtrl));
             this.vTree = new vTreeView();
