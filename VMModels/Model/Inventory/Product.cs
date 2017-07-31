@@ -12,5 +12,10 @@ namespace VMModels.Model
         public int? WarrantyPeriod { get; set; }
         public virtual Manufacturer Manufacturer { get; set; }
         public virtual ICollection<Inventory> Inventories { get; set; }
+
+        public Product()
+        {
+            Inventories = new HashSet<Inventory>();
+        }
     }
 }

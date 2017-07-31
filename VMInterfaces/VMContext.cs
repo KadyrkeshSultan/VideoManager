@@ -55,6 +55,7 @@ namespace VMInterfaces
         public DbSet<Report> Reports {  get;  set; }
 
         public VMContext()
+            :base(VMGlobal.DBConnectionProfile)
         {
             Database.CommandTimeout = new int?(120);
         }

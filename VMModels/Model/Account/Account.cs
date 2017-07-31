@@ -118,5 +118,18 @@ namespace VMModels.Model
         /// Идентификатор ранга пользователя
         /// </summary>
         public virtual UserRank AccountRank_Id { get; set; }
+
+        public Account()
+        {
+            AccountGroups = new HashSet<AccountGroup>();
+        }
+
+        public override string ToString()
+        {
+            string str = string.Format("Model_Account_1", LastName, FirstName);
+            if (!string.IsNullOrEmpty(MiddleName) && !string.IsNullOrEmpty(MiddleName))
+                str = string.Format("Model_Account_2", LastName, FirstName, MiddleName.Substring(0, 1).ToUpper());
+            return str;
+        }
     }
 }

@@ -39,5 +39,13 @@ namespace VMModels.Model
         public string Email { get; set; }
         public string ResolutionCode { get; set; }
         public string ResolutionDesc { get; set; }
+
+        public override string ToString()
+        {
+            string str = string.Empty;
+            if (!string.IsNullOrEmpty(MiddleName))
+                str = MiddleName.Substring(0, 1).ToUpper();
+            return string.Format("Model_Case_1", LastName, FirstName, str);
+        }
     }
 }

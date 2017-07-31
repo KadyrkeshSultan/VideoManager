@@ -395,7 +395,7 @@ namespace AccountCtrl2
             this.mnu_ClearAccountList.Size = new Size(170, 22);
             this.mnu_ClearAccountList.Text = "AccountCtrl2_AcctCtrl_17";
             this.mnu_ClearAccountList.Click += new EventHandler(this.mnu_ClearAccountList_Click);
-            this.TreeImages.ImageStream = (ImageListStreamer)componentResourceManager.GetObject("TreeImages.ImageStream");
+            this.TreeImages.ImageStream = (ImageListStreamer)Resources.AcctCtrl.TreeImages_ImageStream;
             this.TreeImages.TransparentColor = Color.Transparent;
             this.TreeImages.Images.SetKeyName(0, "AccountCtrl2_AcctCtrl_19");
             this.TreeImages.Images.SetKeyName(1, "AccountCtrl2_AcctCtrl_20");
@@ -491,7 +491,7 @@ namespace AccountCtrl2
             this.vAcctList.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.vAcctList.SelectedItemChanged += new EventHandler(this.vAcctList_SelectedItemChanged);
             this.vAcctList.DoubleClick += new EventHandler(this.vAcctList_DoubleClick);
-            this.AcctImages.ImageStream = (ImageListStreamer)componentResourceManager.GetObject("AcctImages.ImageStream");
+            this.AcctImages.ImageStream = (ImageListStreamer)Resources.AcctCtrl.AcctImages_ImageStream;
             this.AcctImages.TransparentColor = Color.Transparent;
             this.AcctImages.Images.SetKeyName(0, "AccountCtrl2_AcctCtrl_34");
             this.AutoScaleDimensions = new SizeF(6f, 13f);
