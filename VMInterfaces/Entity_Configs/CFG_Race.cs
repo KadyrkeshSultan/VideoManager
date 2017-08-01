@@ -10,7 +10,7 @@ namespace VMInterfaces.Entity_Configs
         public CFG_Race()
         {
             HasKey(race => race.Id).Property(race => race.Id).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
-            Property(race => race.Name).IsRequired().HasMaxLength(new int?(64)).HasColumnAnnotation("CFG_Race_unknown1", new IndexAnnotation(new IndexAttribute()
+            Property(race => race.Name).IsRequired().HasMaxLength(new int?(64)).HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()
             {
                 IsUnique = true
             }));

@@ -1,4 +1,5 @@
-﻿using System.Management;
+﻿using System;
+using System.Management;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -8,152 +9,150 @@ namespace Unity
     {
         private static string fingerPrint;
 
-        
         static FingerPrint()
         {
             fingerPrint = string.Empty;
         }
 
-        
-        public static string Value()
+        private static string baseId()
         {
-            if (string.IsNullOrEmpty(fingerPrint))
-                fingerPrint = GetHash("Unity_FingerPrint_unknown1" + cpuId() + "Unity_FingerPrint_unknown2" + biosId() + "Unity_FingerPrint_unknown3" + baseId() + videoId() + "Unity_FingerPrint_unknown4" + macId());
-            return fingerPrint;
+            string str = string.Concat(identifier("Win32_BaseBoard", "Model"), identifier("Win32_BaseBoard", "Manufacturer"), identifier("Win32_BaseBoard", "Name"), identifier("Win32_BaseBoard", "SerialNumber"));
+            return str;
         }
 
-        
+        private static string biosId()
+        {
+            string[] strArrays = new string[] { identifier("Win32_BIOS", "Manufacturer"), identifier("Win32_BIOS", "SMBIOSBIOSVersion"), identifier("Win32_BIOS", "IdentificationCode"), identifier("Win32_BIOS", "SerialNumber"), identifier("Win32_BIOS", "ReleaseDate"), identifier("Win32_BIOS", "Version") };
+            return string.Concat(strArrays);
+        }
+
+        private static string cpuId()
+        {
+            string str = identifier("Win32_Processor", "UniqueId");
+            if (str == "")
+            {
+                str = identifier("Win32_Processor", "ProcessorId");
+                if (str == "")
+                {
+                    str = identifier("Win32_Processor", "Name");
+                    if (str == "")
+                    {
+                        str = identifier("Win32_Processor", "Manufacturer");
+                    }
+                    str = string.Concat(str, identifier("Win32_Processor", "MaxClockSpeed"));
+                }
+            }
+            return str;
+        }
+
+        private static string diskId()
+        {
+            string str = string.Concat(identifier("Win32_DiskDrive", "Model"), identifier("Win32_DiskDrive", "Manufacturer"), identifier("Win32_DiskDrive", "Signature"), identifier("Win32_DiskDrive", "TotalHeads"));
+            return str;
+        }
+
         private static string GetHash(string s)
         {
-            return GetHexString(new MD5CryptoServiceProvider().ComputeHash(new ASCIIEncoding().GetBytes(s)));
+            MD5 mD5CryptoServiceProvider = new MD5CryptoServiceProvider();
+            byte[] bytes = (new ASCIIEncoding()).GetBytes(s);
+            return GetHexString(mD5CryptoServiceProvider.ComputeHash(bytes));
         }
 
-        
         private static string GetHexString(byte[] bt)
         {
-            string str1 = string.Empty;
-            for (int index = 0; index < bt.Length; ++index)
+            char chr;
+            string empty = string.Empty;
+            for (int i = 0; i < (int)bt.Length; i++)
             {
-                int num1 = (int)bt[index];
-                int num2 = num1 & 15;
-                int num3 = num1 >> 4 & 15;
-                char ch;
-                string str2;
-                if (num3 > 9)
+                int num = bt[i];
+                int num1 = num & 15;
+                int num2 = num >> 4 & 15;
+                if (num2 <= 9)
                 {
-                    string str3 = str1;
-                    ch = (char)(num3 - 10 + 65);
-                    string str4 = ch.ToString();
-                    str2 = str3 + str4;
+                    empty = string.Concat(empty, num2.ToString());
                 }
                 else
-                    str2 = str1 + num3.ToString();
-                if (num2 > 9)
                 {
-                    string str3 = str2;
-                    ch = (char)(num2 - 10 + 65);
-                    string str4 = ch.ToString();
-                    str1 = str3 + str4;
+                    chr = (char)(num2 - 10 + 65);
+                    empty = string.Concat(empty, chr.ToString());
+                }
+                if (num1 <= 9)
+                {
+                    empty = string.Concat(empty, num1.ToString());
                 }
                 else
-                    str1 = str2 + num2.ToString();
-                if (index + 1 != bt.Length && (index + 1) % 2 == 0)
-                    str1 += "Unity_FingerPrint_unknown5";
+                {
+                    chr = (char)(num1 - 10 + 65);
+                    empty = string.Concat(empty, chr.ToString());
+                }
+                if ((i + 1 == (int)bt.Length ? false : (i + 1) % 2 == 0))
+                {
+                    empty = string.Concat(empty, "-");
+                }
             }
-            return str1;
+            return empty;
         }
 
-        
         private static string identifier(string wmiClass, string wmiProperty, string wmiMustBeTrue)
         {
             string str = "";
-            foreach (ManagementObject instance in new ManagementClass(wmiClass).GetInstances())
+            foreach (ManagementObject instance in (new ManagementClass(wmiClass)).GetInstances())
             {
-                if (instance[wmiMustBeTrue].ToString() == "Unity_FingerPrint_unknown6")
+                if (!(instance[wmiMustBeTrue].ToString() == "True") || !(str == ""))
                 {
-                    if (str == "")
-                    {
-                        try
-                        {
-                            str = instance[wmiProperty].ToString();
-                            break;
-                        }
-                        catch
-                        {
-                        }
-                    }
+                    continue;
+                }
+                try
+                {
+                    str = instance[wmiProperty].ToString();
+                    break;
+                }
+                catch
+                {
                 }
             }
             return str;
         }
 
-        
         private static string identifier(string wmiClass, string wmiProperty)
         {
             string str = "";
-            foreach (ManagementObject instance in new ManagementClass(wmiClass).GetInstances())
+            foreach (ManagementObject instance in (new ManagementClass(wmiClass)).GetInstances())
             {
-                if (str == "")
+                if (str != "")
                 {
-                    try
-                    {
-                        str = instance[wmiProperty].ToString();
-                        break;
-                    }
-                    catch
-                    {
-                    }
+                    continue;
+                }
+                try
+                {
+                    str = instance[wmiProperty].ToString();
+                    break;
+                }
+                catch
+                {
                 }
             }
             return str;
         }
 
-        
-        private static string cpuId()
-        {
-            string str1 = identifier("Unity_FingerPrint_unknown7", "Unity_FingerPrint_unknown8");
-            if (str1 == "")
-            {
-                str1 = identifier("Unity_FingerPrint_unknown9", "Unity_FingerPrint_unknown10");
-                if (str1 == "")
-                {
-                    string str2 = identifier("Unity_FingerPrint_unknown11", "Unity_FingerPrint_unknown12");
-                    if (str2 == "")
-                        str2 = identifier("Unity_FingerPrint_unknown13", "Unity_FingerPrint_unknown14");
-                    str1 = str2 + identifier("Unity_FingerPrint_unknown15", "Unity_FingerPrint_unknown16");
-                }
-            }
-            return str1;
-        }
-
-        
-        private static string biosId()
-        {
-            return identifier("Unity_FingerPrint_unknown17", "Unity_FingerPrint_unknown18") + identifier("Unity_FingerPrint_unknown19", "Unity_FingerPrint_unknown20") + identifier("Unity_FingerPrint_unknown21", "Unity_FingerPrint_unknown22") + identifier("Unity_FingerPrint_unknown23", "Unity_FingerPrint_unknown24") + identifier("Unity_FingerPrint_unknown25", "Unity_FingerPrint_unknown26") + identifier("Unity_FingerPrint_unknown27", "Unity_FingerPrint_unknown28");
-        }
-
-        
-        private static string diskId()
-        {
-            return identifier("Unity_FingerPrint_unknown29", "Unity_FingerPrint_unknown30") + identifier("Unity_FingerPrint_unknown31", "Unity_FingerPrint_unknown32") + identifier("Unity_FingerPrint_unknown33", "Unity_FingerPrint_unknown34") + identifier("Unity_FingerPrint_unknown35", "Unity_FingerPrint_unknown36");
-        }
-
-        
-        private static string baseId()
-        {
-            return identifier("Unity_FingerPrint_unknown37", "Unity_FingerPrint_unknown38") + identifier("Unity_FingerPrint_unknown39", "Unity_FingerPrint_unknown40") + identifier("Unity_FingerPrint_unknown40", "Unity_FingerPrint_unknown41") + identifier("Unity_FingerPrint_unknown42", "Unity_FingerPrint_unknown43");
-        }
-
-        
-        private static string videoId()
-        {
-            return identifier("Unity_FingerPrint_unknown44", "Unity_FingerPrint_unknown45") + identifier("Unity_FingerPrint_unknown46", "Unity_FingerPrint_unknown47");
-        }
-
-        
         private static string macId()
         {
-            return identifier("Unity_FingerPrint_unknown48", "Unity_FingerPrint_unknown49", "Unity_FingerPrint_unknown50");
+            return identifier("Win32_NetworkAdapterConfiguration", "MACAddress", "IPEnabled");
+        }
+
+        public static string Value()
+        {
+            if (string.IsNullOrEmpty(fingerPrint))
+            {
+                string[] strArrays = new string[] { "CPU >> ", cpuId(), "\nBIOS >> ", biosId(), "\nBASE >> ", baseId(), videoId(), "\nMAC >> ", macId() };
+                fingerPrint = GetHash(string.Concat(strArrays));
+            }
+            return fingerPrint;
+        }
+
+        private static string videoId()
+        {
+            return string.Concat(identifier("Win32_VideoController", "DriverVersion"), identifier("Win32_VideoController", "Name"));
         }
     }
 }

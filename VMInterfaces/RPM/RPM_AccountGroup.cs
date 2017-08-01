@@ -76,7 +76,7 @@ namespace VMInterfaces
                     foreach (DbEntityValidationResult entityValidationError in ex.EntityValidationErrors)
                     {
                         foreach (DbValidationError validationError in entityValidationError.ValidationErrors)
-                            Msg += string.Format("RPM_AccountGroup_unknown1", validationError.PropertyName, validationError.ErrorMessage);
+                            Msg += string.Format("Property: {0} Error: {1}\n", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
             }

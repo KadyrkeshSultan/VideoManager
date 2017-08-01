@@ -9,7 +9,7 @@ namespace VMModels.Enums
         
         public static string DescString()
         {
-            return LangCtrl.GetString("VMModels_AcctSecur_1", "VMModels_AcctSecur_2");
+            return LangCtrl.GetString("enum_AccountSecurity", "Top Secret,Secret,Official,Unclassified");
         }
 
         

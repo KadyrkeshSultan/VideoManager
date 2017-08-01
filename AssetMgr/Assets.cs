@@ -19,14 +19,14 @@ namespace AssetMgr
         
         public bool IsProfile(string DriveID)
         {
-            return File.Exists(Path.Combine(DriveID, "AssetMgr_Assets_1"));
+            return File.Exists(Path.Combine(DriveID, "C3Sentinel.Dat"));
         }
 
         
         public bool SaveAssetProfile(string DriveID, CamProfile rec)
         {
-            FileCrypto.Save((object)rec, Path.Combine(DriveID, "AssetMgr_Assets_2"));
-            new FileInfo(Path.Combine(DriveID, "AssetMgr_Assets_3")).Attributes = FileAttributes.Hidden;
+            FileCrypto.Save((object)rec, Path.Combine(DriveID, "C3Sentinel.Dat"));
+            new FileInfo(Path.Combine(DriveID, "C3Sentinel.Dat")).Attributes = FileAttributes.Hidden;
             return IsProfile(DriveID);
         }
 
@@ -35,7 +35,7 @@ namespace AssetMgr
         {
             CamProfile camProfile = new CamProfile();
             if (IsProfile(DriveID))
-                camProfile = (CamProfile)FileCrypto.LoadConfig(Path.Combine(DriveID, "AssetMgr_Assets_4")) ?? new CamProfile();
+                camProfile = (CamProfile)FileCrypto.LoadConfig(Path.Combine(DriveID, "C3Sentinel.Dat")) ?? new CamProfile();
             return camProfile;
         }
 
@@ -44,7 +44,7 @@ namespace AssetMgr
         {
             if (!IsProfile(DriveID))
                 return;
-            File.Delete(Path.Combine(DriveID, "AssetMgr_Assets_5"));
+            File.Delete(Path.Combine(DriveID, "C3Sentinel.Dat"));
         }
 
         

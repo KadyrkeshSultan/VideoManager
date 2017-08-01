@@ -29,7 +29,7 @@ namespace VideoPlayer2
         
         private void MapPanel_Load(object sender, EventArgs e)
         {
-            chk_MapCompass.Text = LangCtrl.GetString("VideoPlay_MapPanel_1", "VideoPlay_MapPanel_2");
+            chk_MapCompass.Text = LangCtrl.GetString("chk_MapCompass", "Map Compass");
         }
 
         
@@ -67,16 +67,16 @@ namespace VideoPlayer2
             this.chk_MapCompass = new vCheckBox();
             this.VMMap = new VMMap();
             this.tableLayoutPanel1.SuspendLayout();
-            this.SuspendLayout();
-            this.tableLayoutPanel1.BackgroundImage = (Image)Properties.Resources.nogps;
+            base.SuspendLayout();
+            this.tableLayoutPanel1.BackgroundImage = Properties.Resources.nogps;
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
-            this.tableLayoutPanel1.Controls.Add((Control)this.chk_MapCompass, 0, 1);
-            this.tableLayoutPanel1.Controls.Add((Control)this.VMMap, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.chk_MapCompass, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.VMMap, 0, 0);
             this.tableLayoutPanel1.Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Location = new Point(0, 0);
             this.tableLayoutPanel1.Margin = new Padding(0);
-            this.tableLayoutPanel1.Name = "VideoPlay_MapPanel_3";
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
             this.tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 22f));
@@ -85,28 +85,28 @@ namespace VideoPlayer2
             this.chk_MapCompass.BackColor = Color.Transparent;
             this.chk_MapCompass.Dock = DockStyle.Fill;
             this.chk_MapCompass.Location = new Point(3, 441);
-            this.chk_MapCompass.Name = "VideoPlay_MapPanel_4";
+            this.chk_MapCompass.Name = "chk_MapCompass";
             this.chk_MapCompass.Size = new Size(328, 16);
             this.chk_MapCompass.TabIndex = 0;
-            this.chk_MapCompass.Text = "VideoPlay_MapPanel_5";
+            this.chk_MapCompass.Text = "Map Compass";
             this.chk_MapCompass.UseVisualStyleBackColor = false;
             this.chk_MapCompass.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.chk_MapCompass.CheckedChanged += new EventHandler(this.chk_MapCompass_CheckedChanged);
             this.VMMap.Dock = DockStyle.Fill;
             this.VMMap.Location = new Point(3, 3);
-            this.VMMap.Name = "VideoPlay_MapPanel_6";
+            this.VMMap.Name = "VMMap";
             this.VMMap.Size = new Size(328, 432);
             this.VMMap.TabIndex = 1;
-            this.AutoScaleDimensions = new SizeF(6f, 13f);
-            this.AutoScaleMode = AutoScaleMode.Font;
+            base.AutoScaleDimensions = new SizeF(6f, 13f);
+            base.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = Color.White;
-            this.Controls.Add((Control)this.tableLayoutPanel1);
-            this.Margin = new Padding(0);
-            this.Name = "VideoPlay_MapPanel_7";
-            this.Size = new Size(334, 460);
-            this.Load += new EventHandler(this.MapPanel_Load);
+            base.Controls.Add(this.tableLayoutPanel1);
+            base.Margin = new Padding(0);
+            base.Name = "MapPanel2";
+            base.Size = new Size(334, 460);
+            base.Load += new EventHandler(this.MapPanel_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.ResumeLayout(false);
+            base.ResumeLayout(false);
         }
 
         public delegate void DEL_Compass(bool b);

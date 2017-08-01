@@ -49,10 +49,10 @@ namespace VideoPlayer2
         
         private void ImageFrame_Load(object sender, EventArgs e)
         {
-            mnu_ViewImageFile.Text = LangCtrl.GetString("VideoPlay_ImgFrame_1", "VideoPlay_ImgFrame_2");
-            mnu_ExportImage.Text = LangCtrl.GetString("VideoPlay_ImgFrame_3", "VideoPlay_ImgFrame_4");
-            mnu_RedactImage.Text = LangCtrl.GetString("VideoPlay_ImgFrame_5", "VideoPlay_ImgFrame_6");
-            mnu_RemoveImage.Text = LangCtrl.GetString("VideoPlay_ImgFrame_7", "VideoPlay_ImgFrame_8");
+            mnu_ViewImageFile.Text = LangCtrl.GetString("mnu_ViewImageFile", "View Image File");
+            mnu_ExportImage.Text = LangCtrl.GetString("mnu_ExportImage", "Export Image");
+            mnu_RedactImage.Text = LangCtrl.GetString("mnu_RedactImage", "Redact Image");
+            mnu_RemoveImage.Text = LangCtrl.GetString("mnu_RemoveImage", "Remove Image from List");
         }
 
         
@@ -104,7 +104,7 @@ namespace VideoPlayer2
             {
                 string fileName = saveFileDialog.FileName;
                 File.Copy(this.FileName, fileName);
-                Logger.Logging.WriteAccountLog(VMGlobal.LOG_ACTION.EXPORT, string.Format("VideoPlay_ImgFrame_9", fileName), Global.GlobalAccount.Id);
+                Logger.Logging.WriteAccountLog(VMGlobal.LOG_ACTION.EXPORT, string.Format("Export File: {0}", fileName), Global.GlobalAccount.Id);
             }
             catch
             {
@@ -119,13 +119,13 @@ namespace VideoPlayer2
                 return;
             try
             {
-                Global.Log("VideoPlay_ImgFrame_11", "VideoPlay_ImgFrame_12");
+                Global.Log("REDACT", "Redact External File");
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = path;
                 if (!File.Exists(FileName))
                     return;
-                Global.Log("VideoPlay_ImgFrame_13", string.Format("VideoPlay_ImgFrame_14", FileName));
-                startInfo.Arguments = "VideoPlay_ImgFrame_15" + FileName + "VideoPlay_ImgFrame_16";
+                Global.Log("REDACT", string.Format("Image File: {0}", FileName));
+                startInfo.Arguments = string.Concat("\"", this.FileName, "\"");
                 Process.Start(startInfo);
             }
             catch
@@ -144,7 +144,7 @@ namespace VideoPlayer2
         
         private void InitializeComponent()
         {
-            this.components = (IContainer)new Container();
+            this.components = new Container();
             this.pic = new PictureBox();
             this.contextMenuStrip1 = new ContextMenuStrip(this.components);
             this.mnu_ViewImageFile = new ToolStripMenuItem();
@@ -155,59 +155,54 @@ namespace VideoPlayer2
             this.saveFileDialog = new SaveFileDialog();
             ((ISupportInitialize)this.pic).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
-            this.SuspendLayout();
+            base.SuspendLayout();
             this.pic.ContextMenuStrip = this.contextMenuStrip1;
             this.pic.Cursor = Cursors.Hand;
             this.pic.Dock = DockStyle.Fill;
             this.pic.Location = new Point(0, 0);
-            this.pic.Name = "VideoPlay_ImgFrame_17";
+            this.pic.Name = "pic";
             this.pic.Size = new Size(160, 100);
             this.pic.SizeMode = PictureBoxSizeMode.StretchImage;
             this.pic.TabIndex = 0;
             this.pic.TabStop = false;
             this.pic.DoubleClick += new EventHandler(this.pic_DoubleClick);
-            this.contextMenuStrip1.Items.AddRange(new ToolStripItem[5]
-            {
-        (ToolStripItem) this.mnu_ViewImageFile,
-        (ToolStripItem) this.toolStripMenuItem1,
-        (ToolStripItem) this.mnu_RemoveImage,
-        (ToolStripItem) this.mnu_ExportImage,
-        (ToolStripItem) this.mnu_RedactImage
-            });
-            this.contextMenuStrip1.Name = "VideoPlay_ImgFrame_18";
+            ToolStripItemCollection items = this.contextMenuStrip1.Items;
+            ToolStripItem[] mnuViewImageFile = new ToolStripItem[] { this.mnu_ViewImageFile, this.toolStripMenuItem1, this.mnu_RemoveImage, this.mnu_ExportImage, this.mnu_RedactImage };
+            this.contextMenuStrip1.Items.AddRange(mnuViewImageFile);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new Size(204, 98);
-            this.mnu_ViewImageFile.Name = "VideoPlay_ImgFrame_19";
+            this.mnu_ViewImageFile.Name = "mnu_ViewImageFile";
             this.mnu_ViewImageFile.Size = new Size(203, 22);
-            this.mnu_ViewImageFile.Text = "VideoPlay_ImgFrame_20";
+            this.mnu_ViewImageFile.Text = "View Image File...";
             this.mnu_ViewImageFile.Click += new EventHandler(this.mnu_ViewImageFile_Click);
-            this.toolStripMenuItem1.Name = "VideoPlay_ImgFrame_21";
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new Size(200, 6);
-            this.mnu_RemoveImage.Name = "VideoPlay_ImgFrame_22";
+            this.mnu_RemoveImage.Name = "mnu_RemoveImage";
             this.mnu_RemoveImage.Size = new Size(203, 22);
-            this.mnu_RemoveImage.Text = "VideoPlay_ImgFrame_23";
+            this.mnu_RemoveImage.Text = "Remove Image from List";
             this.mnu_RemoveImage.Click += new EventHandler(this.mnu_RemoveImage_Click);
-            this.mnu_ExportImage.Name = "VideoPlay_ImgFrame_24";
+            this.mnu_ExportImage.Name = "mnu_ExportImage";
             this.mnu_ExportImage.Size = new Size(203, 22);
-            this.mnu_ExportImage.Text = "VideoPlay_ImgFrame_25";
+            this.mnu_ExportImage.Text = "Export Image";
             this.mnu_ExportImage.Click += new EventHandler(this.mnu_ExportImage_Click);
-            this.mnu_RedactImage.Name = "VideoPlay_ImgFrame_26";
+            this.mnu_RedactImage.Name = "mnu_RedactImage";
             this.mnu_RedactImage.Size = new Size(203, 22);
-            this.mnu_RedactImage.Text = "VideoPlay_ImgFrame_27";
+            this.mnu_RedactImage.Text = "Redact Image";
             this.mnu_RedactImage.Visible = false;
             this.mnu_RedactImage.Click += new EventHandler(this.mnu_RedactImage_Click);
-            this.saveFileDialog.DefaultExt = "VideoPlay_ImgFrame_28";
-            this.saveFileDialog.Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
-            this.saveFileDialog.Title = "VideoPlay_ImgFrame_30";
-            this.AutoScaleDimensions = new SizeF(6f, 13f);
-            this.AutoScaleMode = AutoScaleMode.Font;
+            this.saveFileDialog.DefaultExt = "JPG";
+            this.saveFileDialog.Filter = "JPEG File|*.jpg";
+            this.saveFileDialog.Title = "Save Image File";
+            base.AutoScaleDimensions = new SizeF(6f, 13f);
+            base.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = Color.Black;
-            this.Controls.Add((Control)this.pic);
-            this.Name = "VideoPlay_ImgFrame_31";
-            this.Size = new Size(160, 100);
-            this.Load += new EventHandler(this.ImageFrame_Load);
+            base.Controls.Add(this.pic);
+            base.Name = "ImageFrame";
+            base.Size = new Size(160, 100);
+            base.Load += new EventHandler(this.ImageFrame_Load);
             ((ISupportInitialize)this.pic).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
-            this.ResumeLayout(false);
+            base.ResumeLayout(false);
         }
     }
 }

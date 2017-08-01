@@ -41,7 +41,7 @@ namespace VMInterfaces
         
         public void DeleteDept(Department rec)
         {
-            context.Database.ExecuteSqlCommand(string.Format("RPM_Dept_unknown1", Guid.Empty, Guid.Empty, rec.Id));
+            context.Database.ExecuteSqlCommand(string.Format("update Accounts set Dept_RecId='{0}', SubStation_RecId='{1}' where Dept_RecId='{2}'", Guid.Empty, Guid.Empty, rec.Id));
             context.Departments.Remove(rec);
         }
 
@@ -110,7 +110,7 @@ namespace VMInterfaces
                     foreach (DbEntityValidationResult entityValidationError in ex.EntityValidationErrors)
                     {
                         foreach (DbValidationError validationError in entityValidationError.ValidationErrors)
-                            Msg += string.Format("RPM_Dept_unknown2", validationError.PropertyName, validationError.ErrorMessage);
+                            Msg += string.Format("Property: {0} Error: {1}\n", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
             }

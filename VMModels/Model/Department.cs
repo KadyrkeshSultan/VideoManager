@@ -24,7 +24,7 @@ namespace VMModels.Model
 
         public override string ToString()
         {
-            return string.Format("Model_Department_1", Name.Trim(), Address1.Trim(), City.Trim(), State.Trim(), PostalCode.Trim());
+            return string.Format("{0}, {1}, {2}, {3}, {4}", Name.Trim(), Address1.Trim(), City.Trim(), State.Trim(), PostalCode.Trim());
         }
     }
 }

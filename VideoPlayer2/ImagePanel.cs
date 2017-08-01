@@ -57,19 +57,23 @@ namespace VideoPlayer2
         {
             sRec = rec;
             pic.Image = img;
-            string path1 = Path.Combine(rec.UNCName, rec.UNCPath);
-            if (!path1.Contains("VideoPlay_ImgPanel_1"))
+            string str = Path.Combine(rec.UNCName, rec.UNCPath);
+            if (!str.Contains(":"))
             {
-                if (!path1.StartsWith("VideoPlay_ImgPanel_2"))
-                    path1 = "VideoPlay_ImgPanel_3" + path1;
+                if (!str.StartsWith("\\\\"))
+                {
+                    str = string.Concat("\\\\", str);
+                }
             }
-            else if (path1.Contains("VideoPlay_ImgPanel_4") && !path1.Contains("VideoPlay_ImgPanel_5"))
-                path1 = path1.Replace("VideoPlay_ImgPanel_6", "VideoPlay_ImgPanel_7");
-            FilePath = Path.Combine(path1, rec.StoredFileName);
+            else if (str.Contains(":") && !str.Contains(":\\"))
+            {
+                str = str.Replace(":", ":\\");
+            }
+            FilePath = Path.Combine(str, rec.StoredFileName);
             Id = rec.Id;
             ToolTip toolTip = new ToolTip();
             timestamp = rec.FileAddedTimestamp.ToString();
-            toolTip.SetToolTip(pic, string.Format("VideoPlay_ImgPanel_8", rec.FrameNumber));
+            toolTip.SetToolTip(pic, string.Format("Video Frame: {0}", rec.FrameNumber));
         }
 
         
@@ -101,7 +105,7 @@ namespace VideoPlayer2
         
         private void mnu_DeleteSnapshot_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(this, "VideoPlay_ImgPanel_9", "VideoPlay_ImgPanel_10", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            if (MessageBox.Show(this, "Delete snapshot?", "Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
             using (RPM_Snapshot rpmSnapshot = new RPM_Snapshot())
             {
@@ -142,7 +146,7 @@ namespace VideoPlayer2
             {
                 string fileName = this.saveFileDialog.FileName;
                 File.Copy(this.FilePath, fileName);
-                Logger.Logging.WriteAccountLog(VMGlobal.LOG_ACTION.EXPORT, string.Format("VideoPlay_ImgPanel_11", fileName), Global.GlobalAccount.Id);
+                Logger.Logging.WriteAccountLog(VMGlobal.LOG_ACTION.EXPORT, string.Format("Export Snapshot: {0}", fileName), Global.GlobalAccount.Id);
             }
             catch
             {
@@ -152,18 +156,18 @@ namespace VideoPlayer2
         
         private void mnu_RedactImage_Click(object sender, EventArgs e)
         {
-            string path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "VideoPlay_ImgPanel_12");
+            string path = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Redact/VideoEditor.exe");
             if (!File.Exists(path))
                 return;
             try
             {
-                Global.Log("VideoPlay_ImgPanel_13", "VideoPlay_ImgPanel_14");
+                Global.Log("REDACT", "Redact External File");
                 ProcessStartInfo startInfo = new ProcessStartInfo();
                 startInfo.FileName = path;
                 if (!File.Exists(this.FilePath))
                     return;
-                Global.Log("VideoPlay_ImgPanel_15", string.Format("VideoPlay_ImgPanel_16", FilePath));
-                startInfo.Arguments = "VideoPlay_ImgPanel_17" + FilePath + "VideoPlay_ImgPanel_18";
+                Global.Log("REDACT", string.Format("Image File: {0}", this.FilePath));
+                startInfo.Arguments = string.Concat("\"", this.FilePath, "\"");
                 Process.Start(startInfo);
             }
             catch
@@ -188,7 +192,7 @@ namespace VideoPlayer2
         
         private void InitializeComponent()
         {
-            this.components = (IContainer)new Container();
+            this.components = new Container();
             this.pic = new PictureBox();
             this.contextMenuStrip1 = new ContextMenuStrip(this.components);
             this.mnu_ViewSnapshot = new ToolStripMenuItem();
@@ -198,54 +202,50 @@ namespace VideoPlayer2
             this.saveFileDialog = new SaveFileDialog();
             ((ISupportInitialize)this.pic).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
-            this.SuspendLayout();
+            base.SuspendLayout();
             this.pic.BackColor = Color.Black;
             this.pic.ContextMenuStrip = this.contextMenuStrip1;
             this.pic.Dock = DockStyle.Fill;
             this.pic.Location = new Point(0, 0);
-            this.pic.Name = "VideoPlay_ImgPanel_19";
+            this.pic.Name = "pic";
             this.pic.Size = new Size(160, 100);
             this.pic.SizeMode = PictureBoxSizeMode.StretchImage;
             this.pic.TabIndex = 0;
             this.pic.TabStop = false;
             this.pic.DoubleClick += new EventHandler(this.pic_DoubleClick);
-            this.contextMenuStrip1.Items.AddRange(new ToolStripItem[4]
-            {
-        (ToolStripItem) this.mnu_ViewSnapshot,
-        (ToolStripItem) this.mnu_DeleteSnapshot,
-        (ToolStripItem) this.mnuExportImage,
-        (ToolStripItem) this.mnu_RedactImage
-            });
-            this.contextMenuStrip1.Name = "VideoPlay_ImgPanel_20";
+            ToolStripItemCollection items = this.contextMenuStrip1.Items;
+            ToolStripItem[] mnuViewSnapshot = new ToolStripItem[] { this.mnu_ViewSnapshot, this.mnu_DeleteSnapshot, this.mnuExportImage, this.mnu_RedactImage };
+            this.contextMenuStrip1.Items.AddRange(mnuViewSnapshot);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new Size(161, 92);
-            this.mnu_ViewSnapshot.Name = "VideoPlay_ImgPanel_21";
+            this.mnu_ViewSnapshot.Name = "mnu_ViewSnapshot";
             this.mnu_ViewSnapshot.Size = new Size(160, 22);
-            this.mnu_ViewSnapshot.Text = "VideoPlay_ImgPanel_22";
+            this.mnu_ViewSnapshot.Text = "View Snapshot...";
             this.mnu_ViewSnapshot.Click += new EventHandler(this.mnu_ViewSnapshot_Click);
-            this.mnu_DeleteSnapshot.Name = "VideoPlay_ImgPanel_23";
+            this.mnu_DeleteSnapshot.Name = "mnu_DeleteSnapshot";
             this.mnu_DeleteSnapshot.Size = new Size(160, 22);
-            this.mnu_DeleteSnapshot.Text = "VideoPlay_ImgPanel_24";
+            this.mnu_DeleteSnapshot.Text = "Delete Snapshot";
             this.mnu_DeleteSnapshot.Click += new EventHandler(this.mnu_DeleteSnapshot_Click);
-            this.mnuExportImage.Name = "VideoPlay_ImgPanel_25";
+            this.mnuExportImage.Name = "mnuExportImage";
             this.mnuExportImage.Size = new Size(160, 22);
-            this.mnuExportImage.Text = "VideoPlay_ImgPanel_26";
+            this.mnuExportImage.Text = "Export Image";
             this.mnuExportImage.Click += new EventHandler(this.mnuExportImage_Click);
-            this.mnu_RedactImage.Name = "VideoPlay_ImgPanel_27";
+            this.mnu_RedactImage.Name = "mnu_RedactImage";
             this.mnu_RedactImage.Size = new Size(160, 22);
-            this.mnu_RedactImage.Text = "VideoPlay_ImgPanel_28";
+            this.mnu_RedactImage.Text = "Redact Image";
             this.mnu_RedactImage.Visible = false;
             this.mnu_RedactImage.Click += new EventHandler(this.mnu_RedactImage_Click);
-            this.saveFileDialog.DefaultExt = "VideoPlay_ImgPanel_30";
-            this.saveFileDialog.Filter = "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*";
-            this.AutoScaleDimensions = new SizeF(6f, 13f);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.Controls.Add((Control)this.pic);
-            this.Name = "VideoPlay_ImgPanel_32";
-            this.Size = new Size(160, 100);
-            this.Load += new EventHandler(this.ImagePanel_Load);
+            this.saveFileDialog.DefaultExt = "JPG";
+            this.saveFileDialog.Filter = "JPEG File|*.jpg";
+            base.AutoScaleDimensions = new SizeF(6f, 13f);
+            base.AutoScaleMode = AutoScaleMode.Font;
+            base.Controls.Add(this.pic);
+            base.Name = "ImagePanel";
+            base.Size = new Size(160, 100);
+            base.Load += new EventHandler(this.ImagePanel_Load);
             ((ISupportInitialize)this.pic).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
-            this.ResumeLayout(false);
+            base.ResumeLayout(false);
         }
     }
 }

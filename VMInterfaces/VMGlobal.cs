@@ -22,45 +22,48 @@ namespace VMInterfaces
 
         static VMGlobal()
         {
-            VMGlobal.ProfilePath = "VMGlobal_unknown1";
-            VMGlobal.ProfileFile = "VMGlobal_unknown2";
+            VMGlobal.ProfilePath = "C:\\ProgramData\\HD Protech\\C3Sentinel";
+            VMGlobal.ProfileFile = "C3Sentinel.dat";
             VMGlobal.DBConnectionProfile = "";
-            VMGlobal.CameraActions = "VMGlobal_unknown3";
-            VMGlobal.LogActions = "VMGlobal_unknown4";
+            VMGlobal.CameraActions = "Check-In,Check-Out,Download,Clear,Battery,Disk Space,Is Cite Camera,Update Camera Profile,Clear Camera Profile,Camera Docked";
+            VMGlobal.LogActions = "Logon,Logout,Logon Failed,Logon Count,List,View,Save,Update,Delete,Video,Image,DVD,Export,Upload,Error Code,System Error,Password";
             VMGlobal.SystemRoles = new string[6]
             {
-                "ADMIN",
-                "DELEGATE",
-                "SUPER",
-                "STANDART",
-                "VIEWONLY",
-                "GUEST"
+                "Administor",
+                "Supevisor",
+                "Standad Account",
+                "View Only",
+                "Guest",
+                "None"
             };
         }
 
         public static void GetDBConnection()
         {
-            if(!Directory.Exists(VMGlobal.ProfilePath))
+            if (!Directory.Exists(ProfilePath))
             {
-                Directory.CreateDirectory(VMGlobal.ProfilePath);
-                Network.SetAcl(VMGlobal.ProfilePath);
+                Directory.CreateDirectory(ProfilePath);
+                Network.SetAcl(ProfilePath);
             }
-            string str = Path.Combine(VMGlobal.ProfilePath, VMGlobal.ProfileFile);
-            if (File.Exists(str))
+            string str = Path.Combine(ProfilePath, ProfileFile);
+            if (!File.Exists(str))
             {
-                DBProfileData dbProfileData = (DBProfileData)FileCrypto.LoadConfig(str);
-                if (dbProfileData.IsLocalDB)
-                    VMGlobal.DBConnectionProfile = "VMGlobal_unknown5";
-                else
-                    VMGlobal.DBConnectionProfile = "VMGlobal_unknown6";
+                DBConnectionProfile = "C3Sentinel";
+                return;
             }
-            else
-                VMGlobal.DBConnectionProfile = "VMGlobal_unknown7";
+            DBProfileData dBProfileDatum = (DBProfileData)FileCrypto.LoadConfig(str);
+            if (dBProfileDatum.IsLocalDB)
+            {
+                DBConnectionProfile = "C3Sentinel";
+                return;
+            }
+            object[] dataSource = new object[] { dBProfileDatum.DataSource, dBProfileDatum.Catalog, dBProfileDatum.PersistSecurityInfo, dBProfileDatum.UserId, dBProfileDatum.Password };
+            DBConnectionProfile = string.Format("Data Source={0};Initial Catalog={1};Persist Security Info={2};User ID={3};Password={4}", dataSource);
         }
 
         public static void SetTestConnection(string conn)
         {
-            VMGlobal.DBConnectionProfile = conn;
+            DBConnectionProfile = conn;
         }
 
         /// <summary>

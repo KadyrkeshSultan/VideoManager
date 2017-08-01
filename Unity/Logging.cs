@@ -13,11 +13,11 @@ namespace Unity
                 Directory.CreateDirectory(GlobalAppCfg.AppDataPath);
             if (Directory.Exists(GlobalAppCfg.AppDataPath))
             {
-                string path = Path.Combine(GlobalAppCfg.AppDataPath, "Unity_Logging_unknown1");
+                string path = Path.Combine(GlobalAppCfg.AppDataPath, "Sentinel.LOG");
                 try
                 {
                     using (StreamWriter streamWriter = new StreamWriter(path, true))
-                        streamWriter.WriteLine(string.Format("Unity_Logging_unknown2", DateTime.Now, msg));
+                        streamWriter.WriteLine(string.Format("{0}: {1}", DateTime.Now, msg));
                 }
                 catch
                 {

@@ -10,7 +10,7 @@ namespace VMInterfaces.Entity_Configs
         public CFG_DomainConfig()
         {
             HasKey(domainConfig => domainConfig.Id).Property(domainConfig => domainConfig.Id).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
-            Property(domainConfig => domainConfig.ProfileName).IsRequired().HasMaxLength(new int?(32)).HasColumnAnnotation("CFG_DomainConfig_unknown1", new IndexAnnotation(new IndexAttribute()
+            Property(domainConfig => domainConfig.ProfileName).IsRequired().HasMaxLength(new int?(32)).HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()
             {
                 IsUnique = true
             }));

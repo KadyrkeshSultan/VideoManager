@@ -53,11 +53,11 @@ namespace AppGlobal
             GlobalAccount = new Account();
             DefaultHashAlgorithm = HASH_ALGORITHM.SHA1;
             ClassificationDays = new Dictionary<string, int>();
-            UNCServer = "AppGlobal_Global_unknown1";
-            RelativePath = "AppGlobal_Global_unknown2";
-            PrimaryUNCServer = "AppGlobal_Global_unknown3";
-            PrimaryRelativePath = "AppGlobal_Global_unknown4";
-            INIFILE = "AppGlobal_Global_unknown5";
+            UNCServer = "C:";
+            RelativePath = "C3Sentinel";
+            PrimaryUNCServer = "C:";
+            PrimaryRelativePath = "C3Sentinel";
+            INIFILE = "CITE.INI";
             RightsProfile = 0;
             Camera_LogRecordID = Guid.Empty;
             Camera_Battery = 0;

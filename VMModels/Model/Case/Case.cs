@@ -45,7 +45,7 @@ namespace VMModels.Model
             string str = string.Empty;
             if (!string.IsNullOrEmpty(MiddleName))
                 str = MiddleName.Substring(0, 1).ToUpper();
-            return string.Format("Model_Case_1", LastName, FirstName, str);
+            return string.Format("{0}, {1} {2}", LastName, FirstName, str);
         }
     }
 }

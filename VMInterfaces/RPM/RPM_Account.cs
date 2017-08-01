@@ -41,8 +41,8 @@ namespace VMInterfaces
         {
             try
             {
-                context.Database.ExecuteSqlCommand(string.Format("RMP_Account_unknown1", Id));
-                WriteLog(VMGlobal.LOG_ACTION.DELETE, "RMP_Account_unknown2");
+                context.Database.ExecuteSqlCommand(string.Format("delete from AccountAccountGroups where Account_Id='{0}'", Id));
+                WriteLog(VMGlobal.LOG_ACTION.DELETE, "Remove Account From All Groups");
             }
             catch
             {
@@ -62,7 +62,7 @@ namespace VMInterfaces
                     InsertUpdate(account);
                     Save();
                     flag = true;
-                    WriteLog(VMGlobal.LOG_ACTION.PASSWORD, "RMP_Account_unknown3");
+                    WriteLog(VMGlobal.LOG_ACTION.PASSWORD, "Update Password");
                 }
             }
             catch
@@ -84,7 +84,7 @@ namespace VMInterfaces
                     InsertUpdate(account);
                     Save();
                     flag = true;
-                    WriteLog(VMGlobal.LOG_ACTION.UPDATE, "RMP_Account_unknown4");
+                    WriteLog(VMGlobal.LOG_ACTION.UPDATE, "Update PIN");
                 }
             }
             catch
@@ -103,7 +103,7 @@ namespace VMInterfaces
                 if (department != null)
                 {
                     str = department.Name;
-                    WriteLog(VMGlobal.LOG_ACTION.VIEW, string.Format("RMP_Account_unknown5", str));
+                    WriteLog(VMGlobal.LOG_ACTION.VIEW, string.Format("Dept: {0}", str));
                 }
             }
             catch
@@ -122,7 +122,7 @@ namespace VMInterfaces
                 if (substation != null)
                 {
                     str = substation.Name;
-                    WriteLog(VMGlobal.LOG_ACTION.VIEW, string.Format("RMP_Account_uknown6", str));
+                    WriteLog(VMGlobal.LOG_ACTION.VIEW, string.Format("Substation: {0}", str));
                 }
             }
             catch
@@ -142,8 +142,8 @@ namespace VMInterfaces
         {
             try
             {
-                context.Inventories.SqlQuery(string.Format("RMP_Account_unknown7", Guid.Empty, Id));
-                WriteLog(VMGlobal.LOG_ACTION.DELETE, "RMP_Account_unknown8");
+                context.Inventories.SqlQuery(string.Format("update Inventories set AccountID='{0}' where AccountID='{1}'", Guid.Empty, Id));
+                WriteLog(VMGlobal.LOG_ACTION.DELETE, "Remove All Inventory");
             }
             catch
             {
@@ -153,7 +153,7 @@ namespace VMInterfaces
         
         public List<Account> GetAccountList()
         {
-            WriteLog(VMGlobal.LOG_ACTION.LIST, "RMP_Account_unknown8");
+            WriteLog(VMGlobal.LOG_ACTION.LIST, "List Accounts");
             return context.Accounts.OrderBy(account => account.LastName).ToList();
         }
 
@@ -168,7 +168,7 @@ namespace VMInterfaces
                     num = 1;
                 if (!string.IsNullOrEmpty(lastName))
                     num += 2;
-                WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("RPM_Account_unknown9", badge, lastName));
+                WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("Search Account: {0} {1}", badge, lastName));
                 switch (num)
                 {
                     case 1:
@@ -215,7 +215,7 @@ namespace VMInterfaces
             {
                 if (VMGlobal.AccountRecord == null)
                     return;
-                WriteLog(VMGlobal.LOG_ACTION.LOGOUT, string.Format("RPM_Account_unknown10", VMGlobal.AccountRecord.ToString(), VMGlobal.AccountRecord.BadgeNumber));
+                WriteLog(VMGlobal.LOG_ACTION.LOGOUT, string.Format("{0} [{1}]", VMGlobal.AccountRecord.ToString(), VMGlobal.AccountRecord.BadgeNumber));
             }
             catch
             {
@@ -235,9 +235,9 @@ namespace VMInterfaces
                     account2 = null;
             }
             if (account2 == null)
-                return (Account)null;
+                return null;
             VMGlobal.AccountRecord = account2;
-            WriteLog(VMGlobal.LOG_ACTION.LOGON, string.Format("RPM_Account_unknown11", account2.ToString(), account2.BadgeNumber, loginId));
+            WriteLog(VMGlobal.LOG_ACTION.LOGON, string.Format("{0} {1}/ {2}", account2.ToString(), account2.BadgeNumber, loginId));
             return account1;
         }
 
@@ -256,7 +256,7 @@ namespace VMInterfaces
         
         public void Delete(Account rec)
         {
-            WriteLog(VMGlobal.LOG_ACTION.DELETE, string.Format("RPM_Account_unknown11", rec.BadgeNumber, rec.ToString()));
+            WriteLog(VMGlobal.LOG_ACTION.DELETE, string.Format("Delete Account: {0} {1}", rec.BadgeNumber, rec.ToString()));
             context.Accounts.Remove(rec);
         }
 
@@ -267,12 +267,12 @@ namespace VMInterfaces
             {
                 if (rec.Id == Guid.Empty)
                 {
-                    WriteLog(VMGlobal.LOG_ACTION.SAVE, string.Format("RPM_Account_unknown12", rec.BadgeNumber, rec.ToString()));
+                    WriteLog(VMGlobal.LOG_ACTION.SAVE, string.Format("Add New Account: {0} {1}", rec.BadgeNumber, rec.ToString()));
                     context.Accounts.Add(rec);
                 }
                 else
                 {
-                    WriteLog(VMGlobal.LOG_ACTION.UPDATE, string.Format("RPM_Account_unknown13", rec.BadgeNumber, rec.ToString()));
+                    WriteLog(VMGlobal.LOG_ACTION.UPDATE, string.Format("{0} {1}", rec.BadgeNumber, rec.ToString()));
                     context.Entry(rec).State = EntityState.Modified;
                 }
             }
@@ -304,7 +304,7 @@ namespace VMInterfaces
                     foreach (DbEntityValidationResult entityValidationError in ex.EntityValidationErrors)
                     {
                         foreach (DbValidationError validationError in entityValidationError.ValidationErrors)
-                            Msg += string.Format("RPM_Account_unknown14", validationError.PropertyName, validationError.ErrorMessage);
+                            Msg += string.Format("Property: {0} Error: {1}\n", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
             }

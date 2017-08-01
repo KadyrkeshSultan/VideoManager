@@ -20,16 +20,16 @@ namespace Unity
         {
             CryptoIO._iterations = 2;
             CryptoIO._keySize = 256;
-            CryptoIO._hash = "Unity_CryptoIO_unknown1";
-            CryptoIO._salt = "Unity_CryptoIO_unknown2";
-            CryptoIO._vector = "Unity_CryptoIO_unknown3";
-            CryptoIO._pwd = "Unity_CryptoIO_unknown4";
+            CryptoIO._hash = "SHA1";
+            CryptoIO._salt = "kgbhouasff23d222";
+            CryptoIO._vector = "geb001tst92sbbcq";
+            CryptoIO._pwd = "foreach(var x in lst)";
         }
 
         
         public static string MD5Encrypt(string txt)
         {
-            return FormsAuthentication.HashPasswordForStoringInConfigFile(txt, "Unity_CryptoIO_unknown5");
+            return FormsAuthentication.HashPasswordForStoringInConfigFile(txt, "MD5");
         }
 
         

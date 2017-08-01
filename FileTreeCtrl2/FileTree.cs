@@ -39,18 +39,12 @@ namespace FileTreeCtrl2
         {
             Months = new string[12]
             {
-                "FileTree2_1",
-                "FileTree2_2",
-                "FileTree2_3",
-                "FileTree2_4",
-                "FileTree2_5",
-                "FileTree2_6",
-                "FileTree2_7",
-                "FileTree2_8",
-                "FileTree2_9",
-                "FileTree2_10",
-                "FileTree2_11",
-                "FileTree2_12"
+                "Jan", "Feb",
+                "Mar", "Apr",
+                "May", "Jun",
+                "Jul", "Aug",
+                "Sep", "Oct",
+                "Nov", "Dec"
             };
             InitializeComponent();
             Dock = DockStyle.Fill;
@@ -80,7 +74,7 @@ namespace FileTreeCtrl2
             using (RPM_Account rpmAccount = new RPM_Account())
             {
                 Account account = rpmAccount.GetAccount(this.AccountID);
-                ROOT.Nodes.Add(new vTreeNode(string.Format("FileTree2_13", account.ToString(), account.BadgeNumber))
+                ROOT.Nodes.Add(new vTreeNode(string.Format("{0} [{1}]", account.ToString(), account.BadgeNumber))
                 {
                     ImageIndex = 1,
                     Tag = account.Id
@@ -117,7 +111,7 @@ namespace FileTreeCtrl2
                             while (enumerator.MoveNext())
                             {
                                 int current = enumerator.Current;
-                                e.Node.Nodes.Add(new vTreeNode(string.Format("FileTree2_14", current))
+                                e.Node.Nodes.Add(new vTreeNode(string.Format("{0}", current))
                                 {
                                     ImageIndex = 2,
                                     Tag = current
@@ -141,7 +135,7 @@ namespace FileTreeCtrl2
                             while (enumerator.MoveNext())
                             {
                                 int current = enumerator.Current;
-                                e.Node.Nodes.Add(new vTreeNode(string.Format("FileTree2_15", Months[current - 1]))
+                                e.Node.Nodes.Add(new vTreeNode(string.Format("{0}", Months[current - 1]))
                                 {
                                     ImageIndex = 3,
                                     Tag = current
@@ -168,7 +162,7 @@ namespace FileTreeCtrl2
                             {
                                 int current = enumerator.Current;
                                 DayOfWeek dayOfWeek = new DateTime(YEAR, MONTH, current).DayOfWeek;
-                                e.Node.Nodes.Add(new vTreeNode(string.Format("FileTree2_16", current, dayOfWeek))
+                                e.Node.Nodes.Add(new vTreeNode(string.Format("{0} • {1}", current, dayOfWeek))
                                 {
                                     ImageIndex = 4,
                                     Tag = current
@@ -209,7 +203,7 @@ namespace FileTreeCtrl2
         private void mnu_RefreshIngestTree_Click(object sender, EventArgs e)
         {
             ClearDateCallback();
-            InitTree("FileTree2_17");
+            InitTree("Catalog by Ingest Date");
         }
 
         
@@ -223,7 +217,7 @@ namespace FileTreeCtrl2
         
         private void InitializeComponent()
         {
-            this.components = (IContainer)new Container();
+            this.components = new Container();
             ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(FileTree));
             this.vTree = new vTreeView();
             this.TreeImages = new ImageList(this.components);
@@ -232,55 +226,52 @@ namespace FileTreeCtrl2
             this.toolStripMenuItem1 = new ToolStripSeparator();
             this.mnu_RefreshIngestTree = new ToolStripMenuItem();
             this.TreeMenu.SuspendLayout();
-            this.SuspendLayout();
-            this.vTree.AccessibleName = "FileTree2_18";
+            base.SuspendLayout();
+            this.vTree.AccessibleName = "TreeView";
             this.vTree.AccessibleRole = AccessibleRole.List;
             this.vTree.ContextMenuStrip = this.TreeMenu;
             this.vTree.Dock = DockStyle.Fill;
             this.vTree.ImageList = this.TreeImages;
             this.vTree.Location = new Point(0, 0);
-            this.vTree.Name = "FileTree2_19";
+            this.vTree.Name = "vTree";
             this.vTree.ScrollPosition = new Point(0, 0);
-            this.vTree.SelectedNode = (vTreeNode)null;
+            this.vTree.SelectedNode = null;
             this.vTree.Size = new Size(397, 498);
             this.vTree.TabIndex = 0;
-            this.vTree.Text = "FileTree2_20";
+            this.vTree.Text = "vTreeView1";
             this.vTree.VIBlendScrollBarsTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.vTree.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.vTree.NodeMouseUp += new vTreeViewMouseEventHandler(this.vTree_NodeMouseUp);
             this.TreeImages.ImageStream = (ImageListStreamer)Resources.FileTree.Tree_ImageStream;
             this.TreeImages.TransparentColor = Color.Transparent;
-            this.TreeImages.Images.SetKeyName(0, "FileTree2_22");
-            this.TreeImages.Images.SetKeyName(1, "FileTree2_23");
-            this.TreeImages.Images.SetKeyName(2, "FileTree2_24");
-            this.TreeImages.Images.SetKeyName(3, "FileTree2_25");
-            this.TreeImages.Images.SetKeyName(4, "FileTree2_26");
-            this.TreeMenu.Items.AddRange(new ToolStripItem[3]
-            {
-        (ToolStripItem) this.mnuTreeLines,
-        (ToolStripItem) this.toolStripMenuItem1,
-        (ToolStripItem) this.mnu_RefreshIngestTree
-            });
-            this.TreeMenu.Name = "FileTree2_27";
+            this.TreeImages.Images.SetKeyName(0, "global.png");
+            this.TreeImages.Images.SetKeyName(1, "person2.png");
+            this.TreeImages.Images.SetKeyName(2, "year.png");
+            this.TreeImages.Images.SetKeyName(3, "month.png");
+            this.TreeImages.Images.SetKeyName(4, "day.png");
+            ToolStripItemCollection items = this.TreeMenu.Items;
+            ToolStripItem[] mnuRefreshIngestTree = new ToolStripItem[] { this.mnuTreeLines, this.toolStripMenuItem1, this.mnu_RefreshIngestTree };
+            this.TreeMenu.Items.AddRange(mnuRefreshIngestTree);
+            this.TreeMenu.Name = "TreeMenu";
             this.TreeMenu.Size = new Size(153, 76);
-            this.mnuTreeLines.Name = "FileTree2_28";
+            this.mnuTreeLines.Name = "mnuTreeLines";
             this.mnuTreeLines.Size = new Size(152, 22);
-            this.mnuTreeLines.Text = "FileTree2_29";
+            this.mnuTreeLines.Text = "Tree Lines";
             this.mnuTreeLines.Click += new EventHandler(this.mnuTreeLines_Click);
-            this.toolStripMenuItem1.Name = "FileTree2_30";
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new Size(149, 6);
-            this.mnu_RefreshIngestTree.Name = "FileTree2_31";
+            this.mnu_RefreshIngestTree.Name = "mnu_RefreshIngestTree";
             this.mnu_RefreshIngestTree.Size = new Size(152, 22);
-            this.mnu_RefreshIngestTree.Text = "FileTree2_32";
+            this.mnu_RefreshIngestTree.Text = "Refresh List";
             this.mnu_RefreshIngestTree.Click += new EventHandler(this.mnu_RefreshIngestTree_Click);
-            this.AutoScaleDimensions = new SizeF(6f, 13f);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.Controls.Add((Control)this.vTree);
-            this.Name = "FileTree2_33";
-            this.Size = new Size(397, 498);
-            this.Load += new EventHandler(this.FileTree_Load);
+            base.AutoScaleDimensions = new SizeF(6f, 13f);
+            base.AutoScaleMode = AutoScaleMode.Font;
+            base.Controls.Add(this.vTree);
+            base.Name = "FileTree";
+            base.Size = new Size(397, 498);
+            base.Load += new EventHandler(this.FileTree_Load);
             this.TreeMenu.ResumeLayout(false);
-            this.ResumeLayout(false);
+            base.ResumeLayout(false);
         }
 
         public delegate void DEL_ClearDate();

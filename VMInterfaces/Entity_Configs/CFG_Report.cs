@@ -10,7 +10,7 @@ namespace VMInterfaces.Entity_Configs
         public CFG_Report()
         {
             HasKey(report => report.Id).Property(report => report.Id).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
-            Property(report => report.ReportName).IsRequired().HasMaxLength(new int?(64)).HasColumnAnnotation("CFG_Report_unknown1", new IndexAnnotation(new IndexAttribute()
+            Property(report => report.ReportName).IsRequired().HasMaxLength(new int?(64)).HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()
             {
                 IsUnique = true
             }));

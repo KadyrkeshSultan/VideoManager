@@ -14,7 +14,7 @@ namespace VMInterfaces.Entity_Configs
             Property(dataFile => dataFile.OriginalFileName).IsRequired().HasMaxLength(new int?(128));
             Property(dataFile => dataFile.FileExtension).IsRequired().HasMaxLength(new int?(8));
             Property(dataFile => dataFile.FileExtension2).HasMaxLength(new int?(8));
-            Property(dataFile => dataFile.Thumbnail).HasColumnType("CFG_DataFile_unknown1");
+            Property(dataFile => dataFile.Thumbnail).HasColumnType("image");
             Property(dataFile => dataFile.GPS).HasMaxLength(new int?(64));
             Property(dataFile => dataFile.ShortDesc).HasMaxLength(new int?(64));
             Property(dataFile => dataFile.PurgeFileName).HasMaxLength(new int?(256));

@@ -25,7 +25,7 @@ namespace Logger
                 using (RPM_Account rpmAccount = new RPM_Account())
                 {
                     Account account = rpmAccount.GetAccount(Id);
-                    memo = string.Format("Logger_Logging_unknown1", account.ToString(), account.BadgeNumber) + memo;
+                    memo = string.Format("{0} [{1}]\n", account.ToString(), account.BadgeNumber) + memo;
                 }
             }
             AccountLog log = new AccountLog();

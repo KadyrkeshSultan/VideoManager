@@ -13,7 +13,7 @@ namespace VMInterfaces.Entity_Configs
             Property(snapshot => snapshot.UNCPath).IsRequired().HasMaxLength(new int?(256));
             Property(snapshot => snapshot.StoredFileName).IsRequired().HasMaxLength(new int?(128));
             Property(snapshot => snapshot.FileExtension).IsRequired().HasMaxLength(new int?(8));
-            Property(snapshot => snapshot.Thumbnail).HasColumnType("CFG_Snapshot_unknown1");
+            Property(snapshot => snapshot.Thumbnail).HasColumnType("image");
             Property(snapshot => snapshot.GPS).HasMaxLength(new int?(64));
             Property(snapshot => snapshot.FileHash).HasMaxLength(new int?(64));
         }

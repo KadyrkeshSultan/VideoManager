@@ -20,10 +20,10 @@ namespace WinReg
                 registryKey.OpenSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree, RegistryRights.FullControl);
                 try
                 {
-                    windowPos.Width = Convert.ToInt32(registryKey.GetValue("WinReg_Reg_1"));
-                    windowPos.Height = Convert.ToInt32(registryKey.GetValue("WinReg_Reg_2"));
-                    windowPos.PosX = Convert.ToInt32(registryKey.GetValue("WinReg_Reg_3"));
-                    windowPos.PosY = Convert.ToInt32(registryKey.GetValue("WinReg_Reg_4"));
+                    windowPos.Width = Convert.ToInt32(registryKey.GetValue("Width"));
+                    windowPos.Height = Convert.ToInt32(registryKey.GetValue("Height"));
+                    windowPos.PosX = Convert.ToInt32(registryKey.GetValue("PosX"));
+                    windowPos.PosY = Convert.ToInt32(registryKey.GetValue("PosY"));
                     registryKey.Close();
                 }
                 catch
@@ -41,10 +41,10 @@ namespace WinReg
             {
                 RegistryKey userAppDataRegistry = Application.UserAppDataRegistry;
                 RegistryKey subKey = userAppDataRegistry.CreateSubKey(key);
-                subKey.SetValue("WinReg_Reg_5", pos.Width);
-                subKey.SetValue("WinReg_Reg_6", pos.Height);
-                subKey.SetValue("WinReg_Reg_7", pos.PosX);
-                subKey.SetValue("WinReg_Reg_8", pos.PosY);
+                subKey.SetValue("Width", pos.Width);
+                subKey.SetValue("Height", pos.Height);
+                subKey.SetValue("PosX", pos.PosX);
+                subKey.SetValue("PosY", pos.PosY);
                 subKey.Flush();
                 subKey.Close();
                 userAppDataRegistry.Close();

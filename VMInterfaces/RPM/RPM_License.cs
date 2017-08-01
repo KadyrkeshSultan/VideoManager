@@ -37,18 +37,18 @@ namespace VMInterfaces
             DateTime now = DateTime.Now;
             rec.Timestamp = now;
             Guid guid = Guid.NewGuid();
-            rec.LicData = CryptoIO.Encrypt(string.Format("RPM_License_unknown1", guid, now));
+            rec.LicData = CryptoIO.Encrypt(string.Format("{0}|{1}|1", guid, now));
             SaveUpdate(rec);
             Save();
             using (RPM_GlobalConfig rpmGlobalConfig = new RPM_GlobalConfig())
             {
                 rpmGlobalConfig.SaveUpdate(new GlobalConfig()
                 {
-                    Key = "RPM_License_unknown2",
-                    Value = CryptoIO.Encrypt(string.Format("RPM_License_unknown3", Guid.NewGuid(), now)),
+                    Key = "PRODUCT_KEY",
+                    Value = CryptoIO.Encrypt(string.Format("{0}|{1}", Guid.NewGuid(), now)),
                     IsEditable = false,
-                    Desc = "RPM_License_unknown4",
-                    DataType = "RPM_License_unknown5"
+                    Desc = "C3 Sentinel SKU Product ID",
+                    DataType = "STRING"
                 });
                 rpmGlobalConfig.Save();
             }
@@ -79,7 +79,7 @@ namespace VMInterfaces
                 DateTime now = DateTime.Now;
                 using (RPM_GlobalConfig rpmGlobalConfig = new RPM_GlobalConfig())
                 {
-                    GlobalConfig configRecord = rpmGlobalConfig.GetConfigRecord("RPM_License_unknown6");
+                    GlobalConfig configRecord = rpmGlobalConfig.GetConfigRecord("PRODUCT_KEY");
                     string[] strArray3 = CryptoIO.Decrypt(configRecord.Value).Split('|');
                     if (strArray2[0].Equals(strArray3[0]))
                     {
@@ -87,7 +87,7 @@ namespace VMInterfaces
                         {
                             if (strArray3[1].Equals(strArray1[1]))
                             {
-                                configRecord.Value = CryptoIO.Encrypt(string.Format("RPM_License_unknown7", strArray3[0], now));
+                                configRecord.Value = CryptoIO.Encrypt(string.Format("{0}|{1}", strArray3[0], now));
                                 rpmGlobalConfig.SaveUpdate(configRecord);
                                 rpmGlobalConfig.Save();
                                 flag = true;
@@ -102,7 +102,7 @@ namespace VMInterfaces
                         License rec = new License();
                         rec.Timestamp = now;
                         Guid guid = Guid.NewGuid();
-                        rec.LicData = CryptoIO.Encrypt(string.Format("RPM_License_unknown8", guid, now, int32));
+                        rec.LicData = CryptoIO.Encrypt(string.Format("{0}|{1}|{2}", guid, now, int32));
                         SaveUpdate(rec);
                         Save();
                     }
@@ -124,12 +124,12 @@ namespace VMInterfaces
                 string[] strArray1 = licenseData.Split('|');
                 using (RPM_GlobalConfig rpmGlobalConfig = new RPM_GlobalConfig())
                 {
-                    str = rpmGlobalConfig.GetConfigValue("RPM_License_unknown9");
+                    str = rpmGlobalConfig.GetConfigValue("PRODUCT_KEY");
                     if (string.IsNullOrEmpty(str))
                         return null;
                     string[] strArray2 = CryptoIO.Decrypt(str).Split('|');
                     if (strArray1[1].Equals(strArray2[1]))
-                        str = CryptoIO.Encrypt(string.Format("RPM_License_unknown10", DateTime.Now.Millisecond, strArray2[0], strArray1[1], DateTime.Now, Count));
+                        str = CryptoIO.Encrypt(string.Format("{0}|{1}|{2}|{3}|{4}", DateTime.Now.Millisecond, strArray2[0], strArray1[1], DateTime.Now, Count));
                 }
             }
             return str;
@@ -167,7 +167,7 @@ namespace VMInterfaces
                     foreach (DbEntityValidationResult entityValidationError in ex.EntityValidationErrors)
                     {
                         foreach (DbValidationError validationError in entityValidationError.ValidationErrors)
-                            Msg += string.Format("RPM_License_unknown11", validationError.PropertyName, validationError.ErrorMessage);
+                            Msg += string.Format("Property: {0} Error: {1}\n", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
             }

@@ -17,7 +17,7 @@ namespace VMModels.Model
 
         public override string ToString()
         {
-            return string.Format("Model_Substation_1", Name, Address1, City, State, PostalCode);
+            return string.Format("{0}, {1}, {2}, {3}, {4}", Name, Address1, City, State, PostalCode);
         }
     }
 }

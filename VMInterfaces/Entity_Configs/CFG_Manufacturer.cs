@@ -10,7 +10,7 @@ namespace VMInterfaces.Entity_Configs
         public CFG_Manufacturer()
         {
             HasKey(manufacturer => manufacturer.Id).Property(manufacturer => manufacturer.Id).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
-            Property(manufacturer => manufacturer.Name).IsRequired().HasMaxLength(new int?(64)).HasColumnAnnotation("CFG_Manufacturer_unknown1", new IndexAnnotation(new IndexAttribute()
+            Property(manufacturer => manufacturer.Name).IsRequired().HasMaxLength(new int?(64)).HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()
             {
                 IsUnique = true
             }));

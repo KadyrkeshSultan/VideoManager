@@ -42,7 +42,7 @@ namespace VMInterfaces
         public void Delete(DomainConfig rec)
         {
             context.DomainCfg.Remove(rec);
-            context.Database.ExecuteSqlCommand(string.Format("RPM_DomainConfig_unknown1", Guid.Empty, rec.Id));
+            context.Database.ExecuteSqlCommand(string.Format("update Substations set DomainCfgID='{0}' where DomainCfgID='{1}'", Guid.Empty, rec.Id));
         }
 
         
@@ -77,7 +77,7 @@ namespace VMInterfaces
                     foreach (DbEntityValidationResult entityValidationError in ex.EntityValidationErrors)
                     {
                         foreach (DbValidationError validationError in entityValidationError.ValidationErrors)
-                            Msg += string.Format("RPM_DomainConfig_unknown2", validationError.PropertyName, validationError.ErrorMessage);
+                            Msg += string.Format("Property: {0} Error: {1}\n", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
             }

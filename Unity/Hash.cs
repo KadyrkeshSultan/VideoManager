@@ -9,7 +9,7 @@ namespace Unity
         public static string GetHashFromFile(string fileName, HashAlgorithm algorithm)
         {
             using (BufferedStream bufferedStream = new BufferedStream(File.OpenRead(fileName), 100000))
-                return BitConverter.ToString(algorithm.ComputeHash(bufferedStream)).Replace("Unity_Hash_unknown1", string.Empty);
+                return BitConverter.ToString(algorithm.ComputeHash(bufferedStream)).Replace("-", string.Empty);
         }
     }
 }

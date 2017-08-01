@@ -21,23 +21,23 @@ namespace Compass
         {
             direction = new string[17]
             {
-                "VMCompass_1",
-                "VMCompass_2",
-                "VMCompass_3",
-                "VMCompass_4",
-                "VMCompass_5",
-                "VMCompass_6",
-                "VMCompass_7",
-                "VMCompass_8",
-                "VMCompass_9",
-                "VMCompass_10",
-                "VMCompass_11",
-                "VMCompass_12",
-                "VMCompass_13",
-                "VMCompass_14",
-                "VMCompass_15",
-                "VMCompass_16",
-                "VMCompass_17",
+                "N",
+                "NNE",
+                "NE",
+                "ENE",
+                "E",
+                "ESE",
+                "SE",
+                "SSE",
+                "S",
+                "SSW",
+                "SW",
+                "WSW",
+                "W",
+                "WNW",
+                "NW",
+                "NNW",
+                "N"
             };
             arrow = (Image)Resources.arrow;
             InitializeComponent();
@@ -96,17 +96,18 @@ namespace Compass
                 }
                 if (speed >= 0)
                 {
-                    using (Font font = new Font("VMCompass_18", 10f, FontStyle.Bold, GraphicsUnit.Point))
+                    using (Font font = new Font("Arial", 10f, FontStyle.Bold, GraphicsUnit.Point))
                     {
                         Rectangle rectangle = new Rectangle(0, 35, 117, 46);
-                        e.Graphics.DrawString(Convert.ToString(speed) + "VMCompass_19", font, Brushes.White, rectangle, new StringFormat()
+                        //TODO : Надо в киллометры
+                        e.Graphics.DrawString(Convert.ToString(speed) + " mph", font, Brushes.White, rectangle, new StringFormat()
                         {
                             Alignment = StringAlignment.Center,
                             LineAlignment = StringAlignment.Center
                         });
                     }
                 }
-                using (Font font = new Font("VMCompass_20", 10f, FontStyle.Bold, GraphicsUnit.Point))
+                using (Font font = new Font("Arial", 10f, FontStyle.Bold, GraphicsUnit.Point))
                 {
                     Rectangle rectangle = new Rectangle(0, 47, 117, 59);
                     StringFormat format = new StringFormat();
@@ -139,7 +140,7 @@ namespace Compass
             this.picture.Image = (Image)Resources.face;
             this.picture.Location = new Point(0, 0);
             this.picture.Margin = new Padding(0);
-            this.picture.Name = "VMCompass_21";
+            this.picture.Name = "picture";
             this.picture.Size = new Size(117, 117);
             this.picture.TabIndex = 0;
             this.picture.TabStop = false;
@@ -148,7 +149,7 @@ namespace Compass
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = Color.Transparent;
             this.Controls.Add((Control)this.picture);
-            this.Name = "VMCompass_22";
+            this.Name = "VMCompass";
             this.Size = new Size(117, 117);
             ((ISupportInitialize)this.picture).EndInit();
             this.ResumeLayout(false);

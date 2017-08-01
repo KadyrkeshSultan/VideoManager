@@ -41,10 +41,10 @@ namespace VMMapEngine
             isMouseDown = false;
             InitMap();
             lblVersion.Alignment = ToolStripItemAlignment.Right;
-            lblVersion.Text = string.Format("VMMap_1", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+            lblVersion.Text = string.Format("Ver {0}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             ToolTip toolTip = new ToolTip();
-            toolTip.SetToolTip(btnSave, "VMMap_2");
-            toolTip.SetToolTip(zoomBar, "VMMap_3");
+            toolTip.SetToolTip(btnSave, "Save image of map to file");
+            toolTip.SetToolTip(zoomBar, "Map zoom level");
         }
 
         
@@ -70,24 +70,24 @@ namespace VMMapEngine
             this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.SuspendLayout();
+            base.SuspendLayout();
             this.panel1.BackColor = Color.Silver;
             this.panel1.BorderStyle = BorderStyle.FixedSingle;
-            this.panel1.Controls.Add((Control)this.tableLayoutPanel1);
+            this.panel1.Controls.Add(this.tableLayoutPanel1);
             this.panel1.Dock = DockStyle.Top;
             this.panel1.Location = new Point(0, 0);
-            this.panel1.Name = "VMMap_4";
+            this.panel1.Name = "panel1";
             this.panel1.Size = new Size(591, 34);
             this.panel1.TabIndex = 0;
             this.btnSave.AllowAnimations = true;
             this.btnSave.BackColor = Color.Transparent;
             this.btnSave.Dock = DockStyle.Fill;
             this.btnSave.Location = new Point(492, 3);
-            this.btnSave.Name = "VMMap_5";
-            this.btnSave.RoundedCornersMask = (byte)15;
+            this.btnSave.Name = "btnSave";
+            this.btnSave.RoundedCornersMask = 15;
             this.btnSave.Size = new Size(74, 26);
             this.btnSave.TabIndex = 2;
-            this.btnSave.Text = "VMMap_6";
+            this.btnSave.Text = "Snapshot";
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.VIBlendTheme = VIBLEND_THEME.OFFICE2010BLACK;
             this.btnSave.Click += new EventHandler(this.btnSave_Click);
@@ -96,16 +96,16 @@ namespace VMMapEngine
             this.zoomBar.Location = new Point(133, 3);
             this.zoomBar.Maximum = 17;
             this.zoomBar.Minimum = 1;
-            this.zoomBar.Name = "VMMap_7";
-            this.zoomBar.RoundedCornersMask = (byte)15;
-            this.zoomBar.RoundedCornersMaskThumb = (byte)15;
+            this.zoomBar.Name = "zoomBar";
+            this.zoomBar.RoundedCornersMask = 15;
+            this.zoomBar.RoundedCornersMaskThumb = 15;
             this.zoomBar.Size = new Size(353, 26);
             this.zoomBar.TabIndex = 1;
             this.zoomBar.Value = 9;
             this.zoomBar.VIBlendTheme = VIBLEND_THEME.OFFICE2010BLACK;
             this.zoomBar.Scroll += new ScrollEventHandler(this.zoomBar_Scroll);
             this.cboProvider.BackColor = Color.White;
-            this.cboProvider.DefaultText = "VMMap_8";
+            this.cboProvider.DefaultText = "Select Map...";
             this.cboProvider.DisplayMember = "";
             this.cboProvider.Dock = DockStyle.Fill;
             this.cboProvider.DropDownList = true;
@@ -114,8 +114,8 @@ namespace VMMapEngine
             this.cboProvider.DropDownResizeDirection = SizingDirection.Both;
             this.cboProvider.DropDownWidth = 124;
             this.cboProvider.Location = new Point(3, 3);
-            this.cboProvider.Name = "VMMap_9";
-            this.cboProvider.RoundedCornersMaskListItem = (byte)15;
+            this.cboProvider.Name = "cboProvider";
+            this.cboProvider.RoundedCornersMaskListItem = 15;
             this.cboProvider.Size = new Size(124, 26);
             this.cboProvider.TabIndex = 0;
             this.cboProvider.UseThemeBackColor = false;
@@ -125,30 +125,28 @@ namespace VMMapEngine
             this.cboProvider.VIBlendTheme = VIBLEND_THEME.OFFICE2010BLACK;
             this.cboProvider.DropDownClose += new EventHandler(this.cboProvider_DropDownClose);
             this.statusStrip1.BackColor = Color.White;
-            this.statusStrip1.Items.AddRange(new ToolStripItem[2]
-            {
-        (ToolStripItem) this.lblGps,
-        (ToolStripItem) this.lblVersion
-            });
+            ToolStripItemCollection items = this.statusStrip1.Items;
+            ToolStripItem[] toolStripItemArray = new ToolStripItem[] { this.lblGps, this.lblVersion };
+            this.statusStrip1.Items.AddRange(toolStripItemArray);
             this.statusStrip1.Location = new Point(0, 561);
-            this.statusStrip1.Name = "VMMap_10";
+            this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new Size(591, 22);
             this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 1;
             this.lblGps.AutoSize = false;
-            this.lblGps.Name = "VMMap_11";
+            this.lblGps.Name = "lblGps";
             this.lblGps.Size = new Size(120, 17);
-            this.lblGps.Text = "VMMap_12";
+            this.lblGps.Text = "0.0,0.0";
             this.lblGps.TextAlign = ContentAlignment.MiddleLeft;
             this.lblVersion.AutoSize = false;
             this.lblVersion.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            this.lblVersion.Font = new Font("VMMap_13", 9f, FontStyle.Italic, GraphicsUnit.Point, (byte)0);
+            this.lblVersion.Font = new Font("Segoe UI", 9f, FontStyle.Italic, GraphicsUnit.Point, 0);
             this.lblVersion.ForeColor = Color.Silver;
-            this.lblVersion.Name = "VMMap_14";
+            this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new Size(100, 17);
-            this.lblVersion.Text = "VMMap_15";
+            this.lblVersion.Text = "Version";
             this.lblVersion.TextAlign = ContentAlignment.MiddleLeft;
-            this.gMap.Bearing = 0.0f;
+            this.gMap.Bearing = 0f;
             this.gMap.CanDragMap = true;
             this.gMap.Dock = DockStyle.Fill;
             this.gMap.GrayScaleMode = false;
@@ -158,7 +156,7 @@ namespace VMMapEngine
             this.gMap.MaxZoom = 2;
             this.gMap.MinZoom = 2;
             this.gMap.MouseWheelZoomType = MouseWheelZoomType.MousePositionAndCenter;
-            this.gMap.Name = "VMMap_16";
+            this.gMap.Name = "gMap";
             this.gMap.NegativeMode = false;
             this.gMap.PolygonsEnabled = true;
             this.gMap.RetryLoadTile = 0;
@@ -166,7 +164,7 @@ namespace VMMapEngine
             this.gMap.ShowTileGridLines = false;
             this.gMap.Size = new Size(591, 527);
             this.gMap.TabIndex = 2;
-            this.gMap.Zoom = 0.0;
+            this.gMap.Zoom = 0;
             this.gMap.Paint += new PaintEventHandler(this.gMap_Paint);
             this.gMap.MouseClick += new MouseEventHandler(this.gMap_MouseClick);
             this.gMap.MouseDown += new MouseEventHandler(this.gMap_MouseDown);
@@ -178,36 +176,36 @@ namespace VMMapEngine
             this.tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
             this.tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 80f));
             this.tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20f));
-            this.tableLayoutPanel1.Controls.Add((Control)this.cboProvider, 0, 0);
-            this.tableLayoutPanel1.Controls.Add((Control)this.btnSave, 2, 0);
-            this.tableLayoutPanel1.Controls.Add((Control)this.zoomBar, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.cboProvider, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnSave, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.zoomBar, 1, 0);
             this.tableLayoutPanel1.Dock = DockStyle.Fill;
             this.tableLayoutPanel1.Location = new Point(0, 0);
-            this.tableLayoutPanel1.Name = "VMMap_17";
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
             this.tableLayoutPanel1.Size = new Size(589, 32);
             this.tableLayoutPanel1.TabIndex = 3;
-            this.AutoScaleDimensions = new SizeF(6f, 13f);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.Controls.Add((Control)this.gMap);
-            this.Controls.Add((Control)this.statusStrip1);
-            this.Controls.Add((Control)this.panel1);
-            this.Name = "VMMap_18";
-            this.Size = new Size(591, 583);
+            base.AutoScaleDimensions = new SizeF(6f, 13f);
+            base.AutoScaleMode = AutoScaleMode.Font;
+            base.Controls.Add(this.gMap);
+            base.Controls.Add(this.statusStrip1);
+            base.Controls.Add(this.panel1);
+            base.Name = "C3Map";
+            base.Size = new Size(591, 583);
             this.panel1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            base.ResumeLayout(false);
+            base.PerformLayout();
         }
 
         
         private void InitMap()
         {
             gMap.MapProvider = GMapProviders.OpenStreetMap;
-            int num = (int)gMap.SetCurrentPositionByKeywords("VMMap_19");
+            gMap.SetCurrentPositionByKeywords("USA");
             gMap.MinZoom = 0;
             gMap.MaxZoom = 17;
             gMap.Zoom = 4.0;
@@ -256,7 +254,7 @@ namespace VMMapEngine
             {
                 Point location = e.Location;
                 PointLatLng latLng = gMap.FromLocalToLatLng(location.X, location.Y);
-                lblGps.Text = string.Format("VMMap_20", latLng.Lat, latLng.Lng);
+                lblGps.Text = string.Format("{0:0.000000},{1:0.000000}", latLng.Lat, latLng.Lng);
             }
             catch (Exception ex)
             {
@@ -283,8 +281,8 @@ namespace VMMapEngine
                 using (SaveFileDialog saveFileDialog = new SaveFileDialog())
                 {
                     DateTime now = DateTime.Now;
-                    saveFileDialog.Filter = "VMMap_21";
-                    saveFileDialog.FileName = string.Format("VMMap_22", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
+                    saveFileDialog.Filter = "PNG (*.png)|*.png";
+                    saveFileDialog.FileName = string.Format("Map{0}{1:00}{2:00}.{3:00}{4:00}{5:00}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second);
                     Image image = gMap.ToImage();
                     if (image == null)
                         return;
