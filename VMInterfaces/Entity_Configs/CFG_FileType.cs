@@ -13,7 +13,7 @@ namespace VMInterfaces.Entity_Configs
             HasKey(fileType => fileType.Id).Property((Expression<Func<FileType, Guid>>)(fileType => fileType.Id)).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
             Property(fileType => fileType.FileExt).IsRequired().HasMaxLength(new int?(8));
             Property(fileType => fileType.TypeDec).HasMaxLength(new int?(64));
-            Property(fileType => fileType.Thumbnail).HasColumnType("CFG_FileType_unknown1");
+            Property(fileType => fileType.Thumbnail).HasColumnType("image");
         }
     }
 }

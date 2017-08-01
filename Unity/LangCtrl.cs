@@ -20,20 +20,21 @@ namespace Unity
         
         public static List<CultureInfo> GetAppLanguages()
         {
-            List<CultureInfo> cultureInfoList = new List<CultureInfo>();
-            foreach (string directory in Directory.GetDirectories(Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Unity_LangCtrl_unknown1")))
+            List<CultureInfo> cultureInfos = new List<CultureInfo>();
+            string directoryName = Path.GetDirectoryName(Application.ExecutablePath);
+            string[] directories = Directory.GetDirectories(Path.Combine(directoryName, "Lang"));
+            for (int i = 0; i < (int)directories.Length; i++)
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+                DirectoryInfo directoryInfo = new DirectoryInfo(directories[i]);
                 try
                 {
-                    CultureInfo cultureInfo = CultureInfo.GetCultureInfo(directoryInfo.Name);
-                    cultureInfoList.Add(cultureInfo);
+                    cultureInfos.Add(CultureInfo.GetCultureInfo(directoryInfo.Name));
                 }
                 catch
                 {
                 }
             }
-            return cultureInfoList;
+            return cultureInfos;
         }
 
         
@@ -79,15 +80,15 @@ namespace Unity
             try
             {
                 string directoryName = Path.GetDirectoryName(Application.ExecutablePath);
-                if (File.Exists(Path.Combine(directoryName, "Unity_LangCtrl_unknown2" + lng + "Unity_LangCtrl_unknown3")))
+                if (File.Exists(Path.Combine(directoryName, string.Concat("Lang/", lng, "/locale.dll"))))
                 {
-                    Assembly assembly = Assembly.LoadFrom(Path.Combine(directoryName, "Unity_LangCtrl_unknown4" + lng + "Unity_LangCtrl_unknown5"));
-                    rm = new ResourceManager("Unity_LangCtrl_unknown6" + lng, assembly);
+                    Assembly assembly = Assembly.LoadFrom(Path.Combine(directoryName, string.Concat("Lang/", lng, "/locale.dll")));
+                    rm = new ResourceManager(string.Concat("resources.", lng), assembly);
                     Language = lng;
                     flag = true;
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 throw;
             }

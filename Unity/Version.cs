@@ -4,7 +4,7 @@
     {
         public static string GetVersion()
         {
-            return "Unity_Version_unknown1";
+            return "Unity.dll - Version 5.0.0.12 - Copyright ©2017 - Kadyrkesh Sultan";
         }
     }
 }

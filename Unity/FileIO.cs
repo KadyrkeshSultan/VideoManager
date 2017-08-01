@@ -26,7 +26,7 @@ namespace Unity
                 }
             }
             else
-                ErrMsg = "Unity_FileIO_unknown1";
+                ErrMsg = "File not found.";
             return obj;
         }
 
@@ -47,7 +47,7 @@ namespace Unity
                 }
             }
             else
-                ErrMsg = string.Format("Unity_FileIO_unknown2", FileName);
+                ErrMsg = string.Format("File {0} does not exist.", FileName);
             return flag;
         }
 

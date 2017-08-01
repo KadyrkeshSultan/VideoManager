@@ -126,9 +126,9 @@ namespace VMModels.Model
 
         public override string ToString()
         {
-            string str = string.Format("Model_Account_1", LastName, FirstName);
+            string str = string.Format("{0}, {1}", LastName, FirstName);
             if (!string.IsNullOrEmpty(MiddleName) && !string.IsNullOrEmpty(MiddleName))
-                str = string.Format("Model_Account_2", LastName, FirstName, MiddleName.Substring(0, 1).ToUpper());
+                str = string.Format("{0}, {1} {2}", LastName, FirstName, MiddleName.Substring(0, 1).ToUpper());
             return str;
         }
     }

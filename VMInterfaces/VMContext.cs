@@ -57,7 +57,7 @@ namespace VMInterfaces
         public VMContext()
             :base(VMGlobal.DBConnectionProfile)
         {
-            Database.CommandTimeout = new int?(120);
+            base.Database.CommandTimeout = new int?(120);
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

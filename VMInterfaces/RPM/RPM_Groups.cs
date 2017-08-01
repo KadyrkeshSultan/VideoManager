@@ -47,19 +47,19 @@ namespace VMInterfaces
         
         public void ClearMembers(Guid RecIdx)
         {
-            context.Database.ExecuteSqlCommand(string.Format("RPM_Groups_unknown1", RecIdx));
+            context.Database.ExecuteSqlCommand(string.Format("delete from AccountAccountGroups where AccountGroup_Id='{0}'", RecIdx));
         }
 
         
         public void ClearGroups(Guid ActIdx)
         {
-            context.Database.ExecuteSqlCommand(string.Format("RPM_Groups_unknown2", ActIdx));
+            context.Database.ExecuteSqlCommand(string.Format("delete from AccountAccountGroups where Account_Id='{0}'", ActIdx));
         }
 
         
         public void AddMember(Guid GrpIdx, Guid ActIdx)
         {
-            context.Database.ExecuteSqlCommand(string.Format("RPM_Groups_unknown3", ActIdx, GrpIdx));
+            context.Database.ExecuteSqlCommand(string.Format("Insert into AccountAccountGroups(Account_Id, AccountGroup_Id) values('{0}', '{1}')", ActIdx, GrpIdx));
         }
 
         
@@ -108,7 +108,7 @@ namespace VMInterfaces
                     foreach (DbEntityValidationResult entityValidationError in ex.EntityValidationErrors)
                     {
                         foreach (DbValidationError validationError in entityValidationError.ValidationErrors)
-                            Msg += string.Format("RPM_Groups_unknown4", validationError.PropertyName, validationError.ErrorMessage);
+                            Msg += string.Format("Property: {0} Error: {1}\n", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
             }

@@ -39,7 +39,7 @@ namespace VideoPlayer2
             this.pictureBox1.Dock = DockStyle.Fill;
             this.pictureBox1.Image = (Image)Properties.Resources.no;
             this.pictureBox1.Location = new Point(0, 0);
-            this.pictureBox1.Name = "VideoPlay_NoGPS_1";
+            this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new Size(257, 305);
             this.pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
             this.pictureBox1.TabIndex = 0;
@@ -48,7 +48,7 @@ namespace VideoPlayer2
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = Color.White;
             this.Controls.Add((Control)this.pictureBox1);
-            this.Name = "VideoPlay_NoGPS_2";
+            this.Name = "NoGPS";
             this.Size = new Size(257, 305);
             this.Load += new EventHandler(this.NoGPS_Load);
             ((ISupportInitialize)this.pictureBox1).EndInit();

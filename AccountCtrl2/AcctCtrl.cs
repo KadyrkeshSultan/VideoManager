@@ -64,7 +64,7 @@ namespace AccountCtrl2
             vTree.Nodes.Clear();
             vAcctList.Items.Clear();
             NodeRecord nodeRecord = new NodeRecord();
-            nodeRecord.Name = LangCtrl.GetString("AccountCtrl2_AcctCtrl_1", "AccountCtrl2_AcctCtrl_1");
+            nodeRecord.Name = LangCtrl.GetString("mnode_Dept", "Departments");
             nodeRecord.RecType = NodeType.ROOT_NODE;
             nodeRecord.ImgIdx = 0;
             nodeRecord.RecIdx = Guid.Empty;
@@ -96,11 +96,11 @@ namespace AccountCtrl2
                     return;
                 NodeRecord nodeRecord = new NodeRecord();
                 nodeRecord.ImgIdx = 3;
-                nodeRecord.Name = "AccountCtrl2_AcctCtrl_3";
+                nodeRecord.Name = "Unassigned";
                 nodeRecord.RecIdx = Guid.Empty;
                 nodeRecord.SubIdx = Guid.Empty;
                 nodeRecord.RecType = NodeType.UNASSIGNED;
-                ROOT.Nodes.Add(new vTreeNode(LangCtrl.GetString("AccountCtrl2_AcctCtrl_4", "AccountCtrl2_AcctCtrl_5"))
+                ROOT.Nodes.Add(new vTreeNode(LangCtrl.GetString("mnode_Unassigned", "Unassigned Accounts"))
                 {
                     Tag = nodeRecord,
                     ImageIndex = nodeRecord.ImgIdx
@@ -236,7 +236,7 @@ namespace AccountCtrl2
         {
             this.vAcctList.Items.Add(new ListItem()
             {
-                Text = string.Format("AccountCtrl2_AcctCtrl_6", rec.ToString(), rec.BadgeNumber, !string.IsNullOrEmpty(rec.Rank) ? string.Format("AccountCtrl2_AcctCtrl_7", rec.Rank) : string.Empty),
+                Text = string.Format("{0} * {1} {2}", rec.ToString(), rec.BadgeNumber, !string.IsNullOrEmpty(rec.Rank) ? string.Format("* {0}", rec.Rank) : string.Empty),
                 Tag = new NodeRecord()
                 {
                     RecIdx = rec.Id,
@@ -356,19 +356,19 @@ namespace AccountCtrl2
             this.TreeMenu.SuspendLayout();
             this.SearchPanel.SuspendLayout();
             this.SuspendLayout();
-            this.vTree.AccessibleName = "AccountCtrl2_AcctCtrl_8";
+            this.vTree.AccessibleName = "TreeView";
             this.vTree.AccessibleRole = AccessibleRole.List;
             this.vTree.BorderColor = Color.White;
             this.vTree.ContextMenuStrip = this.TreeMenu;
             this.vTree.Dock = DockStyle.Left;
             this.vTree.ImageList = this.TreeImages;
             this.vTree.Location = new Point(0, 0);
-            this.vTree.Name = "AccountCtrl2_AcctCtrl_9";
+            this.vTree.Name = "vTree";
             this.vTree.ScrollPosition = new Point(0, 0);
             this.vTree.SelectedNode = (vTreeNode)null;
             this.vTree.Size = new Size(189, 402);
             this.vTree.TabIndex = 0;
-            this.vTree.Text = "AccountCtrl2_AcctCtrl_10";
+            this.vTree.Text = "vTreeView1";
             this.vTree.UseThemeBackColor = false;
             this.vTree.UseThemeBorderColor = false;
             this.vTree.VIBlendScrollBarsTheme = VIBLEND_THEME.OFFICE2010SILVER;
@@ -380,26 +380,26 @@ namespace AccountCtrl2
         (ToolStripItem) this.mnu_ShowTreeLines,
         (ToolStripItem) this.mnu_ClearAccountList
             });
-            this.TreeMenu.Name = "AccountCtrl2_AcctCtrl_11";
+            this.TreeMenu.Name = "TreeMenu";
             this.TreeMenu.Size = new Size(171, 70);
-            this.mnu_RefreshDeptTree.Name = "AccountCtrl2_AcctCtrl_12";
+            this.mnu_RefreshDeptTree.Name = "mnu_RefreshDeptTree";
             this.mnu_RefreshDeptTree.Size = new Size(170, 22);
-            this.mnu_RefreshDeptTree.Text = "AccountCtrl2_AcctCtrl_13";
+            this.mnu_RefreshDeptTree.Text = "Refresh";
             this.mnu_RefreshDeptTree.Click += new EventHandler(this.mnu_RefreshDeptTree_Click);
-            this.mnu_ShowTreeLines.Name = "AccountCtrl2_AcctCtrl_14";
+            this.mnu_ShowTreeLines.Name = "mnu_ShowTreeLines";
             this.mnu_ShowTreeLines.Size = new Size(170, 22);
-            this.mnu_ShowTreeLines.Text = "AccountCtrl2_AcctCtrl_15";
+            this.mnu_ShowTreeLines.Text = "Show Lines";
             this.mnu_ShowTreeLines.Click += new EventHandler(this.mnu_ShowTreeLines_Click);
-            this.mnu_ClearAccountList.Name = "AccountCtrl2_AcctCtrl_16";
+            this.mnu_ClearAccountList.Name = "mnu_ClearAccountList";
             this.mnu_ClearAccountList.Size = new Size(170, 22);
-            this.mnu_ClearAccountList.Text = "AccountCtrl2_AcctCtrl_17";
+            this.mnu_ClearAccountList.Text = "Clear Account List";
             this.mnu_ClearAccountList.Click += new EventHandler(this.mnu_ClearAccountList_Click);
             this.TreeImages.ImageStream = (ImageListStreamer)Resources.AcctCtrl.TreeImages_ImageStream;
             this.TreeImages.TransparentColor = Color.Transparent;
-            this.TreeImages.Images.SetKeyName(0, "AccountCtrl2_AcctCtrl_19");
-            this.TreeImages.Images.SetKeyName(1, "AccountCtrl2_AcctCtrl_20");
-            this.TreeImages.Images.SetKeyName(2, "AccountCtrl2_AcctCtrl_21");
-            this.TreeImages.Images.SetKeyName(3, "AccountCtrl2_AcctCtrl_22");
+            this.TreeImages.Images.SetKeyName(0, "global.png");
+            this.TreeImages.Images.SetKeyName(1, "dept1.png");
+            this.TreeImages.Images.SetKeyName(2, "substation.png");
+            this.TreeImages.Images.SetKeyName(3, "unassigned.png");
             this.SearchPanel.Controls.Add((Control)this.btn_ResetList);
             this.SearchPanel.Controls.Add((Control)this.btn_Find);
             this.SearchPanel.Controls.Add((Control)this.txtLastName);
@@ -408,18 +408,18 @@ namespace AccountCtrl2
             this.SearchPanel.Controls.Add((Control)this.lbl_BadgeNumber);
             this.SearchPanel.Dock = DockStyle.Top;
             this.SearchPanel.Location = new Point(189, 0);
-            this.SearchPanel.Name = "AccountCtrl2_AcctCtrl_23";
+            this.SearchPanel.Name = "SearchPanel";
             this.SearchPanel.Size = new Size(250, 100);
             this.SearchPanel.TabIndex = 1;
             this.btn_ResetList.AllowAnimations = true;
             this.btn_ResetList.BackColor = Color.Transparent;
             this.btn_ResetList.Location = new Point(10, 67);
-            this.btn_ResetList.Name = "AccountCtrl2_AcctCtrl_23";
+            this.btn_ResetList.Name = "btn_ResetList";
             this.btn_ResetList.RoundedCornersMask = (byte)15;
             this.btn_ResetList.RoundedCornersRadius = 0;
             this.btn_ResetList.Size = new Size(106, 24);
             this.btn_ResetList.TabIndex = 5;
-            this.btn_ResetList.Text = "AccountCtrl2_AcctCtrl_23";
+            this.btn_ResetList.Text = "Reset List";
             this.btn_ResetList.UseVisualStyleBackColor = false;
             this.btn_ResetList.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.btn_ResetList.Click += new EventHandler(this.btn_ResetList_Click);
@@ -428,12 +428,12 @@ namespace AccountCtrl2
             this.btn_Find.Image = (Image)Properties.Resources.search;
             this.btn_Find.ImageAlign = ContentAlignment.MiddleLeft;
             this.btn_Find.Location = new Point(122, 67);
-            this.btn_Find.Name = "AccountCtrl2_AcctCtrl_24";
+            this.btn_Find.Name = "btn_Find";
             this.btn_Find.RoundedCornersMask = (byte)15;
             this.btn_Find.RoundedCornersRadius = 0;
             this.btn_Find.Size = new Size(116, 24);
             this.btn_Find.TabIndex = 4;
-            this.btn_Find.Text = "AccountCtrl2_AcctCtrl_25";
+            this.btn_Find.Text = "Find";
             this.btn_Find.UseVisualStyleBackColor = false;
             this.btn_Find.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.btn_Find.Click += new EventHandler(this.btn_Find_Click);
@@ -443,7 +443,7 @@ namespace AccountCtrl2
             this.txtLastName.DefaultText = "";
             this.txtLastName.Location = new Point(122, 37);
             this.txtLastName.MaxLength = 32;
-            this.txtLastName.Name = "AccountCtrl2_AcctCtrl_26";
+            this.txtLastName.Name = "txtLastName";
             this.txtLastName.PasswordChar = char.MinValue;
             this.txtLastName.ScrollBars = ScrollBars.None;
             this.txtLastName.SelectionLength = 0;
@@ -453,17 +453,17 @@ namespace AccountCtrl2
             this.txtLastName.TextAlign = HorizontalAlignment.Left;
             this.txtLastName.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.lbl_LastName.Location = new Point(7, 42);
-            this.lbl_LastName.Name = "AccountCtrl2_AcctCtrl_27";
+            this.lbl_LastName.Name = "lbl_LastName";
             this.lbl_LastName.Size = new Size(110, 13);
             this.lbl_LastName.TabIndex = 2;
-            this.lbl_LastName.Text = "AccountCtrl2_AcctCtrl_28";
+            this.lbl_LastName.Text = "Last Name";
             this.txtBadgeNumber.BackColor = Color.White;
             this.txtBadgeNumber.BoundsOffset = new Size(1, 1);
             this.txtBadgeNumber.ControlBorderColor = Color.FromArgb(39, 39, 39);
             this.txtBadgeNumber.DefaultText = "";
             this.txtBadgeNumber.Location = new Point(122, 8);
             this.txtBadgeNumber.MaxLength = 12;
-            this.txtBadgeNumber.Name = "AccountCtrl2_AcctCtrl_29";
+            this.txtBadgeNumber.Name = "txtBadgeNumber";
             this.txtBadgeNumber.PasswordChar = char.MinValue;
             this.txtBadgeNumber.ScrollBars = ScrollBars.None;
             this.txtBadgeNumber.SelectionLength = 0;
@@ -473,16 +473,16 @@ namespace AccountCtrl2
             this.txtBadgeNumber.TextAlign = HorizontalAlignment.Left;
             this.txtBadgeNumber.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.lbl_BadgeNumber.Location = new Point(7, 13);
-            this.lbl_BadgeNumber.Name = "AccountCtrl2_AcctCtrl_30";
+            this.lbl_BadgeNumber.Name = "lbl_BadgeNumber";
             this.lbl_BadgeNumber.Size = new Size(110, 13);
             this.lbl_BadgeNumber.TabIndex = 0;
-            this.lbl_BadgeNumber.Text = "AccountCtrl2_AcctCtrl_31";
+            this.lbl_BadgeNumber.Text = "Badge Number";
             this.vAcctList.BorderColor = Color.White;
             this.vAcctList.Dock = DockStyle.Fill;
             this.vAcctList.ImageList = this.AcctImages;
             this.vAcctList.ItemHeight = 24;
             this.vAcctList.Location = new Point(189, 100);
-            this.vAcctList.Name = "AccountCtrl2_AcctCtrl_32";
+            this.vAcctList.Name = "vAcctList";
             this.vAcctList.RoundedCornersMaskListItem = (byte)15;
             this.vAcctList.Size = new Size(250, 302);
             this.vAcctList.TabIndex = 2;
@@ -492,14 +492,14 @@ namespace AccountCtrl2
             this.vAcctList.DoubleClick += new EventHandler(this.vAcctList_DoubleClick);
             this.AcctImages.ImageStream = (ImageListStreamer)Resources.AcctCtrl.AcctImages_ImageStream;
             this.AcctImages.TransparentColor = Color.Transparent;
-            this.AcctImages.Images.SetKeyName(0, "AccountCtrl2_AcctCtrl_34");
+            this.AcctImages.Images.SetKeyName(0, "people.png");
             this.AutoScaleDimensions = new SizeF(6f, 13f);
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = Color.White;
             this.Controls.Add((Control)this.vAcctList);
             this.Controls.Add((Control)this.SearchPanel);
             this.Controls.Add((Control)this.vTree);
-            this.Name = "AccountCtrl2_AcctCtrl_35";
+            this.Name = "AcctCtrl";
             this.Size = new Size(439, 402);
             this.Load += new EventHandler(this.AcctCtrl_Load);
             this.Resize += new EventHandler(this.AcctCtrl_Resize);

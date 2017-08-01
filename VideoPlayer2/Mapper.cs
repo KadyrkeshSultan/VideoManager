@@ -42,9 +42,9 @@ namespace VideoPlayer2
         public static void SetMapper(VMMap mapEng)
         {
             mainMap = mapEng.GetMapControl;
-            Markers = new GMapOverlay(mainMap, "VideoPlay_Mapper_1");
+            Markers = new GMapOverlay(mainMap, "Vehicle");
             mainMap.Overlays.Add(Markers);
-            RoutesOverlay = new GMapOverlay(mainMap, "VideoPlay_Mapper_2");
+            RoutesOverlay = new GMapOverlay(mainMap, "Routes");
             mainMap.Overlays.Add(RoutesOverlay);
             mainMap.MarkersEnabled = true;
             mainMap.Zoom = mainMap.MaxZoom;
@@ -95,51 +95,65 @@ namespace VideoPlayer2
         
         public static bool LoadDataPoints(string file, string fileExt)
         {
-            TotalPts = 0.0;
+            TotalPts = 0;
             bool flag = false;
             pts = new List<PointLatLng>();
-            string path = file + fileExt;
-            int num1 = 0;
-            if (File.Exists(path))
+            string str = string.Concat(file, fileExt);
+            int num = 0;
+            if (File.Exists(str))
             {
-                using (StreamReader streamReader = new StreamReader(path))
+                using (StreamReader streamReader = new StreamReader(str))
                 {
-                    string str1;
-                    while ((str1 = streamReader.ReadLine()) != null)
+                    while (true)
                     {
-                        ++num1;
-                        if (str1.Contains("VideoPlay_Mapper_3"))
+                        string str1 = streamReader.ReadLine();
+                        string str2 = str1;
+                        if (str1 == null)
                         {
-                            string str2 = "VideoPlay_Mapper_4";
-                            string str3 = "VideoPlay_Mapper_5";
-                            string[] strArray = str1.Split(',');
-                            if (strArray[0].ToUpper().StartsWith("VideoPlay_Mapper_6"))
+                            break;
+                        }
+                        num++;
+                        if (str2.Contains(","))
+                        {
+                            string str3 = "S";
+                            string str4 = "E";
+                            string[] strArrays = str2.Split(new char[] { ',' });
+                            if (!strArrays[0].ToUpper().StartsWith("N"))
                             {
-                                str2 = "VideoPlay_Mapper_7";
-                                strArray[0] = strArray[0].Substring(1);
+                                strArrays[0] = strArrays[0].Substring(1);
                             }
                             else
-                                strArray[0] = strArray[0].Substring(1);
-                            if (strArray[1].ToUpper().StartsWith("VideoPlay_Mapper_8"))
                             {
-                                str3 = "VideoPlay_Mapper_9";
-                                strArray[1] = strArray[1].Substring(1);
+                                str3 = "N";
+                                strArrays[0] = strArrays[0].Substring(1);
+                            }
+                            if (!strArrays[1].ToUpper().StartsWith("W"))
+                            {
+                                strArrays[1] = strArrays[1].Substring(1);
                             }
                             else
-                                strArray[1] = strArray[1].Substring(1);
+                            {
+                                str4 = "W";
+                                strArrays[1] = strArrays[1].Substring(1);
+                            }
                             try
                             {
-                                if (Convert.ToDouble(strArray[0]) == 0.0 && Convert.ToDouble(strArray[1]) == 0.0)
+                                if (Convert.ToDouble(strArrays[0]) != 0 || Convert.ToDouble(strArrays[1]) != 0)
                                 {
-                                    str1 = string.Format("VideoPlay_Mapper_10", str2, str3);
+                                    int num1 = strArrays[0].IndexOf(".");
+                                    int num2 = strArrays[1].IndexOf(".");
+                                    string str5 = strArrays[0].Substring(0, strArrays[0].Length - (strArrays[0].Length - num1 + 2));
+                                    string str6 = strArrays[0].Substring(num1 - 2);
+                                    double num3 = Convert.ToDouble(str5) + Convert.ToDouble(str6) / 60;
+                                    string str7 = strArrays[1].Substring(0, strArrays[1].Length - (strArrays[1].Length - num2 + 2));
+                                    string str8 = strArrays[1].Substring(num2 - 2);
+                                    double num4 = Convert.ToDouble(str7) + Convert.ToDouble(str8) / 60;
+                                    object[] objArray = new object[] { str3, num3, str4, num4 };
+                                    str2 = string.Format("{0}{1};{2}{3}", objArray);
                                 }
                                 else
                                 {
-                                    int num2 = strArray[0].IndexOf("VideoPlay_Mapper_11");
-                                    int num3 = strArray[1].IndexOf("VideoPlay_Mapper_12");
-                                    double num4 = Convert.ToDouble(strArray[0].Substring(0, strArray[0].Length - (strArray[0].Length - num2 + 2))) + Convert.ToDouble(strArray[0].Substring(num2 - 2)) / 60.0;
-                                    double num5 = Convert.ToDouble(strArray[1].Substring(0, strArray[1].Length - (strArray[1].Length - num3 + 2))) + Convert.ToDouble(strArray[1].Substring(num3 - 2)) / 60.0;
-                                    str1 = string.Format("VideoPlay_Mapper_13", str2, num4, str3, num5);
+                                    str2 = string.Format("{0}00.0000;{1}00.0000", str3, str4);
                                 }
                             }
                             catch
@@ -148,12 +162,26 @@ namespace VideoPlayer2
                         }
                         try
                         {
-                            Pos.Add(str1);
-                            string[] strArray = str1.Split(';');
-                            strArray[0] = !strArray[0].ToUpper().StartsWith("VideoPlay_Mapper_14") ? "VideoPlay_Mapper_15" + strArray[0].Substring(1) : strArray[0].Substring(1);
-                            strArray[1] = !strArray[1].ToUpper().StartsWith("VideoPlay_Mapper_16") ? strArray[1].Substring(1) : "VideoPlay_Mapper_17" + strArray[1].Substring(1);
-                            TotalPts += Convert.ToDouble(strArray[0]);
-                            PointLatLng pointLatLng = new PointLatLng(Convert.ToDouble(strArray[0]), Convert.ToDouble(strArray[1]));
+                            Mapper.Pos.Add(str2);
+                            string[] strArrays1 = str2.Split(new char[] { ';' });
+                            if (!strArrays1[0].ToUpper().StartsWith("N"))
+                            {
+                                strArrays1[0] = string.Concat("-", strArrays1[0].Substring(1));
+                            }
+                            else
+                            {
+                                strArrays1[0] = strArrays1[0].Substring(1);
+                            }
+                            if (!strArrays1[1].ToUpper().StartsWith("W"))
+                            {
+                                strArrays1[1] = strArrays1[1].Substring(1);
+                            }
+                            else
+                            {
+                                strArrays1[1] = string.Concat("-", strArrays1[1].Substring(1));
+                            }
+                            TotalPts += Convert.ToDouble(strArrays1[0]);
+                            PointLatLng pointLatLng = new PointLatLng(Convert.ToDouble(strArrays1[0]), Convert.ToDouble(strArrays1[1]));
                             pts.Add(pointLatLng);
                         }
                         catch
@@ -163,8 +191,10 @@ namespace VideoPlayer2
                 }
             }
             if (pts.Count > 0)
+            {
                 flag = true;
-            maproute = new GMapRoute(pts, "VideoPlay_Mapper_18");
+            }
+            maproute = new GMapRoute(pts, "ROUTE");
             pts2 = pts;
             double distance = maproute.Distance;
             return flag;
@@ -176,34 +206,64 @@ namespace VideoPlayer2
             try
             {
                 int count = pts2.Count;
-                if (count <= 0 || idx > count - 1)
-                    return;
-                string[] strArray1 = Pos[idx].Split(';');
-                strArray1[0] = !strArray1[0].ToUpper().StartsWith("VideoPlay_Mapper_19") ? "VideoPlay_Mapper_20" + strArray1[0].Substring(1) : strArray1[0].Substring(1);
-                strArray1[1] = !strArray1[1].ToUpper().StartsWith("VideoPlay_Mapper_21") ? strArray1[1].Substring(1) : "VideoPlay_Mapper_22" + strArray1[1].Substring(1);
-                if (idx > 2)
+                if (count > 0 && idx <= count - 1)
                 {
-                    string[] strArray2 = Pos[idx - 1].Split(';');
-                    strArray2[0] = !strArray2[0].ToUpper().StartsWith("VideoPlay_Mapper_23") ? "VideoPlay_Mapper_24" + strArray2[0].Substring(1) : strArray2[0].Substring(1);
-                    strArray2[1] = !strArray2[1].ToUpper().StartsWith("VideoPlay_Mapper_25") ? strArray2[1].Substring(1) : "VideoPlay_Mapper_26" + strArray2[1].Substring(1);
-                    LastLat = Convert.ToDouble(strArray2[0]);
-                    LastLng = Convert.ToDouble(strArray2[1]);
-                    if (LastLat != 0.0 && LastLng != 0.0)
+                    string[] strArrays = Pos[idx].Split(new char[] { ';' });
+                    if (!strArrays[0].ToUpper().StartsWith("N"))
                     {
-                        double num = CalcDist(new PointLatLng(LastLat, LastLng), new PointLatLng(Convert.ToDouble(strArray1[0]), Convert.ToDouble(strArray1[1]))) * 5280.0 * 0.681818 * 0.621371;
-                        CompassBearing = (int)Geodesy.Bearing(LastLat, LastLng, Convert.ToDouble(strArray1[0]), Convert.ToDouble(strArray1[1]));
-                        compass.SetData((int)num, CompassBearing);
+                        strArrays[0] = string.Concat("-", strArrays[0].Substring(1));
                     }
+                    else
+                    {
+                        strArrays[0] = strArrays[0].Substring(1);
+                    }
+                    if (!strArrays[1].ToUpper().StartsWith("W"))
+                    {
+                        strArrays[1] = strArrays[1].Substring(1);
+                    }
+                    else
+                    {
+                        strArrays[1] = string.Concat("-", strArrays[1].Substring(1));
+                    }
+                    if (idx > 2)
+                    {
+                        string[] strArrays1 = Pos[idx - 1].Split(new char[] { ';' });
+                        if (!strArrays1[0].ToUpper().StartsWith("N"))
+                        {
+                            strArrays1[0] = string.Concat("-", strArrays1[0].Substring(1));
+                        }
+                        else
+                        {
+                            strArrays1[0] = strArrays1[0].Substring(1);
+                        }
+                        if (!strArrays1[1].ToUpper().StartsWith("W"))
+                        {
+                            strArrays1[1] = strArrays1[1].Substring(1);
+                        }
+                        else
+                        {
+                            strArrays1[1] = string.Concat("-", strArrays1[1].Substring(1));
+                        }
+                        LastLat = Convert.ToDouble(strArrays1[0]);
+                        LastLng = Convert.ToDouble(strArrays1[1]);
+                        if (LastLat != 0 && LastLng != 0)
+                        {
+                            double num = CalcDist(new PointLatLng(LastLat, LastLng), new PointLatLng(Convert.ToDouble(strArrays[0]), Convert.ToDouble(strArrays[1])));
+                            double num1 = num * 5280 * 0.681818 * 0.621371;
+                            CompassBearing = (int)Geodesy.Bearing(LastLat, LastLng, Convert.ToDouble(strArrays[0]), Convert.ToDouble(strArrays[1]));
+                            compass.SetData((int)num1, CompassBearing);
+                        }
+                    }
+                    PointLatLng pointLatLng = new PointLatLng(Convert.ToDouble(strArrays[0]), Convert.ToDouble(strArrays[1]));
+                    mainMap.Overlays.Clear();
+                    Markers.Markers.Clear();
+                    GMapMarker gMapMarkerGoogleGreen = new GMapMarkerGoogleGreen(mainMap.Position);
+                    Markers.Markers.Add(gMapMarkerGoogleGreen);
+                    mainMap.Overlays.Add(Markers);
+                    mainMap.Position = pointLatLng;
                 }
-                PointLatLng pointLatLng = new PointLatLng(Convert.ToDouble(strArray1[0]), Convert.ToDouble(strArray1[1]));
-                mainMap.Overlays.Clear();
-                Markers.Markers.Clear();
-                GMapMarker gmapMarker = new GMapMarkerGoogleGreen(mainMap.Position);
-                Markers.Markers.Add(gmapMarker);
-                mainMap.Overlays.Add(Markers);
-                mainMap.Position = pointLatLng;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
             }
         }

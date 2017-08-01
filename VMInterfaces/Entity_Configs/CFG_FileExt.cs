@@ -10,7 +10,7 @@ namespace VMInterfaces.Entity_Configs
         public CFG_FileExt()
         {
             HasKey(fileExt => fileExt.Id).Property(fileExt => fileExt.Id).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
-            Property(fileExt => fileExt.Ext).IsRequired().HasMaxLength(new int?(8)).HasColumnAnnotation("CFG_FileExt_unknown_1", new IndexAnnotation(new IndexAttribute()
+            Property(fileExt => fileExt.Ext).IsRequired().HasMaxLength(new int?(8)).HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()
             {
                 IsUnique = true
             }));

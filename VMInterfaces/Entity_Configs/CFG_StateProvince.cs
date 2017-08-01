@@ -10,7 +10,7 @@ namespace VMInterfaces.Entity_Configs
         public CFG_StateProvince()
         {
             HasKey(stateProvince => stateProvince.Id).Property(stateProvince => stateProvince.Id).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
-            Property(stateProvince => stateProvince.Name).IsRequired().HasMaxLength(new int?(64)).HasColumnAnnotation("CFG_StateProvince_unknown1", new IndexAnnotation(new IndexAttribute()
+            Property(stateProvince => stateProvince.Name).IsRequired().HasMaxLength(new int?(64)).HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()
             {
                 IsUnique = true
             }));

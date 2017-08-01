@@ -14,7 +14,7 @@ namespace Unity
         {
             get
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "Unity_GlobalAppCfg_unknown1");
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "HD Protech\\Sentinel");
             }
         }
 

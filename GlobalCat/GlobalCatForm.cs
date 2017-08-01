@@ -56,10 +56,10 @@ namespace GlobalCat
                 this.HeaderPanel.BackgroundImage = Properties.Resources.topbar45;
             try
             {
-                Text = LangCtrl.GetString("GlobalCatForm_1", "GlobalCatForm_2");
+                Text = LangCtrl.GetString("dlg_GlobalCatalog", "Global Catalog Search");
                 LangCtrl.reText(this);
-                gcFileCount.Text = string.Format(LangCtrl.GetString("GlobalCatForm_3", "GlobalCatForm_4"), 0);
-                gc_Accounts.Text = string.Format(LangCtrl.GetString("GlobalCatForm_5", "GlobalCatForm_6"), 0);
+                gcFileCount.Text = string.Format(LangCtrl.GetString("gcFileCount", "Files: {0}"), 0);
+                gc_Accounts.Text = string.Format(LangCtrl.GetString("gc_Accounts", "Accounts: {0}"), 0);
                 LoadRegData();
                 ResetDates();
             }
@@ -100,7 +100,7 @@ namespace GlobalCat
         
         private void btn_Reset_Click(object sender, EventArgs e)
         {
-            Global.Log("GlobalCatForm_7", "GlobalCatForm_8");
+            Global.Log("SEARCH", "Clear Search Parameters");
             ResetForm();
         }
 
@@ -111,8 +111,8 @@ namespace GlobalCat
             {
                 FormCtrl.ClearForm(this);
                 ResetDates();
-                gcFileCount.Text = string.Format(LangCtrl.GetString("GlobalCatForm_9", "GlobalCatForm_10"), 0);
-                gc_Accounts.Text = string.Format(LangCtrl.GetString("GlobalCatForm_11", "GlobalCatForm_12"), 0);
+                gcFileCount.Text = string.Format(LangCtrl.GetString("gcFileCount", "Files: {0}"), 0);
+                gc_Accounts.Text = string.Format(LangCtrl.GetString("gc_Accounts", "Accounts: {0}"), 0);
                 DataPanel.Controls.Clear();
                 btnByFileDate.Checked = true;
             }
@@ -127,7 +127,7 @@ namespace GlobalCat
             bool flag = true;
             if (string.IsNullOrEmpty(txtCAD.Text) && string.IsNullOrEmpty(txtRMS.Text) && string.IsNullOrEmpty(txtSet.Text))
             {
-                int num = (int)MessageBox.Show(this, LangCtrl.GetString("GlobalCatForm_13", "GlobalCatForm_14"), "GlobalCatForm_15", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show(this, LangCtrl.GetString("gc_msg1", "Search requires either RMS or CAD number."), "Search", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 txtRMS.Select();
                 flag = false;
             }
@@ -162,8 +162,8 @@ namespace GlobalCat
                                     using (RPM_Account rpmAccount = new RPM_Account())
                                     {
                                         Account account = rpmAccount.GetAccount(df.AccountId);
-                                        str = string.Format("GlobalCatForm_16", account.ToString(), account.BadgeNumber);
-                                        string data = string.Format("GlobalCatForm_17", account.Rank);
+                                        str = string.Format("{0} • {1}", account.ToString(), account.BadgeNumber);
+                                        string data = string.Format("Rank: {0}", account.Rank);
                                         AccountPanel accountPanel = new AccountPanel(str, data, account.Security);
                                         DataPanel.Controls.Add(accountPanel);
                                         DataPanel.Controls.SetChildIndex(accountPanel, 0);
@@ -183,19 +183,21 @@ namespace GlobalCat
                         {
                             Label label = new Label();
                             label.Dock = DockStyle.Top;
-                            label.Font = new Font("GlobalCatForm_18", 16f);
-                            label.Text = LangCtrl.GetString("GlobalCatForm_19", "GlobalCatForm_20");
+                            label.Font = new Font("Verdana", 16f);
+                            label.Text = LangCtrl.GetString("gc_NoResults", "NO RESULTS FOUND");
                             DataPanel.Controls.Add(label);
                         }
                     }
-                    gcFileCount.Text = string.Format(LangCtrl.GetString("GlobalCatForm_21", "GlobalCatForm_22"), num1);
-                    gc_Accounts.Text = string.Format(LangCtrl.GetString("GlobalCatForm_23", "GlobalCatForm_24"), num2);
+                    gcFileCount.Text = string.Format(LangCtrl.GetString("gcFileCount", "Files: {0}"), num1);
+                    gc_Accounts.Text = string.Format(LangCtrl.GetString("gc_Accounts", "Accounts: {0}"), num2);
                 }
-                Global.Log("GlobalCatForm_25", "GlobalCatForm_26" + string.Format("GlobalCatForm_27", FromDate.Value.Value, ToDate.Value.Value, txtRMS.Text, txtCAD.Text, chk_FilterEvidence.Checked, num2, num1));
+                object[] objArray = new object[] { FromDate.Value.Value, ToDate.Value.Value, txtRMS.Text, txtCAD.Text, chk_FilterEvidence.Checked, num2, num1 };
+                string str2 = string.Format("{0} to {1} RMS: {2} CAD: {3} Evidence: {4}   RESULT> Accounts: {5} Files: {6}", objArray);
+                Global.Log("SEARCH GC", string.Concat("Global Catalog> ", str2));
             }
             catch (Exception ex)
             {
-                int num = (int)MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.Message);
             }
             DataPanel.ResumeLayout();
         }
@@ -231,7 +233,7 @@ namespace GlobalCat
                     Height = Height,
                     PosX = Location.X,
                     PosY = Location.Y
-                }, "GlobalCatForm_28");
+                }, "GlobalCatWindow");
             }
             catch
             {
@@ -243,7 +245,7 @@ namespace GlobalCat
         {
             try
             {
-                WindowPos windowPos = Registry.GetWindowPos("GlobalCatForm_29");
+                WindowPos windowPos = Registry.GetWindowPos("GlobalCatWindow");
                 if (windowPos.Height != 0 && windowPos.Width != 0)
                 {
                     Width = windowPos.Width;
@@ -279,6 +281,7 @@ namespace GlobalCat
         
         private void InitializeComponent()
         {
+            ListItem listItem = new ListItem();
             ListItem listItem1 = new ListItem();
             ListItem listItem2 = new ListItem();
             ListItem listItem3 = new ListItem();
@@ -289,7 +292,6 @@ namespace GlobalCat
             ListItem listItem8 = new ListItem();
             ListItem listItem9 = new ListItem();
             ListItem listItem10 = new ListItem();
-            ListItem listItem11 = new ListItem();
             ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(GlobalCatForm));
             this.HeaderPanel = new Panel();
             this.gc_Accounts = new Label();
@@ -317,108 +319,108 @@ namespace GlobalCat
             this.DataPanel = new Panel();
             this.HeaderPanel.SuspendLayout();
             this.SearchPanel.SuspendLayout();
-            this.SuspendLayout();
+            base.SuspendLayout();
             this.HeaderPanel.BackColor = Color.FromArgb(64, 64, 64);
             this.HeaderPanel.BackgroundImageLayout = ImageLayout.Stretch;
-            this.HeaderPanel.Controls.Add((Control)this.gc_Accounts);
-            this.HeaderPanel.Controls.Add((Control)this.gcFileCount);
-            this.HeaderPanel.Controls.Add((Control)this.btn_Reset);
-            this.HeaderPanel.Controls.Add((Control)this.btn_Search);
+            this.HeaderPanel.Controls.Add(this.gc_Accounts);
+            this.HeaderPanel.Controls.Add(this.gcFileCount);
+            this.HeaderPanel.Controls.Add(this.btn_Reset);
+            this.HeaderPanel.Controls.Add(this.btn_Search);
             this.HeaderPanel.Dock = DockStyle.Top;
             this.HeaderPanel.Location = new Point(0, 0);
-            this.HeaderPanel.Name = "GlobalCatForm_29";
+            this.HeaderPanel.Name = "HeaderPanel";
             this.HeaderPanel.Size = new Size(884, 40);
             this.HeaderPanel.TabIndex = 0;
             this.gc_Accounts.AutoSize = true;
             this.gc_Accounts.BackColor = Color.Transparent;
             this.gc_Accounts.ForeColor = Color.White;
             this.gc_Accounts.Location = new Point(321, 21);
-            this.gc_Accounts.Name = "GlobalCatForm_30";
+            this.gc_Accounts.Name = "gc_Accounts";
             this.gc_Accounts.Size = new Size(64, 13);
             this.gc_Accounts.TabIndex = 3;
-            this.gc_Accounts.Text = "GlobalCatForm_31";
+            this.gc_Accounts.Text = "Accounts: 0";
             this.gcFileCount.AutoSize = true;
             this.gcFileCount.BackColor = Color.Transparent;
             this.gcFileCount.ForeColor = Color.White;
             this.gcFileCount.Location = new Point(321, 4);
-            this.gcFileCount.Name = "GlobalCatForm_32";
+            this.gcFileCount.Name = "gcFileCount";
             this.gcFileCount.Size = new Size(40, 13);
             this.gcFileCount.TabIndex = 2;
-            this.gcFileCount.Text = "GlobalCatForm_33";
+            this.gcFileCount.Text = "Files: 0";
             this.btn_Reset.AllowAnimations = true;
             this.btn_Reset.BackColor = Color.Transparent;
             this.btn_Reset.Location = new Point(110, 4);
-            this.btn_Reset.Name = "GlobalCatForm_34";
-            this.btn_Reset.RoundedCornersMask = (byte)15;
+            this.btn_Reset.Name = "btn_Reset";
+            this.btn_Reset.RoundedCornersMask = 15;
             this.btn_Reset.RoundedCornersRadius = 0;
             this.btn_Reset.Size = new Size(100, 30);
             this.btn_Reset.TabIndex = 1;
-            this.btn_Reset.Text = "GlobalCatForm_35";
+            this.btn_Reset.Text = "Reset";
             this.btn_Reset.UseVisualStyleBackColor = false;
             this.btn_Reset.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.btn_Reset.Click += new EventHandler(this.btn_Reset_Click);
             this.btn_Search.AllowAnimations = true;
             this.btn_Search.BackColor = Color.Transparent;
             this.btn_Search.Location = new Point(4, 4);
-            this.btn_Search.Name = "GlobalCatForm_36";
-            this.btn_Search.RoundedCornersMask = (byte)15;
+            this.btn_Search.Name = "btn_Search";
+            this.btn_Search.RoundedCornersMask = 15;
             this.btn_Search.RoundedCornersRadius = 0;
             this.btn_Search.Size = new Size(100, 30);
             this.btn_Search.TabIndex = 0;
-            this.btn_Search.Text = "GlobalCatForm_37";
+            this.btn_Search.Text = "Search";
             this.btn_Search.UseVisualStyleBackColor = false;
             this.btn_Search.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.btn_Search.Click += new EventHandler(this.btn_Search_Click);
             this.SearchPanel.BackColor = Color.White;
             this.SearchPanel.BorderStyle = BorderStyle.FixedSingle;
-            this.SearchPanel.Controls.Add((Control)this.gc_Search);
-            this.SearchPanel.Controls.Add((Control)this.btnByIngestDate);
-            this.SearchPanel.Controls.Add((Control)this.btnByFileDate);
-            this.SearchPanel.Controls.Add((Control)this.txtSet);
-            this.SearchPanel.Controls.Add((Control)this.gc_Set);
-            this.SearchPanel.Controls.Add((Control)this.chk_FilterEvidence);
-            this.SearchPanel.Controls.Add((Control)this.txtCAD);
-            this.SearchPanel.Controls.Add((Control)this.gc_CADId);
-            this.SearchPanel.Controls.Add((Control)this.txtRMS);
-            this.SearchPanel.Controls.Add((Control)this.gc_RMSId);
-            this.SearchPanel.Controls.Add((Control)this.gc_Days);
-            this.SearchPanel.Controls.Add((Control)this.ToDate);
-            this.SearchPanel.Controls.Add((Control)this.gc_EndDate);
-            this.SearchPanel.Controls.Add((Control)this.FromDate);
-            this.SearchPanel.Controls.Add((Control)this.gc_StartDate);
-            this.SearchPanel.Controls.Add((Control)this.lblLine1);
-            this.SearchPanel.Controls.Add((Control)this.cboDays);
+            this.SearchPanel.Controls.Add(this.gc_Search);
+            this.SearchPanel.Controls.Add(this.btnByIngestDate);
+            this.SearchPanel.Controls.Add(this.btnByFileDate);
+            this.SearchPanel.Controls.Add(this.txtSet);
+            this.SearchPanel.Controls.Add(this.gc_Set);
+            this.SearchPanel.Controls.Add(this.chk_FilterEvidence);
+            this.SearchPanel.Controls.Add(this.txtCAD);
+            this.SearchPanel.Controls.Add(this.gc_CADId);
+            this.SearchPanel.Controls.Add(this.txtRMS);
+            this.SearchPanel.Controls.Add(this.gc_RMSId);
+            this.SearchPanel.Controls.Add(this.gc_Days);
+            this.SearchPanel.Controls.Add(this.ToDate);
+            this.SearchPanel.Controls.Add(this.gc_EndDate);
+            this.SearchPanel.Controls.Add(this.FromDate);
+            this.SearchPanel.Controls.Add(this.gc_StartDate);
+            this.SearchPanel.Controls.Add(this.lblLine1);
+            this.SearchPanel.Controls.Add(this.cboDays);
             this.SearchPanel.Dock = DockStyle.Left;
             this.SearchPanel.Location = new Point(0, 40);
-            this.SearchPanel.Name = "GlobalCatForm_38";
+            this.SearchPanel.Name = "SearchPanel";
             this.SearchPanel.Size = new Size(323, 622);
             this.SearchPanel.TabIndex = 1;
             this.gc_Search.AutoSize = true;
             this.gc_Search.Location = new Point(17, 57);
-            this.gc_Search.Name = "GlobalCatForm_39";
+            this.gc_Search.Name = "gc_Search";
             this.gc_Search.Size = new Size(106, 13);
             this.gc_Search.TabIndex = 48;
-            this.gc_Search.Text = "GlobalCatForm_40";
+            this.gc_Search.Text = "Date Search Options";
             this.btnByIngestDate.BackColor = Color.Transparent;
             this.btnByIngestDate.Flat = true;
-            this.btnByIngestDate.Image = (Image)null;
+            this.btnByIngestDate.Image = null;
             this.btnByIngestDate.Location = new Point(145, 67);
-            this.btnByIngestDate.Name = "GlobalCatForm_41";
+            this.btnByIngestDate.Name = "btnByIngestDate";
             this.btnByIngestDate.Size = new Size(162, 24);
             this.btnByIngestDate.TabIndex = 47;
-            this.btnByIngestDate.Text = "GlobalCatForm_42";
+            this.btnByIngestDate.Text = "By Ingest Date";
             this.btnByIngestDate.UseVisualStyleBackColor = false;
             this.btnByIngestDate.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.btnByFileDate.BackColor = Color.Transparent;
             this.btnByFileDate.Checked = true;
             this.btnByFileDate.Flat = true;
-            this.btnByFileDate.Image = (Image)null;
+            this.btnByFileDate.Image = null;
             this.btnByFileDate.Location = new Point(145, 39);
-            this.btnByFileDate.Name = "GlobalCatForm_43";
+            this.btnByFileDate.Name = "btnByFileDate";
             this.btnByFileDate.Size = new Size(162, 24);
             this.btnByFileDate.TabIndex = 46;
             this.btnByFileDate.TabStop = true;
-            this.btnByFileDate.Text = "GlobalCatForm_44";
+            this.btnByFileDate.Text = "By Original File Date";
             this.btnByFileDate.UseVisualStyleBackColor = false;
             this.btnByFileDate.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.txtSet.BackColor = Color.White;
@@ -427,8 +429,8 @@ namespace GlobalCat
             this.txtSet.DefaultText = "";
             this.txtSet.Location = new Point(145, 212);
             this.txtSet.MaxLength = 32;
-            this.txtSet.Name = "GlobalCatForm_45";
-            this.txtSet.PasswordChar = char.MinValue;
+            this.txtSet.Name = "txtSet";
+            this.txtSet.PasswordChar = '\0';
             this.txtSet.ScrollBars = ScrollBars.None;
             this.txtSet.SelectionLength = 0;
             this.txtSet.SelectionStart = 0;
@@ -437,16 +439,16 @@ namespace GlobalCat
             this.txtSet.TextAlign = HorizontalAlignment.Left;
             this.txtSet.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.gc_Set.Location = new Point(16, 217);
-            this.gc_Set.Name = "GlobalCatForm_46";
+            this.gc_Set.Name = "gc_Set";
             this.gc_Set.Size = new Size(120, 13);
             this.gc_Set.TabIndex = 44;
-            this.gc_Set.Text = "GlobalCatForm_47";
+            this.gc_Set.Text = "Set ID";
             this.chk_FilterEvidence.BackColor = Color.Transparent;
             this.chk_FilterEvidence.Location = new Point(145, 241);
-            this.chk_FilterEvidence.Name = "GlobalCatForm_48";
+            this.chk_FilterEvidence.Name = "chk_FilterEvidence";
             this.chk_FilterEvidence.Size = new Size(162, 24);
             this.chk_FilterEvidence.TabIndex = 43;
-            this.chk_FilterEvidence.Text = "GlobalCatForm_49";
+            this.chk_FilterEvidence.Text = "Marked as Evidence";
             this.chk_FilterEvidence.UseVisualStyleBackColor = false;
             this.chk_FilterEvidence.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.txtCAD.BackColor = Color.White;
@@ -455,8 +457,8 @@ namespace GlobalCat
             this.txtCAD.DefaultText = "";
             this.txtCAD.Location = new Point(145, 183);
             this.txtCAD.MaxLength = 32;
-            this.txtCAD.Name = "GlobalCatForm_50";
-            this.txtCAD.PasswordChar = char.MinValue;
+            this.txtCAD.Name = "txtCAD";
+            this.txtCAD.PasswordChar = '\0';
             this.txtCAD.ScrollBars = ScrollBars.None;
             this.txtCAD.SelectionLength = 0;
             this.txtCAD.SelectionStart = 0;
@@ -465,18 +467,18 @@ namespace GlobalCat
             this.txtCAD.TextAlign = HorizontalAlignment.Left;
             this.txtCAD.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.gc_CADId.Location = new Point(17, 188);
-            this.gc_CADId.Name = "GlobalCatForm_51";
+            this.gc_CADId.Name = "gc_CADId";
             this.gc_CADId.Size = new Size(120, 13);
             this.gc_CADId.TabIndex = 39;
-            this.gc_CADId.Text = "GlobalCatForm_52";
+            this.gc_CADId.Text = "CAD ID";
             this.txtRMS.BackColor = Color.White;
             this.txtRMS.BoundsOffset = new Size(1, 1);
             this.txtRMS.ControlBorderColor = Color.FromArgb(39, 39, 39);
             this.txtRMS.DefaultText = "";
             this.txtRMS.Location = new Point(145, 155);
             this.txtRMS.MaxLength = 32;
-            this.txtRMS.Name = "GlobalCatForm_53";
-            this.txtRMS.PasswordChar = char.MinValue;
+            this.txtRMS.Name = "txtRMS";
+            this.txtRMS.PasswordChar = '\0';
             this.txtRMS.ScrollBars = ScrollBars.None;
             this.txtRMS.SelectionLength = 0;
             this.txtRMS.SelectionStart = 0;
@@ -485,16 +487,16 @@ namespace GlobalCat
             this.txtRMS.TextAlign = HorizontalAlignment.Left;
             this.txtRMS.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.gc_RMSId.Location = new Point(17, 160);
-            this.gc_RMSId.Name = "GlobalCatForm_54";
+            this.gc_RMSId.Name = "gc_RMSId";
             this.gc_RMSId.Size = new Size(120, 13);
             this.gc_RMSId.TabIndex = 37;
-            this.gc_RMSId.Text = "GlobalCatForm_55";
+            this.gc_RMSId.Text = "RMS ID";
             this.gc_Days.AutoSize = true;
             this.gc_Days.Location = new Point(214, 15);
-            this.gc_Days.Name = "GlobalCatForm_56";
+            this.gc_Days.Name = "gc_Days";
             this.gc_Days.Size = new Size(31, 13);
             this.gc_Days.TabIndex = 25;
-            this.gc_Days.Text = "GlobalCatForm_57";
+            this.gc_Days.Text = "Days";
             this.ToDate.BackColor = Color.White;
             this.ToDate.BorderColor = Color.Black;
             this.ToDate.Culture = new CultureInfo("");
@@ -503,24 +505,24 @@ namespace GlobalCat
             this.ToDate.DropDownMinimumSize = new Size(10, 10);
             this.ToDate.DropDownResizeDirection = SizingDirection.None;
             this.ToDate.FormatValue = "";
-            this.ToDate.Location = new Point(145, (int)sbyte.MaxValue);
+            this.ToDate.Location = new Point(145, 127);
             this.ToDate.MaxDate = new DateTime(2100, 1, 1, 0, 0, 0, 0);
             this.ToDate.MinDate = new DateTime(1900, 1, 1, 0, 0, 0, 0);
-            this.ToDate.Name = "GlobalCatForm_58";
+            this.ToDate.Name = "ToDate";
             this.ToDate.ShowGrip = false;
             this.ToDate.Size = new Size(128, 23);
             this.ToDate.TabIndex = 30;
-            this.ToDate.Text = "GlobalCatForm_59";
+            this.ToDate.Text = "07/14/2014 17:46:50";
             this.ToDate.UseThemeBackColor = false;
             this.ToDate.UseThemeDropDownArrowColor = true;
-            this.ToDate.Value = new DateTime(2017, 08, 01);
+            this.ToDate.Value = new DateTime(2017, 08, 02);
             this.ToDate.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.ToDate.ValueChanged += new EventHandler(this.ToDate_ValueChanged);
             this.gc_EndDate.Location = new Point(17, 132);
-            this.gc_EndDate.Name = "GlobalCatForm_60";
+            this.gc_EndDate.Name = "gc_EndDate";
             this.gc_EndDate.Size = new Size(120, 13);
             this.gc_EndDate.TabIndex = 29;
-            this.gc_EndDate.Text = "GlobalCatForm_61";
+            this.gc_EndDate.Text = "To Date/Time";
             this.FromDate.BackColor = Color.White;
             this.FromDate.BorderColor = Color.Black;
             this.FromDate.Culture = new CultureInfo("");
@@ -532,24 +534,24 @@ namespace GlobalCat
             this.FromDate.Location = new Point(145, 99);
             this.FromDate.MaxDate = new DateTime(2100, 1, 1, 0, 0, 0, 0);
             this.FromDate.MinDate = new DateTime(1900, 1, 1, 0, 0, 0, 0);
-            this.FromDate.Name = "GlobalCatForm_62";
+            this.FromDate.Name = "FromDate";
             this.FromDate.ShowGrip = false;
             this.FromDate.Size = new Size(128, 23);
             this.FromDate.TabIndex = 28;
-            this.FromDate.Text = "GlobalCatForm_63";
+            this.FromDate.Text = "07/14/2014 17:46:50";
             this.FromDate.UseThemeBackColor = false;
             this.FromDate.UseThemeDropDownArrowColor = true;
-            this.FromDate.Value = new DateTime(2017, 08, 01);
+            this.FromDate.Value = new DateTime(2017, 8, 02);
             this.FromDate.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.FromDate.ValueChanged += new EventHandler(this.FromDate_ValueChanged);
             this.gc_StartDate.Location = new Point(17, 104);
-            this.gc_StartDate.Name = "GlobalCatForm_64";
+            this.gc_StartDate.Name = "gc_StartDate";
             this.gc_StartDate.Size = new Size(120, 13);
             this.gc_StartDate.TabIndex = 27;
-            this.gc_StartDate.Text = "GlobalCatForm_65";
+            this.gc_StartDate.Text = "From Date/Time";
             this.lblLine1.BorderStyle = BorderStyle.Fixed3D;
             this.lblLine1.Location = new Point(17, 34);
-            this.lblLine1.Name = "GlobalCatForm_66";
+            this.lblLine1.Name = "lblLine1";
             this.lblLine1.Size = new Size(290, 1);
             this.lblLine1.TabIndex = 26;
             this.cboDays.BackColor = Color.White;
@@ -561,28 +563,29 @@ namespace GlobalCat
             this.cboDays.DropDownMinimumSize = new Size(150, 240);
             this.cboDays.DropDownResizeDirection = SizingDirection.Both;
             this.cboDays.DropDownWidth = 64;
-            listItem1.RoundedCornersMask = (byte)15;
-            listItem1.Text = "GlobalCatForm_67";
-            listItem2.RoundedCornersMask = (byte)15;
-            listItem2.Text = "GlobalCatForm_68";
-            listItem3.RoundedCornersMask = (byte)15;
-            listItem3.Text = "GlobalCatForm_69";
-            listItem4.RoundedCornersMask = (byte)15;
-            listItem4.Text = "GlobalCatForm_70";
-            listItem5.RoundedCornersMask = (byte)15;
-            listItem5.Text = "GlobalCatForm_71";
-            listItem6.RoundedCornersMask = (byte)15;
-            listItem6.Text = "GlobalCatForm_72";
-            listItem7.RoundedCornersMask = (byte)15;
-            listItem7.Text = "GlobalCatForm_73";
-            listItem8.RoundedCornersMask = (byte)15;
-            listItem8.Text = "GlobalCatForm_74";
-            listItem9.RoundedCornersMask = (byte)15;
-            listItem9.Text = "GlobalCatForm_75";
-            listItem10.RoundedCornersMask = (byte)15;
-            listItem10.Text = "GlobalCatForm_76";
-            listItem11.RoundedCornersMask = (byte)15;
-            listItem11.Text = "GlobalCatForm_77";
+            listItem.RoundedCornersMask = 15;
+            listItem.Text = "1";
+            listItem1.RoundedCornersMask = 15;
+            listItem1.Text = "2";
+            listItem2.RoundedCornersMask = 15;
+            listItem2.Text = "3";
+            listItem3.RoundedCornersMask = 15;
+            listItem3.Text = "5";
+            listItem4.RoundedCornersMask = 15;
+            listItem4.Text = "10";
+            listItem5.RoundedCornersMask = 15;
+            listItem5.Text = "15";
+            listItem6.RoundedCornersMask = 15;
+            listItem6.Text = "20";
+            listItem7.RoundedCornersMask = 15;
+            listItem7.Text = "30";
+            listItem8.RoundedCornersMask = 15;
+            listItem8.Text = "60";
+            listItem9.RoundedCornersMask = 15;
+            listItem9.Text = "90";
+            listItem10.RoundedCornersMask = 15;
+            listItem10.Text = "120";
+            this.cboDays.Items.Add(listItem);
             this.cboDays.Items.Add(listItem1);
             this.cboDays.Items.Add(listItem2);
             this.cboDays.Items.Add(listItem3);
@@ -593,13 +596,12 @@ namespace GlobalCat
             this.cboDays.Items.Add(listItem8);
             this.cboDays.Items.Add(listItem9);
             this.cboDays.Items.Add(listItem10);
-            this.cboDays.Items.Add(listItem11);
             this.cboDays.Location = new Point(145, 5);
-            this.cboDays.Name = "GlobalCatForm_78";
-            this.cboDays.RoundedCornersMaskListItem = (byte)15;
+            this.cboDays.Name = "cboDays";
+            this.cboDays.RoundedCornersMaskListItem = 15;
             this.cboDays.Size = new Size(64, 23);
             this.cboDays.TabIndex = 24;
-            this.cboDays.Text = "GlobalCatForm_79";
+            this.cboDays.Text = "1";
             this.cboDays.UseThemeBackColor = false;
             this.cboDays.UseThemeDropDownArrowColor = true;
             this.cboDays.ValueMember = "";
@@ -609,28 +611,28 @@ namespace GlobalCat
             this.DataPanel.AutoScroll = true;
             this.DataPanel.Dock = DockStyle.Fill;
             this.DataPanel.Location = new Point(323, 40);
-            this.DataPanel.Name = "GlobalCatForm_80";
+            this.DataPanel.Name = "DataPanel";
             this.DataPanel.Size = new Size(561, 622);
             this.DataPanel.TabIndex = 2;
-            this.AutoScaleDimensions = new SizeF(6f, 13f);
-            this.AutoScaleMode = AutoScaleMode.Font;
+            base.AutoScaleDimensions = new SizeF(6f, 13f);
+            base.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = Color.White;
-            this.ClientSize = new Size(884, 662);
-            this.Controls.Add((Control)this.DataPanel);
-            this.Controls.Add((Control)this.SearchPanel);
-            this.Controls.Add((Control)this.HeaderPanel);
-            this.Icon = (Icon)Resources.GlobalCatForm.GlobalCatIcon;
+            base.ClientSize = new Size(884, 662);
+            base.Controls.Add(this.DataPanel);
+            base.Controls.Add(this.SearchPanel);
+            base.Controls.Add(this.HeaderPanel);
+            base.Icon = (Icon)Resources.GlobalCatForm.GlobalCatIcon;
             this.MinimumSize = new Size(850, 650);
-            this.Name = "GlobalCatForm_81";
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "GlobalCatForm_82";
-            this.FormClosing += new FormClosingEventHandler(this.GlobalCatForm_FormClosing);
-            this.Load += new EventHandler(this.GlobalCatForm_Load);
+            base.Name = "GlobalCatForm";
+            base.StartPosition = FormStartPosition.CenterScreen;
+            this.Text = "Global Catalog Search";
+            base.FormClosing += new FormClosingEventHandler(this.GlobalCatForm_FormClosing);
+            base.Load += new EventHandler(this.GlobalCatForm_Load);
             this.HeaderPanel.ResumeLayout(false);
             this.HeaderPanel.PerformLayout();
             this.SearchPanel.ResumeLayout(false);
             this.SearchPanel.PerformLayout();
-            this.ResumeLayout(false);
+            base.ResumeLayout(false);
         }
     }
 }

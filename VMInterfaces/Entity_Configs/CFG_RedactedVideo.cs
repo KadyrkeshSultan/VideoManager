@@ -10,7 +10,7 @@ namespace VMInterfaces.Entity_Configs
         {
             HasKey(redactedVideo => redactedVideo.Id).Property(redactedVideo => redactedVideo.Id).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
             Property(redactedVideo => redactedVideo.UNCPath).IsRequired().HasMaxLength(new int?(256));
-            Property(redactedVideo => redactedVideo.Thumbnail).HasColumnType("CFG_RedactedVideo_unknown1");
+            Property(redactedVideo => redactedVideo.Thumbnail).HasColumnType("image");
             Property(redactedVideo => redactedVideo.Title).IsRequired().HasMaxLength(new int?(32));
             Property(redactedVideo => redactedVideo.Desc).HasMaxLength(new int?(64));
             Property(redactedVideo => redactedVideo.FileName).IsRequired().HasMaxLength(new int?(128));

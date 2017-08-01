@@ -28,7 +28,7 @@ namespace Unity
         
         public static void Set(VIBLEND_THEME theme)
         {
-            List<Type> list = ((IEnumerable<Type>)GetTypesInNamespace(Assembly.LoadFile(Application.StartupPath + "Unity_Theme_unknown1"), "Unity_Theme_unknown2")).ToList();
+            List<Type> list = ((IEnumerable<Type>)GetTypesInNamespace(Assembly.LoadFile(Application.StartupPath + "\\VIBlend.WinForms.Controls.dll"), "VIBlend.WinForms.Controls")).ToList();
             foreach (Form openForm in Application.OpenForms)
             {
                 if (openForm != null)
@@ -37,7 +37,7 @@ namespace Unity
                     {
                         try
                         {
-                            control.GetType().GetProperty("Unity_Theme_unknown3").SetValue(control, theme, null);
+                            control.GetType().GetProperty("VIBlendTheme").SetValue(control, theme, null);
                         }
                         catch
                         {
@@ -50,14 +50,14 @@ namespace Unity
         
         public static void Set(VIBLEND_THEME theme, Form form)
         {
-            List<Type> list = ((IEnumerable<Type>)GetTypesInNamespace(Assembly.LoadFile(Application.StartupPath + "Unity_Theme_unknown4"), "Unity_Theme_unknown5")).ToList();
+            List<Type> list = ((IEnumerable<Type>)GetTypesInNamespace(Assembly.LoadFile(Application.StartupPath + "\\VIBlend.WinForms.Controls.dll"), "VIBlend.WinForms.Controls")).ToList();
             if (form == null)
                 return;
             foreach (object control in GetControls(form, list))
             {
                 try
                 {
-                    control.GetType().GetProperty("Unity_Theme_unknown6").SetValue(control, theme, null);
+                    control.GetType().GetProperty("VIBlendTheme").SetValue(control, theme, null);
                 }
                 catch
                 {

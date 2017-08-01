@@ -10,7 +10,7 @@ namespace VMInterfaces.Entity_Configs
         public CFG_UserRank()
         {
             HasKey(userRank => userRank.Id).Property(userRank => userRank.Id).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
-            Property(userRank => userRank.Rank).IsRequired().HasMaxLength(new int?(32)).HasColumnAnnotation("CFG_UserRank_unknown1", new IndexAnnotation(new IndexAttribute()
+            Property(userRank => userRank.Rank).IsRequired().HasMaxLength(new int?(32)).HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()
             {
                 IsUnique = true
             }));

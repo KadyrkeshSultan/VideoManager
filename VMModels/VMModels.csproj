@@ -49,7 +49,6 @@
     <Compile Include="Enums\SYSTEM_ROLE.cs" />
     <Compile Include="Enums\UserRights.cs" />
     <Compile Include="Model\Account\Account.cs" />
-    <Compile Include="Model\Account\AccountAccountGroup.cs" />
     <Compile Include="Model\Account\AccountGroup.cs" />
     <Compile Include="Model\Account\AccountLog.cs" />
     <Compile Include="Model\AlertEmail.cs" />

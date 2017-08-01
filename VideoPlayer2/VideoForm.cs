@@ -1,104 +1,187 @@
 ﻿using AppGlobal;
 using AxAXVLC;
+using AXVLC;
+using VMMapEngine;
 using NReco.VideoConverter;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Resources;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Unity;
 using VIBlend.Utilities;
 using VIBlend.WinForms.Controls;
+using VideoPlayer2.Properties;
 using VMInterfaces;
-using VMModels.Enums;
 using VMModels.Model;
+using VMModels.Enums;
 
 namespace VideoPlayer2
 {
     public class VideoForm : Form
     {
         public const int WM_NCLBUTTONDOWN = 161;
+
         public const int HT_CAPTION = 2;
+
         private const int CS_DROPSHADOW = 131072;
+
         private MapPanel2 mapPanel;
+
         private ThumbPanel thumbPanel;
+
         private TagPanel tagPanel;
+
         private FilePanel filePanel;
+
         private ImageFilePanel imgPanel;
+
         private int FileLength;
+
         private double FPS;
+
         private int fileIndex;
+
         private bool IsLoop;
+
         private int StartMS;
+
         private int EndMS;
+
         private int StartFrame;
+
         private int EndFrame;
-        private List<Guid> FileID;
-        private List<MediaFile> Media;
-        private List<ImageFile> Images;
-        private Guid AccountID;
-        private VideoTag vTag;
-        private bool IsCmdPanel;
+
+        private List<Guid> FileID = new List<Guid>();
+
+        private List<MediaFile> Media = new List<MediaFile>();
+
+        private List<ImageFile> Images = new List<ImageFile>();
+
+        private Guid AccountID = Guid.Empty;
+
+        private VideoTag vTag = new VideoTag();
+
+        private bool IsCmdPanel = true;
+
         private bool IsPlaying;
+
         private int TagIndex;
-        private string StartTag;
-        private string EndTag;
+
+        private string StartTag = string.Empty;
+
+        private string EndTag = string.Empty;
+
         private bool IsPlayTags;
+
         private IContainer components;
+
         private Panel FormPanel;
+
         private Panel HeaderPanel;
+
         private Panel ControlPanel;
+
         private vButton btnClose;
+
         private PictureBox LogoPic;
+
         private vButton btnStop;
+
         private vButton btnPlay;
+
         private Label lblFrame;
+
         private Label lblTime;
+
         private vButton btnCtrlPanel;
+
         private vButton btnNext;
+
         private vButton btnPrev;
+
         private vButton btnFramePlus;
+
         private vButton btnFrameMinus;
+
         private TrackBar VolumeBar;
+
         private TrackBar SpeedBar;
+
         private vButton btnThumbnails;
+
         private vButton btn_Map;
+
         private TableLayoutPanel TrackbarTable;
+
         private vTrackBar VideoBar;
+
         private vButton btnSnapshot;
+
         private Label lblSpeed;
+
         private vButton btnFiles;
+
         private vButton btnTags;
+
         private OpenFileDialog openFileDialog1;
+
         private Label lbl_File;
+
         private Label lbl_TagState;
+
         private ContextMenuStrip VideoMenu;
+
         private ToolStripMenuItem mnu_TagStart;
+
         private ToolStripMenuItem mnu_TagEnd;
+
         private ToolStripMenuItem mnu_TagClear;
+
         private ToolStripSeparator toolStripMenuItem1;
+
         private ToolStripMenuItem mnu_TagSave;
+
         private ToolStripMenuItem mnu_TagLoop;
+
         private Panel OptionPanel;
+
         private Panel MenuPanel;
+
         private Label lbl_SecurityLevel;
+
         private System.Windows.Forms.Timer timer1;
+
         private Label lbl_VideoTime;
+
         private Label lblVideoTitle;
+
         private vCheckBox chk_TagsOnly;
+
         private Label lbl_Filedate;
+
         private Label lbl_Classification;
+
         private Label lblSet;
+
         private PictureBox picEvidence;
+
         private Panel VideoPanel;
+
         private AxVLCPlugin2 vlc;
+
         private Panel VCRPanel;
+
         private PictureBox VolPic;
+
         private vButton btnImageFiles;
+
         private Label lbl_ImageFileCount;
+
         private Label lbl_VideoFileCount;
 
         protected override CreateParams CreateParams
@@ -106,871 +189,265 @@ namespace VideoPlayer2
             get
             {
                 CreateParams createParams = base.CreateParams;
-                createParams.ClassStyle |= 131072;
+                CreateParams classStyle = createParams;
+                classStyle.ClassStyle = classStyle.ClassStyle | 131072;
                 return createParams;
             }
         }
 
-        
         public VideoForm()
         {
-            FileID = new List<Guid>();
-            Media = new List<MediaFile>();
-            Images = new List<ImageFile>();
-            AccountID = Guid.Empty;
-            vTag = new VideoTag();
-            IsCmdPanel = true;
-            StartTag = string.Empty;
-            EndTag = string.Empty;
             try
             {
-                InitializeComponent();
+                this.InitializeComponent();
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                int num = (int)MessageBox.Show(ex.Message);
+                MessageBox.Show(exception.Message);
             }
         }
 
-        [DllImport("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-
-        [DllImport("user32.dll")]
-        public static extern bool ReleaseCapture();
-
-        
-        private void VideoForm_Load(object sender, EventArgs e)
-        {
-            if (Global.IS_WOLFCOM)
-            {
-                HeaderPanel.BackgroundImage = Properties.Resources.topbar45;
-                VideoPanel.BackColor = Color.FromArgb(64, 64, 64);
-                btnClose.VIBlendTheme = VIBLEND_THEME.NERO;
-            }
-            LangCtrl.reText(this);
-            LangCtrl.reText(VideoMenu);
-            Global.Log("VideoForm_1", "VideoForm_2");
-            VolumeBar.Value = 100;
-            InitControls();
-            SetToolTips();
-        }
-
-        
-        private void SetToolTips()
-        {
-            // TODO : Придется доделовать 
-            ToolTip toolTip = new ToolTip();
-            //toolTip.SetToolTip((Control)this.picEvidence, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6722), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6754)));
-            //toolTip.SetToolTip((Control)this.btn_Map, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6774), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6790)));
-            //toolTip.SetToolTip((Control)this.btnFrameMinus, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6828), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6858)));
-            //toolTip.SetToolTip((Control)this.btnFramePlus, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6888), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6916)));
-            //toolTip.SetToolTip((Control)this.btnNext, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6944), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6968)));
-            //toolTip.SetToolTip((Control)this.btnPlay, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(6992), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7010)));
-            //toolTip.SetToolTip((Control)this.btnPrev, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7038), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7056)));
-            //toolTip.SetToolTip((Control)this.btnSnapshot, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7088), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7112)));
-            //toolTip.SetToolTip((Control)this.btnStop, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7144), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7168)));
-            //toolTip.SetToolTip((Control)this.btnTags, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7192), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7218)));
-            //toolTip.SetToolTip((Control)this.btnThumbnails, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7244), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7282)));
-            //toolTip.SetToolTip((Control)this.SpeedBar, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7316), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7344)));
-            //toolTip.SetToolTip((Control)this.VolumeBar, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7376), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7398)));
-            //toolTip.SetToolTip((Control)this.btnImageFiles, LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7414), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(7444)));
-        }
-
-        
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            tagPanel.EVT_MergeVideo -= new TagPanel.DEL_MergeVideo(tagPanel_EVT_MergeVideo);
-            mapPanel.EVT_Compass -= new MapPanel2.DEL_Compass(mapPanel_EVT_Compass);
-            if (vlc != null)
-            {
-                try
-                {
-                    vlc.MediaPlayerTimeChanged -= new DVLCEvents_MediaPlayerTimeChangedEventHandler(vlc_MediaPlayerTimeChanged);
-                    vlc.playlist.stop();
-                }
-                catch
-                {
-                }
-            }
-            Global.Log("VideoForm_3", "VideoForm_4");
-            Application.DoEvents();
-            Close();
-        }
-
-        
-        private void VideoForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-        }
-
-        
-        private void HeaderMouseDown(MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Left)
-                return;
-            ReleaseCapture();
-            SendMessage(Handle, 161, 2, 0);
-        }
-
-        
-        private void HeaderPanel_MouseDown(object sender, MouseEventArgs e)
-        {
-            HeaderMouseDown(e);
-        }
-
-        
-        private void LogoPic_MouseDown(object sender, MouseEventArgs e)
-        {
-            HeaderMouseDown(e);
-        }
-
-        
-        private void lbl_File_MouseDown(object sender, MouseEventArgs e)
-        {
-            HeaderMouseDown(e);
-        }
-
-        
-        private void lblVideoTitle_MouseDown(object sender, MouseEventArgs e)
-        {
-            HeaderMouseDown(e);
-        }
-
-        
-        public void LoadVideoList(List<Guid> files, Guid AccountId)
-        {
-            vlc.Hide();
-            FileID = files;
-            AccountID = AccountId;
-            timer1.Start();
-        }
-
-        
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            timer1.Stop();
-            timer1.Enabled = false;
-            if (vlc == null)
-                return;
-            vlc.MediaPlayerTimeChanged -= new DVLCEvents_MediaPlayerTimeChangedEventHandler(vlc_MediaPlayerTimeChanged);
-            vlc.MediaPlayerTimeChanged += new DVLCEvents_MediaPlayerTimeChangedEventHandler(vlc_MediaPlayerTimeChanged);
-            ProcessFiles();
-        }
-
-        
-        private void ProcessFiles()
-        {
-            if (vlc != null)
-                vlc.playlist.items.clear();
-            fileIndex = 0;
-            Media = new List<MediaFile>();
-            List<string> stringList = new List<string>();
-            using (RPM_DataFile rpmDataFile = new RPM_DataFile())
-            {
-                string str1 = "VideoForm_5";
-                string str2 = "VideoForm_6";
-                foreach (Guid Id in FileID)
-                {
-                    DataFile dataFile = rpmDataFile.GetDataFile(Id);
-                    string path = Path.Combine(Path.Combine(dataFile.UNCName, dataFile.UNCPath), dataFile.StoredFileName) + dataFile.FileExtension;
-                    if (File.Exists(path))
-                    {
-                        if (str1.Contains(dataFile.FileExtension.ToUpper()))
-                        {
-                            MediaFile mediaFile = new MediaFile();
-                            mediaFile.Classification = dataFile.Classification;
-                            mediaFile.FileDate = dataFile.FileTimestamp.Value;
-                            mediaFile.FileName = path;
-                            mediaFile.IsEvidence = dataFile.IsEvidence;
-                            mediaFile.Security = dataFile.Security;
-                            mediaFile.Ext2 = dataFile.FileExtension2;
-                            mediaFile.FileID = dataFile.Id;
-                            mediaFile.Set = dataFile.SetName;
-                            mediaFile.UNCName = dataFile.UNCName;
-                            mediaFile.UNCPath = dataFile.UNCPath;
-                            this.Media.Add(mediaFile);
-                            Global.Log("VideoForm_7", string.Format("VideoForm_8", mediaFile.FileName));
-                            if (vlc != null)
-                                vlc.playlist.add("VideoForm_9" + path, null, null);
-                        }
-                        else if (str2.Contains(dataFile.FileExtension.ToUpper()))
-                            Images.Add(new ImageFile()
-                            {
-                                FileName = path,
-                                Thumbnail = Utilities.resizeImage(160, 100, Utilities.ByteArrayToImage(dataFile.Thumbnail))
-                            });
-                    }
-                    else
-                        stringList.Add(Path.GetFileName(path));
-                }
-            }
-            lbl_VideoFileCount.Text = string.Format(LangCtrl.GetString("VideoForm_10", "VideoForm_11"), Media.Count);
-            lbl_ImageFileCount.Text = string.Format(LangCtrl.GetString("VideoForm_12", "VideoForm_13"), Images.Count);
-            Mapper.ClearPoints();
-            lbl_File.Text = string.Format(LangCtrl.GetString("VideoForm_14", "VideoForm_15"), 1, Media.Count);
-            if (Images.Count > 0)
-            {
-                imgPanel.LoadImages(Images);
-                LoadOptionControl(imgPanel);
-            }
-            if (Media.Count > 0)
-            {
-                vlc.Show();
-                PlayVideo();
-            }
-            if (Media.Count > 0)
-            {
-                try
-                {
-                    filePanel.LoadData(Media[fileIndex].FileID);
-                }
-                catch (Exception ex)
-                {
-                    int num = (int)MessageBox.Show(this, string.Format(LangCtrl.GetString("VideoForm_16", "VideoForm_17"), ex.Message), "VideoForm_18", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-            }
-            else
-            {
-                try
-                {
-                    vlc.Hide();
-                    if (Images.Count != 0)
-                        return;
-                    string empty = string.Empty;
-                    int num1 = 1;
-                    foreach (string str in stringList)
-                        empty += string.Format("VideoForm_19", num1++, str);
-                    int num2 = (int)MessageBox.Show(this, string.Format(LangCtrl.GetString("VideoForm_20", "VideoForm_21"), empty), "VideoForm_22", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-                catch
-                {
-                }
-            }
-        }
-
-        
-        private void btnCtrlPanel_Click(object sender, EventArgs e)
-        {
-            IsCmdPanel = !IsCmdPanel;
-            ControlPanel.Visible = IsCmdPanel;
-        }
-
-        
-        private void InitControls()
-        {
-            mapPanel = new MapPanel2();
-            mapPanel.EVT_Compass -= new MapPanel2.DEL_Compass(mapPanel_EVT_Compass);
-            mapPanel.EVT_Compass += new MapPanel2.DEL_Compass(mapPanel_EVT_Compass);
-            Mapper.SetMapper(mapPanel.GetMapObject());
-            LoadOptionControl(mapPanel);
-            thumbPanel = new ThumbPanel();
-            imgPanel = new ImageFilePanel();
-            tagPanel = new TagPanel();
-            tagPanel.EVT_MergeVideo -= new TagPanel.DEL_MergeVideo(tagPanel_EVT_MergeVideo);
-            tagPanel.EVT_MergeVideo += new TagPanel.DEL_MergeVideo(tagPanel_EVT_MergeVideo);
-            filePanel = new FilePanel();
-        }
-
-        
         private void btn_Map_Click(object sender, EventArgs e)
         {
-            LoadOptionControl(mapPanel);
+            this.LoadOptionControl(this.mapPanel);
         }
 
-        
-        private void btnThumbnails_Click(object sender, EventArgs e)
+        private void btnClose_Click(object sender, EventArgs e)
         {
-            LoadOptionControl(thumbPanel);
-        }
-
-        
-        private void btnFiles_Click(object sender, EventArgs e)
-        {
-            LoadOptionControl(filePanel);
-        }
-
-        
-        private void btnTags_Click(object sender, EventArgs e)
-        {
-            LoadOptionControl(tagPanel);
-        }
-
-        
-        private void btnImageFiles_Click(object sender, EventArgs e)
-        {
-            LoadOptionControl(imgPanel);
-        }
-
-        
-        private void mapPanel_EVT_Compass(bool b)
-        {
-            Mapper.ShowCompass(b);
-        }
-
-        
-        private void LoadOptionControl(Control ctrl)
-        {
-            if (OptionPanel.Controls.Contains(ctrl))
-                return;
-            try
+            this.tagPanel.EVT_MergeVideo -= new TagPanel.DEL_MergeVideo(this.tagPanel_EVT_MergeVideo);
+            this.mapPanel.EVT_Compass -= new MapPanel2.DEL_Compass(this.mapPanel_EVT_Compass);
+            if (this.vlc != null)
             {
-                OptionPanel.Controls.Clear();
-                OptionPanel.Controls.Add(ctrl);
-            }
-            catch
-            {
-            }
-        }
-
-        
-        private void btnPlay_Click(object sender, EventArgs e)
-        {
-            PlayVideo();
-        }
-
-        
-        private void PlayVideo()
-        {
-            try
-            {
-                if (Media.Count <= 0 || vlc == null)
-                    return;
-                vlc.Show();
-                if (Media.Count > 1)
-                    btnPrev.Enabled = btnNext.Enabled = true;
-                if (!vlc.playlist.isPlaying && !IsPlaying)
-                {
-                    LoadGPS();
-                    btnPlay.Image = Properties.Resources.pause;
-                    try
-                    {
-                        vlc.playlist.playItem(fileIndex);
-                    }
-                    catch (Exception ex)
-                    {
-                        string message = ex.Message;
-                    }
-                    GetFileLength();
-                    FPS = vlc.input.fps;
-                    if (FPS == 0.0)
-                        FPS = 30.0;
-                    IsPlaying = true;
-                }
-                else
-                {
-                    btnPlay.Image = Properties.Resources.play;
-                    if (!vlc.playlist.isPlaying)
-                        btnPlay.Image = Properties.Resources.pause;
-                    vlc.playlist.togglePause();
-                }
-                UpdateVideoTime();
-            }
-            catch (Exception ex)
-            {
-                int num = (int)MessageBox.Show(this, string.Format("VideoForm_23", ex.Message), "VideoForm_24", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-            }
-        }
-
-        
-        private void GetFileLength()
-        {
-            FileLength = (int)vlc.input.Length;
-            while (FileLength == 0)
-                FileLength = (int)vlc.input.Length;
-            VideoBar.Maximum = FileLength;
-        }
-
-        
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            StopPlayer();
-        }
-
-        
-        private void StopPlayer()
-        {
-            VideoBar.Value = 0;
-            TagIndex = 0;
-            vlc.playlist.stop();
-            IsPlaying = false;
-            btnPlay.Image = Properties.Resources.play;
-            vlc.Hide();
-        }
-
-        
-        private void btnPrev_Click(object sender, EventArgs e)
-        {
-            if (--fileIndex < 0)
-                fileIndex = Media.Count - 1;
-            MoveToVideo();
-        }
-
-        
-        private void btnNext_Click(object sender, EventArgs e)
-        {
-            if (++fileIndex > Media.Count - 1)
-                fileIndex = 0;
-            MoveToVideo();
-        }
-
-        
-        private void MoveToVideo()
-        {
-            ClearTAG();
-            Mapper.ClearPoints();
-            vlc.Show();
-            TagIndex = 0;
-            LoadGPS();
-            vlc.playlist.playItem(fileIndex);
-            GetFileLength();
-            lbl_File.Text = string.Format(LangCtrl.GetString("VideoForm_25", "VideoForm_26"), fileIndex + 1, Media.Count);
-            btnPlay.Image = Properties.Resources.pause;
-            UpdateVideoTime();
-            filePanel.LoadData(Media[fileIndex].FileID);
-        }
-
-        
-        private void vlc_MediaPlayerTimeChanged(object sender, DVLCEvents_MediaPlayerTimeChangedEvent e)
-        {
-            if (IsPlayTags)
-                PlayTags(e.time);
-            else
-                Update(e.time);
-        }
-
-        
-        private void PlayTags(int t)
-        {
-            //TODO : Надо изменить delegate
-            Action p1;
-            BeginInvoke((p1 = () =>
-            {
-                if (FileLength > 0 && TagIndex <= tagPanel.TagList.Count - 1)
-                {
-                    if (t <= VideoBar.Maximum)
-                        VideoBar.Value = t;
-                    if (t > (int)tagPanel.TagList[TagIndex].EndFrame)
-                    {
-                        ++TagIndex;
-                        if (TagIndex > tagPanel.TagList.Count - 1 || tagPanel.TagList.Count == 0)
-                        {
-                            TagIndex = 0;
-                            EOF();
-                            filePanel.LoadData(Media[fileIndex].FileID);
-                        }
-                        if (tagPanel.TagList.Count > 0)
-                            vlc.input.Time = tagPanel.TagList[TagIndex].StartFrame;
-                        else
-                            EOF();
-                    }
-                    UpdateLabelsAndMap(t);
-                }
-                else
-                    EOF();
-            }));
-        }
-
-        
-        private void Update(int t)
-        {
-            try
-            {
-                // TODO : Delegate
-                Action p2;
-                BeginInvoke(( p2 = () =>
-                {
-                    if (FileLength <= 0)
-                        return;
-                    if (t <= VideoBar.Maximum)
-                        VideoBar.Value = t;
-                    if (IsLoop && EndMS > 0 && t > EndMS)
-                    {
-                        t = StartMS;
-                        vlc.input.Time = t;
-                    }
-                    UpdateLabelsAndMap(t);
-                }));
-            }
-            catch
-            {
-            }
-        }
-
-        
-        private void UpdateLabelsAndMap(int t)
-        {
-            TimeSpan timeSpan = TimeSpan.FromMilliseconds(t);
-            lblTime.Text = string.Format("VideoForm_27", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
-            lblFrame.Text = string.Format("VideoForm_28", GetFrame());
-            Mapper.UpdatePosition(t / 1000);
-        }
-
-        
-        private void UpdateVideoTime()
-        {
-            TimeSpan timeSpan = TimeSpan.FromMilliseconds(VideoBar.Maximum);
-            lbl_VideoTime.Text = string.Format("VideoForm_29", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
-            lbl_SecurityLevel.BackColor = Color.White;
-            lbl_SecurityLevel.ForeColor = Color.Black;
-            switch (Media[fileIndex].Security)
-            {
-                case SECURITY.TOPSECRET:
-                    lbl_SecurityLevel.ForeColor = Color.White;
-                    lbl_SecurityLevel.BackColor = Color.Red;
-                    break;
-                case SECURITY.SECRET:
-                    lbl_SecurityLevel.BackColor = Color.Orange;
-                    lbl_SecurityLevel.ForeColor = Color.Black;
-                    break;
-                case SECURITY.OFFICIAL:
-                    lbl_SecurityLevel.BackColor = Color.Yellow;
-                    lbl_SecurityLevel.ForeColor = Color.Black;
-                    break;
-            }
-            picEvidence.Visible = false;
-            if (Media[fileIndex].IsEvidence)
-                picEvidence.Visible = true;
-            lbl_SecurityLevel.Text = AccountSecurity.GetSecurityDesc(Media[fileIndex].Security);
-            lbl_Classification.Text = Media[fileIndex].Classification;
-            lbl_Filedate.Text = Media[fileIndex].FileDate.ToString();
-            lblSet.Text = Media[fileIndex].Set;
-            thumbPanel.SetFileID(Media[fileIndex].FileID);
-            tagPanel.ListTags(Media[fileIndex].FileID);
-        }
-
-        
-        private void VolumeBar_Scroll(object sender, EventArgs e)
-        {
-            vlc.Volume = VolumeBar.Value;
-            VolPic.Image = Properties.Resources.volume;
-            if (VolumeBar.Value != 0)
-                return;
-            VolPic.Image = Properties.Resources.volume_mute;
-        }
-
-        
-        private void VolPic_MouseClick(object sender, MouseEventArgs e)
-        {
-            vlc.Volume = VolumeBar.Value = 0;
-            VolPic.Image = Properties.Resources.volume_mute;
-        }
-
-        
-        private void VideoBar_Scroll(object sender, ScrollEventArgs e)
-        {
-            CheckScroll();
-        }
-
-        
-        private void CheckScroll()
-        {
-            int startMs = VideoBar.Value;
-            if (IsLoop && EndMS > 0 && startMs > EndMS)
-                startMs = StartMS;
-            vlc.input.Time = (double)startMs;
-            if (vlc.playlist.isPlaying)
-                return;
-            Update((int)((double)startMs + FPS));
-        }
-
-        
-        private void vlc_MediaPlayerEndReached(object sender, EventArgs e)
-        {
-            EOF();
-        }
-
-        
-        private void EOF()
-        {
-            if (++fileIndex > Media.Count - 1)
-                fileIndex = 0;
-            lbl_File.Text = string.Format(LangCtrl.GetString("VideoForm_30", "VideoForm_31"), fileIndex + 1, Media.Count);
-            LoadGPS();
-            vlc.playlist.playItem(fileIndex);
-            FPS = vlc.input.fps;
-            if (FPS == 0.0)
-                FPS = 30.0;
-            FileLength = 0;
-            while (FileLength == 0)
-                FileLength = (int)vlc.input.Length;
-            TagIndex = 0;
-            VideoBar.Maximum = FileLength;
-            UpdateVideoTime();
-            filePanel.LoadData(Media[fileIndex].FileID);
-        }
-
-        
-        private void SpeedBar_Scroll(object sender, EventArgs e)
-        {
-            double num = new double[8]
-            {
-        0.25,
-        0.5,
-        0.75,
-        1.0,
-        1.25,
-        1.5,
-        1.75,
-        2.0
-            }[SpeedBar.Value - 1];
-            lblSpeed.Text = string.Format("VideoForm_22", num);
-            vlc.input.rate = num;
-        }
-
-        
-        private void btnFrameMinus_Click(object sender, EventArgs e)
-        {
-            double num = (double)VideoBar.Value - FPS;
-            if (num < 0.0)
-                return;
-            vlc.input.Time = num;
-            VideoBar.Value = (int)num;
-            Update((int)num);
-        }
-
-        
-        private void btnFramePlus_Click(object sender, EventArgs e)
-        {
-            double num = (double)VideoBar.Value + FPS;
-            if (num > (double)FileLength)
-                return;
-            vlc.input.Time = num;
-            VideoBar.Value = (int)num;
-            Update((int)num);
-        }
-
-        
-        private int GetFrame()
-        {
-            return (int)((double)VideoBar.Value / (1000.0 / FPS));
-        }
-
-        
-        private void mnu_TagStart_Click(object sender, EventArgs e)
-        {
-            int num = VideoBar.Value;
-            StartMS = num;
-            StartFrame = num;
-            StartTag = string.Format("VideoForm_33", GetFrame(), lblTime.Text);
-            lbl_TagState.Text = string.Format(LangCtrl.GetString("VideoForm_34", "VideoForm_35"), StartTag);
-        }
-
-        
-        private void mnu_TagEnd_Click(object sender, EventArgs e)
-        {
-            if (string.IsNullOrEmpty(StartTag))
-                return;
-            int num = VideoBar.Value;
-            EndMS = num;
-            EndFrame = num;
-            EndTag = string.Format("VideoForm_36", GetFrame(), lblTime.Text);
-            lbl_TagState.Text = string.Format(LangCtrl.GetString("VideoForm_37", "VideoForm_38"), StartTag, EndTag);
-        }
-
-        
-        private void mnu_TagClear_Click(object sender, EventArgs e)
-        {
-            ClearTAG();
-        }
-
-        
-        private void ClearTAG()
-        {
-            StartTag = EndTag = string.Empty;
-            lbl_TagState.Text = LangCtrl.GetString("VideoForm_39", "VideoForm_40");
-            StartFrame = EndFrame = StartMS = EndMS = 0;
-            mnu_TagLoop.Checked = IsLoop = false;
-        }
-
-        
-        private void mnu_TagSave_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                SaveTag saveTag = new SaveTag();
-                if (StartMS < 0 || EndMS <= 1 || saveTag.ShowDialog(this) != DialogResult.OK)
-                    return;
-                vTag = new VideoTag();
-                vTag.ShortDesc = saveTag.Desc;
-                vTag.StartFrame = (long)StartFrame;
-                vTag.EndFrame = (long)EndFrame;
-                vTag.StartTime = new double?((double)StartMS / 1000.0);
-                vTag.EndTime = new double?((double)EndMS / 1000.0);
-                DataFile rec = new DataFile();
-                using (RPM_DataFile rpmDataFile = new RPM_DataFile())
-                {
-                    rec = rpmDataFile.GetDataFile(Media[fileIndex].FileID);
-                    rec.VideoTags.Add(vTag);
-                    rpmDataFile.SaveUpdate(rec);
-                    rpmDataFile.Save();
-                }
-                TimeSpan timeSpan1 = new TimeSpan(0, 0, Convert.ToInt32(vTag.StartTime));
-                TimeSpan timeSpan2 = new TimeSpan(0, 0, Convert.ToInt32(vTag.EndTime));
-                string str1 = string.Format("VideoForm_41", timeSpan1.Hours, timeSpan1.Minutes, timeSpan1.Seconds);
-                string str2 = string.Format("VideoForm_42", timeSpan2.Hours, timeSpan2.Minutes, timeSpan2.Seconds);
-                Global.Log("VideoForm_43", string.Format("VideoForm_44", rec.StoredFileName, rec.FileExtension, str1, str2, vTag.ShortDesc.ToUpper()));
-                tagPanel.ListTags(Media[fileIndex].FileID);
-            }
-            catch
-            {
-            }
-        }
-
-        
-        private void mnu_TagLoop_Click(object sender, EventArgs e)
-        {
-            IsLoop = !IsLoop;
-            mnu_TagLoop.Checked = IsLoop;
-        }
-
-        
-        private void LoadGPS()
-        {
-            try
-            {
-                Mapper.ClearPoints();
-                Mapper.MapHide();
-                if (string.IsNullOrEmpty(Media[fileIndex].Ext2))
-                    return;
-                Mapper.LoadDataPoints(Media[fileIndex].FileName.Substring(0, Media[fileIndex].FileName.IndexOf('.')), Media[fileIndex].Ext2);
-                if (Mapper.GPSDataPoints() <= 0.0)
-                    return;
-                Mapper.MapShow();
-            }
-            catch
-            {
-            }
-        }
-
-        
-        private void btnSnapshot_Click(object sender, EventArgs ee)
-        {
-            new Thread(new ThreadStart(WriteSnapshot)).Start();
-        }
-
-        
-        private void WriteSnapshot()
-        {
-            try
-            {
-                string path2 = string.Format("VideoForm_45", Guid.NewGuid());
-                DateTime now = DateTime.Now;
-                string.Format("VideoForm_46", Global.GlobalAccount.Id, now.Year, now.Month, now.Day);
-                string uncPath = Media[fileIndex].UNCPath;
-                string str1 = Path.Combine(Path.Combine(Global.UNCServer, Global.RelativePath), uncPath);
-                if (!str1.Contains("VideoForm_47"))
-                {
-                    if (!str1.StartsWith("VideoForm_48"))
-                        str1 = "VideoForm_49" + str1;
-                }
-                else if (str1.Contains("VideoForm_50") && !str1.Contains("VideoForm_51"))
-                    str1 = str1.Replace("VideoForm_52", "VideoForm_53");
-                if (!Directory.Exists(str1))
-                    Directory.CreateDirectory(str1);
-                Network.SetAcl(str1);
-                Image tNail = null;
-                string str2 = Path.Combine(str1, path2);
-                Network.SetAcl(str1);
                 try
                 {
-                    float num = (float)(VideoBar.Value / 1000);
-                    Global.Log("VideoForm_54", string.Format("VideoForm_55", Media[fileIndex].FileName, num));
-                    new FFMpegConverter().GetVideoThumbnail(Media[fileIndex].FileName, str2, new float?(num));
-                    Thread.Sleep(500);
-                    if (File.Exists(str2))
-                    {
-                        using (FileStream fileStream = new FileStream(str2, FileMode.Open, FileAccess.Read))
-                            tNail = Image.FromStream(fileStream);
-                    }
+                    this.vlc.MediaPlayerTimeChanged -= new AxAXVLC.DVLCEvents_MediaPlayerTimeChangedEventHandler(this.vlc_MediaPlayerTimeChanged);
+                    this.vlc.playlist.stop();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    //TODO: Delegate
-                    VideoForm videoForm = this;
-                    int num;
-                    Func<int> p1;
-                    BeginInvoke((p1 = () => num = (int)MessageBox.Show(videoForm, string.Format("VideoForm_56", ex.Message), "VideoForm_56", MessageBoxButtons.OK, MessageBoxIcon.Hand)));
                 }
-                if (tNail == null)
-                    return;
-                Snapshot rec = new Snapshot();
-                using (RPM_Snapshot rpmSnapshot = new RPM_Snapshot())
-                {
-                    rec.DataFileId = Media[fileIndex].FileID;
-                    rec.FileAddedTimestamp = new DateTime?(DateTime.Now);
-                    rec.FileExtension = "VideoForm_57";
-                    tNail = Utilities.resizeImage(160, 100, Image.FromFile(str2));
-                    rec.Thumbnail = Utilities.ImageToByte(tNail);
-                    rec.StoredFileName = path2;
-                    rec.FrameNumber = Convert.ToInt32(lblFrame.Text);
-                    rec.UNCName = Path.Combine(Global.UNCServer, Global.RelativePath);
-                    rec.UNCPath = uncPath;
-                    rec.FileHash = string.Empty;
-                    rpmSnapshot.SaveUpdate(rec);
-                    rpmSnapshot.Save();
-                }
-                //TODO: Delegate
-                Action p2;
-                this.BeginInvoke((p2 = () =>
-                {
-                    btnSnapshot.Enabled = true;
-                    if (thumbPanel == null)
-                        return;
-                    thumbPanel.AddImage(rec, tNail);
-                }));
             }
-            catch (Exception ex)
+            Global.Log("CLOSE", "Media Player");
+            Application.DoEvents();
+            base.Close();
+        }
+
+        private void btnCtrlPanel_Click(object sender, EventArgs e)
+        {
+            this.IsCmdPanel = !this.IsCmdPanel;
+            this.ControlPanel.Visible = this.IsCmdPanel;
+        }
+
+        private void btnFiles_Click(object sender, EventArgs e)
+        {
+            this.LoadOptionControl(this.filePanel);
+        }
+
+        private void btnFrameMinus_Click(object sender, EventArgs e)
+        {
+            double value = (double)((double)this.VideoBar.Value - this.FPS);
+            if (value >= 0)
             {
-                string message = ex.Message;
+                this.vlc.input.Time = value;
+                this.VideoBar.Value = (int)value;
+                this.Update((int)value);
             }
         }
 
-        
+        private void btnFramePlus_Click(object sender, EventArgs e)
+        {
+            double value = (double)((double)this.VideoBar.Value + this.FPS);
+            if (value <= (double)this.FileLength)
+            {
+                this.vlc.input.Time = value;
+                this.VideoBar.Value = (int)value;
+                this.Update((int)value);
+            }
+        }
+
+        private void btnImageFiles_Click(object sender, EventArgs e)
+        {
+            this.LoadOptionControl(this.imgPanel);
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            VideoForm videoForm = this;
+            int num = videoForm.fileIndex + 1;
+            int num1 = num;
+            videoForm.fileIndex = num;
+            if (num1 > this.Media.Count - 1)
+            {
+                this.fileIndex = 0;
+            }
+            this.MoveToVideo();
+        }
+
+        private void btnPlay_Click(object sender, EventArgs e)
+        {
+            this.PlayVideo();
+        }
+
+        private void btnPrev_Click(object sender, EventArgs e)
+        {
+            VideoForm videoForm = this;
+            int num = videoForm.fileIndex - 1;
+            int num1 = num;
+            videoForm.fileIndex = num;
+            if (num1 < 0)
+            {
+                this.fileIndex = this.Media.Count - 1;
+            }
+            this.MoveToVideo();
+        }
+
+        private void btnSnapshot_Click(object sender, EventArgs e)
+        {
+            (new Thread(new ThreadStart(this.WriteSnapshot))).Start();
+        }
+
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+            this.StopPlayer();
+        }
+
+        private void btnTags_Click(object sender, EventArgs e)
+        {
+            this.LoadOptionControl(this.tagPanel);
+        }
+
+        private void btnThumbnails_Click(object sender, EventArgs e)
+        {
+            this.LoadOptionControl(this.thumbPanel);
+        }
+
+        private void CheckScroll()
+        {
+            int value = this.VideoBar.Value;
+            if (this.IsLoop && this.EndMS > 0 && value > this.EndMS)
+            {
+                value = this.StartMS;
+            }
+            this.vlc.input.Time = (double)value;
+            if (!this.vlc.playlist.isPlaying)
+            {
+                this.Update((int)((double)((double)value + this.FPS)));
+            }
+        }
+
         private void chk_TagsOnly_CheckedChanged(object sender, EventArgs e)
         {
-            IsPlayTags = !IsPlayTags;
-            if (IsPlayTags)
+            this.IsPlayTags = !this.IsPlayTags;
+            if (!this.IsPlayTags)
             {
-                TagIndex = 0;
-                VideoBar.Enabled = false;
-                PlayTags(0);
-                lbl_TagState.Text = LangCtrl.GetString("VideoForm_58", "VideoForm_59");
-            }
-            else
-            {
-                VideoBar.Enabled = true;
-                lbl_TagState.Text = LangCtrl.GetString("VideoForm_60", "VideoForm_61");
-            }
-        }
-
-        
-        private void tagPanel_EVT_MergeVideo(string folder)
-        {
-            if (Media.Count <= 0)
+                this.VideoBar.Enabled = true;
+                this.lbl_TagState.Text = LangCtrl.GetString("vf_Mark", "MARK");
                 return;
-            MergeVideo mergeVideo = new MergeVideo();
-            mergeVideo.EVT_StopPlayer -= new MergeVideo.DEL_StopPlayer(mVid_EVT_StopPlayer);
-            mergeVideo.EVT_StopPlayer += new MergeVideo.DEL_StopPlayer(mVid_EVT_StopPlayer);
-            mergeVideo.VideoPath = folder;
-            mergeVideo.media = Media;
-            int num = (int)mergeVideo.ShowDialog(this);
-            mergeVideo.EVT_StopPlayer -= new MergeVideo.DEL_StopPlayer(mVid_EVT_StopPlayer);
+            }
+            this.TagIndex = 0;
+            this.VideoBar.Enabled = false;
+            this.PlayTags(0);
+            this.lbl_TagState.Text = LangCtrl.GetString("vf_MarkPlaying", "MARK - Playing");
         }
 
-        
-        private void mVid_EVT_StopPlayer()
+        private void ClearTAG()
         {
-            StopPlayer();
+            string empty = string.Empty;
+            string str = empty;
+            this.EndTag = empty;
+            this.StartTag = str;
+            this.lbl_TagState.Text = LangCtrl.GetString("vf_Mark", "MARK");
+            this.EndMS = 0;
+            this.StartMS = 0;
+            this.EndFrame = 0;
+            this.StartFrame = 0;
+            this.IsLoop = false;
+            this.mnu_TagLoop.Checked = false;
         }
 
-        
         protected override void Dispose(bool disposing)
         {
             if (disposing && this.components != null)
+            {
                 this.components.Dispose();
+            }
             base.Dispose(disposing);
         }
 
-        
+        private void EOF()
+        {
+            VideoForm videoForm = this;
+            int num = videoForm.fileIndex + 1;
+            int num1 = num;
+            videoForm.fileIndex = num;
+            if (num1 > this.Media.Count - 1)
+            {
+                this.fileIndex = 0;
+            }
+            this.lbl_File.Text = string.Format(LangCtrl.GetString("vf_File", "File {0} : {1}"), this.fileIndex + 1, this.Media.Count);
+            this.LoadGPS();
+            this.vlc.playlist.playItem(this.fileIndex);
+            this.FPS = this.vlc.input.fps;
+            if (this.FPS == 0)
+            {
+                this.FPS = 30;
+            }
+            this.FileLength = 0;
+            while (this.FileLength == 0)
+            {
+                this.FileLength = (int)this.vlc.input.Length;
+            }
+            this.TagIndex = 0;
+            this.VideoBar.Maximum = this.FileLength;
+            this.UpdateVideoTime();
+            this.filePanel.LoadData(this.Media[this.fileIndex].FileID);
+        }
+
+        private void GetFileLength()
+        {
+            this.FileLength = (int)this.vlc.input.Length;
+            while (this.FileLength == 0)
+            {
+                this.FileLength = (int)this.vlc.input.Length;
+            }
+            this.VideoBar.Maximum = this.FileLength;
+        }
+
+        private int GetFrame()
+        {
+            int value = this.VideoBar.Value;
+            return (int)((double)value / (1000 / this.FPS));
+        }
+
+        private void HeaderMouseDown(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                VideoForm.ReleaseCapture();
+                VideoForm.SendMessage(base.Handle, 161, 2, 0);
+            }
+        }
+
+        private void HeaderPanel_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.HeaderMouseDown(e);
+        }
+
+        private void InitControls()
+        {
+            this.mapPanel = new MapPanel2();
+            this.mapPanel.EVT_Compass -= new MapPanel2.DEL_Compass(this.mapPanel_EVT_Compass);
+            this.mapPanel.EVT_Compass += new MapPanel2.DEL_Compass(this.mapPanel_EVT_Compass);
+            Mapper.SetMapper(this.mapPanel.GetMapObject());
+            this.LoadOptionControl(this.mapPanel);
+            this.thumbPanel = new ThumbPanel();
+            this.imgPanel = new ImageFilePanel();
+            this.tagPanel = new TagPanel();
+            this.tagPanel.EVT_MergeVideo -= new TagPanel.DEL_MergeVideo(this.tagPanel_EVT_MergeVideo);
+            this.tagPanel.EVT_MergeVideo += new TagPanel.DEL_MergeVideo(this.tagPanel_EVT_MergeVideo);
+            this.filePanel = new FilePanel();
+        }
+
         private void InitializeComponent()
         {
             this.components = new Container();
@@ -1031,58 +508,58 @@ namespace VideoPlayer2
             this.VCRPanel.SuspendLayout();
             ((ISupportInitialize)this.VolPic).BeginInit();
             ((ISupportInitialize)this.picEvidence).BeginInit();
-            this.SpeedBar.BeginInit();
-            this.VolumeBar.BeginInit();
+            ((ISupportInitialize)this.SpeedBar).BeginInit();
+            ((ISupportInitialize)this.VolumeBar).BeginInit();
             this.VideoPanel.SuspendLayout();
-            this.vlc.BeginInit();
+            ((ISupportInitialize)this.vlc).BeginInit();
             this.TrackbarTable.SuspendLayout();
             this.VideoMenu.SuspendLayout();
             this.ControlPanel.SuspendLayout();
             this.MenuPanel.SuspendLayout();
             this.HeaderPanel.SuspendLayout();
             ((ISupportInitialize)this.LogoPic).BeginInit();
-            this.SuspendLayout();
+            base.SuspendLayout();
             this.FormPanel.BackColor = Color.White;
             this.FormPanel.BorderStyle = BorderStyle.FixedSingle;
-            this.FormPanel.Controls.Add((Control)this.VCRPanel);
-            this.FormPanel.Controls.Add((Control)this.VideoPanel);
-            this.FormPanel.Controls.Add((Control)this.TrackbarTable);
-            this.FormPanel.Controls.Add((Control)this.ControlPanel);
-            this.FormPanel.Controls.Add((Control)this.HeaderPanel);
+            this.FormPanel.Controls.Add(this.VCRPanel);
+            this.FormPanel.Controls.Add(this.VideoPanel);
+            this.FormPanel.Controls.Add(this.TrackbarTable);
+            this.FormPanel.Controls.Add(this.ControlPanel);
+            this.FormPanel.Controls.Add(this.HeaderPanel);
             this.FormPanel.Dock = DockStyle.Fill;
-            this.FormPanel.Font = new Font("VideoForm_62", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.FormPanel.Font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
             this.FormPanel.Location = new Point(0, 0);
-            this.FormPanel.Name = "VideoForm_63";
+            this.FormPanel.Name = "FormPanel";
             this.FormPanel.Size = new Size(1000, 650);
             this.FormPanel.TabIndex = 0;
-            this.VCRPanel.Controls.Add((Control)this.VolPic);
-            this.VCRPanel.Controls.Add((Control)this.btnStop);
-            this.VCRPanel.Controls.Add((Control)this.btnPlay);
-            this.VCRPanel.Controls.Add((Control)this.picEvidence);
-            this.VCRPanel.Controls.Add((Control)this.lblTime);
-            this.VCRPanel.Controls.Add((Control)this.lblSet);
-            this.VCRPanel.Controls.Add((Control)this.lblFrame);
-            this.VCRPanel.Controls.Add((Control)this.lbl_Classification);
-            this.VCRPanel.Controls.Add((Control)this.btnPrev);
-            this.VCRPanel.Controls.Add((Control)this.lbl_Filedate);
-            this.VCRPanel.Controls.Add((Control)this.btnNext);
-            this.VCRPanel.Controls.Add((Control)this.chk_TagsOnly);
-            this.VCRPanel.Controls.Add((Control)this.btnFrameMinus);
-            this.VCRPanel.Controls.Add((Control)this.lbl_SecurityLevel);
-            this.VCRPanel.Controls.Add((Control)this.btnFramePlus);
-            this.VCRPanel.Controls.Add((Control)this.lblSpeed);
-            this.VCRPanel.Controls.Add((Control)this.SpeedBar);
-            this.VCRPanel.Controls.Add((Control)this.btnSnapshot);
-            this.VCRPanel.Controls.Add((Control)this.VolumeBar);
+            this.VCRPanel.Controls.Add(this.VolPic);
+            this.VCRPanel.Controls.Add(this.btnStop);
+            this.VCRPanel.Controls.Add(this.btnPlay);
+            this.VCRPanel.Controls.Add(this.picEvidence);
+            this.VCRPanel.Controls.Add(this.lblTime);
+            this.VCRPanel.Controls.Add(this.lblSet);
+            this.VCRPanel.Controls.Add(this.lblFrame);
+            this.VCRPanel.Controls.Add(this.lbl_Classification);
+            this.VCRPanel.Controls.Add(this.btnPrev);
+            this.VCRPanel.Controls.Add(this.lbl_Filedate);
+            this.VCRPanel.Controls.Add(this.btnNext);
+            this.VCRPanel.Controls.Add(this.chk_TagsOnly);
+            this.VCRPanel.Controls.Add(this.btnFrameMinus);
+            this.VCRPanel.Controls.Add(this.lbl_SecurityLevel);
+            this.VCRPanel.Controls.Add(this.btnFramePlus);
+            this.VCRPanel.Controls.Add(this.lblSpeed);
+            this.VCRPanel.Controls.Add(this.SpeedBar);
+            this.VCRPanel.Controls.Add(this.btnSnapshot);
+            this.VCRPanel.Controls.Add(this.VolumeBar);
             this.VCRPanel.Dock = DockStyle.Bottom;
             this.VCRPanel.Location = new Point(0, 544);
-            this.VCRPanel.Name = "VideoForm_64";
+            this.VCRPanel.Name = "VCRPanel";
             this.VCRPanel.Size = new Size(647, 104);
             this.VCRPanel.TabIndex = 2;
             this.VolPic.Cursor = Cursors.Hand;
-            this.VolPic.Image = (Image)Properties.Resources.volume;
+            this.VolPic.Image = Properties.Resources.volume;
             this.VolPic.Location = new Point(401, 75);
-            this.VolPic.Name = "VideoForm_65";
+            this.VolPic.Name = "VolPic";
             this.VolPic.Size = new Size(20, 20);
             this.VolPic.SizeMode = PictureBoxSizeMode.CenterImage;
             this.VolPic.TabIndex = 42;
@@ -1090,10 +567,10 @@ namespace VideoPlayer2
             this.VolPic.MouseClick += new MouseEventHandler(this.VolPic_MouseClick);
             this.btnStop.AllowAnimations = true;
             this.btnStop.BackColor = Color.Transparent;
-            this.btnStop.Image = (Image)Properties.Resources.stop;
+            this.btnStop.Image = Properties.Resources.stop;
             this.btnStop.Location = new Point(58, 3);
-            this.btnStop.Name = "VideoForm_66";
-            this.btnStop.RoundedCornersMask = (byte)15;
+            this.btnStop.Name = "btnStop";
+            this.btnStop.RoundedCornersMask = 15;
             this.btnStop.RoundedCornersRadius = 0;
             this.btnStop.Size = new Size(28, 28);
             this.btnStop.TabIndex = 11;
@@ -1102,58 +579,58 @@ namespace VideoPlayer2
             this.btnStop.Click += new EventHandler(this.btnStop_Click);
             this.btnPlay.AllowAnimations = true;
             this.btnPlay.BackColor = Color.Transparent;
-            this.btnPlay.Image = (Image)Properties.Resources.pause;
+            this.btnPlay.Image = Properties.Resources.pause;
             this.btnPlay.Location = new Point(24, 3);
-            this.btnPlay.Name = "VideoForm_67";
-            this.btnPlay.RoundedCornersMask = (byte)15;
+            this.btnPlay.Name = "btnPlay";
+            this.btnPlay.RoundedCornersMask = 15;
             this.btnPlay.RoundedCornersRadius = 0;
             this.btnPlay.Size = new Size(28, 28);
             this.btnPlay.TabIndex = 10;
             this.btnPlay.UseVisualStyleBackColor = false;
             this.btnPlay.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.btnPlay.Click += new EventHandler(this.btnPlay_Click);
-            this.picEvidence.Image = (Image)Properties.Resources.star;
+            this.picEvidence.Image = Properties.Resources.star;
             this.picEvidence.Location = new Point(462, 4);
-            this.picEvidence.Name = "VideoForm_68";
+            this.picEvidence.Name = "picEvidence";
             this.picEvidence.Size = new Size(20, 20);
             this.picEvidence.SizeMode = PictureBoxSizeMode.CenterImage;
             this.picEvidence.TabIndex = 41;
             this.picEvidence.TabStop = false;
             this.lblTime.BorderStyle = BorderStyle.FixedSingle;
-            this.lblTime.Font = new Font("VideoForm_69", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.lblTime.Font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
             this.lblTime.Location = new Point(24, 41);
-            this.lblTime.Name = "VideoForm_70";
+            this.lblTime.Name = "lblTime";
             this.lblTime.Size = new Size(130, 23);
             this.lblTime.TabIndex = 19;
-            this.lblTime.Text = "VideoForm_71";
+            this.lblTime.Text = "00:00:00.000";
             this.lblTime.TextAlign = ContentAlignment.MiddleCenter;
             this.lblSet.AutoSize = true;
             this.lblSet.Location = new Point(462, 80);
-            this.lblSet.Name = "VideoForm_72";
+            this.lblSet.Name = "lblSet";
             this.lblSet.Size = new Size(23, 13);
             this.lblSet.TabIndex = 40;
-            this.lblSet.Text = "VideoForm_73";
+            this.lblSet.Text = "Set";
             this.lblFrame.BorderStyle = BorderStyle.FixedSingle;
-            this.lblFrame.Font = new Font("VideoForm_74", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.lblFrame.Font = new Font("Microsoft Sans Serif", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
             this.lblFrame.Location = new Point(24, 72);
-            this.lblFrame.Name = "VideoForm_75";
+            this.lblFrame.Name = "lblFrame";
             this.lblFrame.Size = new Size(130, 23);
             this.lblFrame.TabIndex = 20;
-            this.lblFrame.Text = "VideoForm_76";
+            this.lblFrame.Text = "0";
             this.lblFrame.TextAlign = ContentAlignment.MiddleCenter;
             this.lbl_Classification.AutoSize = true;
             this.lbl_Classification.Location = new Point(462, 63);
-            this.lbl_Classification.Name = "VideoForm_77";
+            this.lbl_Classification.Name = "lbl_Classification";
             this.lbl_Classification.Size = new Size(68, 13);
             this.lbl_Classification.TabIndex = 39;
-            this.lbl_Classification.Text = "VideoForm_78";
+            this.lbl_Classification.Text = "Classification";
             this.btnPrev.AllowAnimations = true;
             this.btnPrev.BackColor = Color.Transparent;
             this.btnPrev.Enabled = false;
-            this.btnPrev.Image = (Image)Properties.Resources.file_prev;
+            this.btnPrev.Image = Properties.Resources.file_prev;
             this.btnPrev.Location = new Point(92, 3);
-            this.btnPrev.Name = "VideoForm_79";
-            this.btnPrev.RoundedCornersMask = (byte)15;
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.RoundedCornersMask = 15;
             this.btnPrev.RoundedCornersRadius = 0;
             this.btnPrev.Size = new Size(28, 28);
             this.btnPrev.TabIndex = 21;
@@ -1162,17 +639,17 @@ namespace VideoPlayer2
             this.btnPrev.Click += new EventHandler(this.btnPrev_Click);
             this.lbl_Filedate.AutoSize = true;
             this.lbl_Filedate.Location = new Point(462, 46);
-            this.lbl_Filedate.Name = "VideoForm_80";
+            this.lbl_Filedate.Name = "lbl_Filedate";
             this.lbl_Filedate.Size = new Size(158, 13);
             this.lbl_Filedate.TabIndex = 37;
-            this.lbl_Filedate.Text = "VideoForm_81";
+            this.lbl_Filedate.Text = "File Date: 00/00/0000 00:00:00";
             this.btnNext.AllowAnimations = true;
             this.btnNext.BackColor = Color.Transparent;
             this.btnNext.Enabled = false;
-            this.btnNext.Image = (Image)Properties.Resources.filenext;
+            this.btnNext.Image = Properties.Resources.filenext;
             this.btnNext.Location = new Point(126, 3);
-            this.btnNext.Name = "VideoForm_82";
-            this.btnNext.RoundedCornersMask = (byte)15;
+            this.btnNext.Name = "btnNext";
+            this.btnNext.RoundedCornersMask = 15;
             this.btnNext.RoundedCornersRadius = 0;
             this.btnNext.Size = new Size(28, 28);
             this.btnNext.TabIndex = 22;
@@ -1181,57 +658,57 @@ namespace VideoPlayer2
             this.btnNext.Click += new EventHandler(this.btnNext_Click);
             this.chk_TagsOnly.BackColor = Color.Transparent;
             this.chk_TagsOnly.Location = new Point(172, 41);
-            this.chk_TagsOnly.Name = "VideoForm_83";
+            this.chk_TagsOnly.Name = "chk_TagsOnly";
             this.chk_TagsOnly.Size = new Size(118, 24);
             this.chk_TagsOnly.TabIndex = 36;
-            this.chk_TagsOnly.Text = "VideoForm_84";
+            this.chk_TagsOnly.Text = "Play Video Marks";
             this.chk_TagsOnly.UseVisualStyleBackColor = false;
             this.chk_TagsOnly.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.chk_TagsOnly.CheckedChanged += new EventHandler(this.chk_TagsOnly_CheckedChanged);
             this.btnFrameMinus.AllowAnimations = true;
             this.btnFrameMinus.BackColor = Color.Transparent;
-            this.btnFrameMinus.Font = new Font("VideoForm_85", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.btnFrameMinus.Font = new Font("Microsoft Sans Serif", 14.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
             this.btnFrameMinus.Location = new Point(172, 3);
-            this.btnFrameMinus.Name = "VideoForm_86";
-            this.btnFrameMinus.RoundedCornersMask = (byte)15;
+            this.btnFrameMinus.Name = "btnFrameMinus";
+            this.btnFrameMinus.RoundedCornersMask = 15;
             this.btnFrameMinus.RoundedCornersRadius = 0;
             this.btnFrameMinus.Size = new Size(28, 28);
             this.btnFrameMinus.TabIndex = 23;
-            this.btnFrameMinus.Text = "VideoForm_87";
+            this.btnFrameMinus.Text = "-";
             this.btnFrameMinus.UseVisualStyleBackColor = false;
             this.btnFrameMinus.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.btnFrameMinus.Click += new EventHandler(this.btnFrameMinus_Click);
             this.lbl_SecurityLevel.AutoSize = true;
             this.lbl_SecurityLevel.BorderStyle = BorderStyle.FixedSingle;
             this.lbl_SecurityLevel.Location = new Point(462, 27);
-            this.lbl_SecurityLevel.Name = "VideoForm_88";
+            this.lbl_SecurityLevel.Name = "lbl_SecurityLevel";
             this.lbl_SecurityLevel.Size = new Size(66, 15);
             this.lbl_SecurityLevel.TabIndex = 35;
-            this.lbl_SecurityLevel.Text = "VideoForm_89";
+            this.lbl_SecurityLevel.Text = "Unclassified";
             this.btnFramePlus.AllowAnimations = true;
             this.btnFramePlus.BackColor = Color.Transparent;
-            this.btnFramePlus.Font = new Font("VideoForm_90", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.btnFramePlus.Font = new Font("Microsoft Sans Serif", 14.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
             this.btnFramePlus.Location = new Point(206, 3);
-            this.btnFramePlus.Name = "VideoForm_91";
-            this.btnFramePlus.RoundedCornersMask = (byte)15;
+            this.btnFramePlus.Name = "btnFramePlus";
+            this.btnFramePlus.RoundedCornersMask = 15;
             this.btnFramePlus.RoundedCornersRadius = 0;
             this.btnFramePlus.Size = new Size(28, 28);
             this.btnFramePlus.TabIndex = 25;
-            this.btnFramePlus.Text = "VideoForm_92";
+            this.btnFramePlus.Text = "+";
             this.btnFramePlus.UseVisualStyleBackColor = false;
             this.btnFramePlus.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.btnFramePlus.Click += new EventHandler(this.btnFramePlus_Click);
-            this.lblSpeed.Location = new Point((int)byte.MaxValue, 81);
-            this.lblSpeed.Name = "VideoForm_93";
+            this.lblSpeed.Location = new Point(255, 81);
+            this.lblSpeed.Name = "lblSpeed";
             this.lblSpeed.Size = new Size(49, 14);
             this.lblSpeed.TabIndex = 33;
-            this.lblSpeed.Text = "VideoForm_94";
+            this.lblSpeed.Text = "1x";
             this.lblSpeed.TextAlign = ContentAlignment.MiddleRight;
             this.SpeedBar.AutoSize = false;
             this.SpeedBar.Location = new Point(310, 3);
             this.SpeedBar.Maximum = 8;
             this.SpeedBar.Minimum = 1;
-            this.SpeedBar.Name = "VideoForm_95";
+            this.SpeedBar.Name = "SpeedBar";
             this.SpeedBar.Orientation = Orientation.Vertical;
             this.SpeedBar.Size = new Size(40, 98);
             this.SpeedBar.TabIndex = 29;
@@ -1239,10 +716,10 @@ namespace VideoPlayer2
             this.SpeedBar.Scroll += new EventHandler(this.SpeedBar_Scroll);
             this.btnSnapshot.AllowAnimations = true;
             this.btnSnapshot.BackColor = Color.Transparent;
-            this.btnSnapshot.Image = (Image)Properties.Resources.snapshot;
+            this.btnSnapshot.Image = Properties.Resources.snapshot;
             this.btnSnapshot.Location = new Point(240, 3);
-            this.btnSnapshot.Name = "VideoForm_96";
-            this.btnSnapshot.RoundedCornersMask = (byte)15;
+            this.btnSnapshot.Name = "btnSnapshot";
+            this.btnSnapshot.RoundedCornersMask = 15;
             this.btnSnapshot.RoundedCornersRadius = 0;
             this.btnSnapshot.Size = new Size(28, 28);
             this.btnSnapshot.TabIndex = 32;
@@ -1252,7 +729,7 @@ namespace VideoPlayer2
             this.VolumeBar.AutoSize = false;
             this.VolumeBar.Location = new Point(357, 3);
             this.VolumeBar.Maximum = 100;
-            this.VolumeBar.Name = "VideoForm_97";
+            this.VolumeBar.Name = "VolumeBar";
             this.VolumeBar.Orientation = Orientation.Vertical;
             this.VolumeBar.Size = new Size(40, 98);
             this.VolumeBar.TabIndex = 30;
@@ -1261,19 +738,19 @@ namespace VideoPlayer2
             this.VolumeBar.Value = 50;
             this.VolumeBar.Scroll += new EventHandler(this.VolumeBar_Scroll);
             this.VideoPanel.BackColor = Color.Black;
-            this.VideoPanel.BackgroundImage = (Image)Properties.Resources.video;
+            this.VideoPanel.BackgroundImage = Properties.Resources.video;
             this.VideoPanel.BackgroundImageLayout = ImageLayout.Center;
-            this.VideoPanel.Controls.Add((Control)this.vlc);
+            this.VideoPanel.Controls.Add(this.vlc);
             this.VideoPanel.Dock = DockStyle.Top;
             this.VideoPanel.Location = new Point(0, 45);
-            this.VideoPanel.Name = "VideoForm_98";
+            this.VideoPanel.Name = "VideoPanel";
             this.VideoPanel.Padding = new Padding(0, 1, 0, 0);
             this.VideoPanel.Size = new Size(647, 451);
             this.VideoPanel.TabIndex = 0;
             this.vlc.Dock = DockStyle.Fill;
             this.vlc.Enabled = true;
             this.vlc.Location = new Point(0, 1);
-            this.vlc.Name = "VideoForm_99";
+            this.vlc.Name = "vlc";
             this.vlc.OcxState = (AxHost.State)Resources.VideoForm.vlc_OcxState;
             this.vlc.Size = new Size(647, 450);
             this.vlc.TabIndex = 0;
@@ -1284,25 +761,25 @@ namespace VideoPlayer2
             this.TrackbarTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 20f));
             this.TrackbarTable.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40f));
             this.TrackbarTable.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 22f));
-            this.TrackbarTable.Controls.Add((Control)this.VideoBar, 1, 0);
-            this.TrackbarTable.Controls.Add((Control)this.lbl_File, 2, 1);
-            this.TrackbarTable.Controls.Add((Control)this.lbl_TagState, 1, 1);
-            this.TrackbarTable.Controls.Add((Control)this.lbl_VideoTime, 3, 1);
+            this.TrackbarTable.Controls.Add(this.VideoBar, 1, 0);
+            this.TrackbarTable.Controls.Add(this.lbl_File, 2, 1);
+            this.TrackbarTable.Controls.Add(this.lbl_TagState, 1, 1);
+            this.TrackbarTable.Controls.Add(this.lbl_VideoTime, 3, 1);
             this.TrackbarTable.Location = new Point(0, 499);
-            this.TrackbarTable.Name = "VideoForm_100";
+            this.TrackbarTable.Name = "TrackbarTable";
             this.TrackbarTable.RowCount = 2;
             this.TrackbarTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
             this.TrackbarTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 14f));
             this.TrackbarTable.Size = new Size(647, 42);
             this.TrackbarTable.TabIndex = 1;
             this.VideoBar.BackColor = Color.Transparent;
-            this.TrackbarTable.SetColumnSpan((Control)this.VideoBar, 3);
+            this.TrackbarTable.SetColumnSpan(this.VideoBar, 3);
             this.VideoBar.ContextMenuStrip = this.VideoMenu;
             this.VideoBar.Dock = DockStyle.Fill;
             this.VideoBar.Location = new Point(23, 3);
-            this.VideoBar.Name = "VideoForm_101";
-            this.VideoBar.RoundedCornersMask = (byte)15;
-            this.VideoBar.RoundedCornersMaskThumb = (byte)15;
+            this.VideoBar.Name = "VideoBar";
+            this.VideoBar.RoundedCornersMask = 15;
+            this.VideoBar.RoundedCornersMaskThumb = 15;
             this.VideoBar.RoundedCornersRadius = 0;
             this.VideoBar.RoundedCornersRadiusThumb = 0;
             this.VideoBar.Size = new Size(599, 22);
@@ -1310,98 +787,92 @@ namespace VideoPlayer2
             this.VideoBar.Value = 0;
             this.VideoBar.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.VideoBar.Scroll += new ScrollEventHandler(this.VideoBar_Scroll);
-            this.VideoMenu.Items.AddRange(new ToolStripItem[6]
-            {
-        (ToolStripItem) this.mnu_TagStart,
-        (ToolStripItem) this.mnu_TagEnd,
-        (ToolStripItem) this.mnu_TagClear,
-        (ToolStripItem) this.toolStripMenuItem1,
-        (ToolStripItem) this.mnu_TagSave,
-        (ToolStripItem) this.mnu_TagLoop
-            });
-            this.VideoMenu.Name = "VideoForm_102";
+            ToolStripItemCollection items = this.VideoMenu.Items;
+            ToolStripItem[] mnuTagStart = new ToolStripItem[] { this.mnu_TagStart, this.mnu_TagEnd, this.mnu_TagClear, this.toolStripMenuItem1, this.mnu_TagSave, this.mnu_TagLoop };
+            this.VideoMenu.Items.AddRange(mnuTagStart);
+            this.VideoMenu.Name = "VideoMenu";
             this.VideoMenu.Size = new Size(170, 120);
-            this.mnu_TagStart.Name = "VideoForm_103";
+            this.mnu_TagStart.Name = "mnu_TagStart";
             this.mnu_TagStart.Size = new Size(169, 22);
-            this.mnu_TagStart.Text = "VideoForm_104";
+            this.mnu_TagStart.Text = "Mark - Start";
             this.mnu_TagStart.Click += new EventHandler(this.mnu_TagStart_Click);
-            this.mnu_TagEnd.Name = "VideoForm_105";
+            this.mnu_TagEnd.Name = "mnu_TagEnd";
             this.mnu_TagEnd.Size = new Size(169, 22);
-            this.mnu_TagEnd.Text = "VideoForm_106";
+            this.mnu_TagEnd.Text = "Mark - End";
             this.mnu_TagEnd.Click += new EventHandler(this.mnu_TagEnd_Click);
-            this.mnu_TagClear.Name = "VideoForm_107";
+            this.mnu_TagClear.Name = "mnu_TagClear";
             this.mnu_TagClear.Size = new Size(169, 22);
-            this.mnu_TagClear.Text = "VideoForm_108";
+            this.mnu_TagClear.Text = "Mark - Clear";
             this.mnu_TagClear.Click += new EventHandler(this.mnu_TagClear_Click);
-            this.toolStripMenuItem1.Name = "VideoForm_109";
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new Size(166, 6);
-            this.mnu_TagSave.Name = "VideoForm_110";
+            this.mnu_TagSave.Name = "mnu_TagSave";
             this.mnu_TagSave.Size = new Size(169, 22);
-            this.mnu_TagSave.Text = "VideoForm_111";
+            this.mnu_TagSave.Text = "Save Video Mark";
             this.mnu_TagSave.Click += new EventHandler(this.mnu_TagSave_Click);
-            this.mnu_TagLoop.Name = "VideoForm_112";
+            this.mnu_TagLoop.Name = "mnu_TagLoop";
             this.mnu_TagLoop.Size = new Size(169, 22);
-            this.mnu_TagLoop.Text = "VideoForm_113";
+            this.mnu_TagLoop.Text = "Loop Video Marks";
             this.mnu_TagLoop.Click += new EventHandler(this.mnu_TagLoop_Click);
             this.lbl_File.AutoSize = true;
             this.lbl_File.Dock = DockStyle.Fill;
             this.lbl_File.Location = new Point(265, 28);
-            this.lbl_File.Name = "VideoForm_114";
+            this.lbl_File.Name = "lbl_File";
             this.lbl_File.Size = new Size(115, 14);
             this.lbl_File.TabIndex = 34;
-            this.lbl_File.Text = "VideoForm_115";
+            this.lbl_File.Text = "File 0 : 0";
             this.lbl_File.TextAlign = ContentAlignment.MiddleCenter;
             this.lbl_TagState.AutoSize = true;
             this.lbl_TagState.Dock = DockStyle.Fill;
-            this.lbl_TagState.Font = new Font("VideoForm_116", 6.75f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.lbl_TagState.Font = new Font("Microsoft Sans Serif", 6.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
             this.lbl_TagState.ForeColor = Color.FromArgb(64, 64, 64);
             this.lbl_TagState.Location = new Point(23, 28);
-            this.lbl_TagState.Name = "VideoForm_117";
+            this.lbl_TagState.Name = "lbl_TagState";
             this.lbl_TagState.Size = new Size(236, 14);
             this.lbl_TagState.TabIndex = 1;
-            this.lbl_TagState.Text = "VideoForm_118";
+            this.lbl_TagState.Text = "MARK";
             this.lbl_VideoTime.AutoSize = true;
             this.lbl_VideoTime.Dock = DockStyle.Fill;
-            this.lbl_VideoTime.Font = new Font("VideoForm_119", 6.75f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.lbl_VideoTime.Font = new Font("Microsoft Sans Serif", 6.75f, FontStyle.Regular, GraphicsUnit.Point, 0);
             this.lbl_VideoTime.ForeColor = Color.FromArgb(64, 64, 64);
             this.lbl_VideoTime.Location = new Point(386, 28);
             this.lbl_VideoTime.Margin = new Padding(3, 0, 0, 0);
-            this.lbl_VideoTime.Name = "VideoForm_119";
+            this.lbl_VideoTime.Name = "lbl_VideoTime";
             this.lbl_VideoTime.Size = new Size(239, 14);
             this.lbl_VideoTime.TabIndex = 2;
-            this.lbl_VideoTime.Text = "VideoForm_120";
+            this.lbl_VideoTime.Text = "00:00:00.000";
             this.lbl_VideoTime.TextAlign = ContentAlignment.MiddleRight;
             this.ControlPanel.AutoScroll = true;
-            this.ControlPanel.Controls.Add((Control)this.OptionPanel);
-            this.ControlPanel.Controls.Add((Control)this.MenuPanel);
+            this.ControlPanel.Controls.Add(this.OptionPanel);
+            this.ControlPanel.Controls.Add(this.MenuPanel);
             this.ControlPanel.Dock = DockStyle.Right;
             this.ControlPanel.Location = new Point(647, 45);
             this.ControlPanel.Margin = new Padding(0);
-            this.ControlPanel.Name = "VideoForm_121";
+            this.ControlPanel.Name = "ControlPanel";
             this.ControlPanel.Size = new Size(351, 603);
             this.ControlPanel.TabIndex = 2;
             this.OptionPanel.Dock = DockStyle.Fill;
             this.OptionPanel.Location = new Point(0, 0);
-            this.OptionPanel.Name = "VideoForm_122";
+            this.OptionPanel.Name = "OptionPanel";
             this.OptionPanel.Size = new Size(351, 553);
             this.OptionPanel.TabIndex = 1;
-            this.MenuPanel.Controls.Add((Control)this.btnImageFiles);
-            this.MenuPanel.Controls.Add((Control)this.btn_Map);
-            this.MenuPanel.Controls.Add((Control)this.btnFiles);
-            this.MenuPanel.Controls.Add((Control)this.btnTags);
-            this.MenuPanel.Controls.Add((Control)this.btnThumbnails);
+            this.MenuPanel.Controls.Add(this.btnImageFiles);
+            this.MenuPanel.Controls.Add(this.btn_Map);
+            this.MenuPanel.Controls.Add(this.btnFiles);
+            this.MenuPanel.Controls.Add(this.btnTags);
+            this.MenuPanel.Controls.Add(this.btnThumbnails);
             this.MenuPanel.Dock = DockStyle.Bottom;
             this.MenuPanel.Location = new Point(0, 553);
-            this.MenuPanel.Name = "VideoForm_123";
+            this.MenuPanel.Name = "MenuPanel";
             this.MenuPanel.Size = new Size(351, 50);
             this.MenuPanel.TabIndex = 0;
             this.btnImageFiles.AllowAnimations = true;
             this.btnImageFiles.BackColor = Color.Transparent;
-            this.btnImageFiles.Font = new Font("VideoForm_124", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-            this.btnImageFiles.Image = (Image)Properties.Resources.picture_2;
+            this.btnImageFiles.Font = new Font("Microsoft Sans Serif", 14.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+            this.btnImageFiles.Image = Properties.Resources.picture_2;
             this.btnImageFiles.Location = new Point(140, 11);
-            this.btnImageFiles.Name = "VideoForm_125";
-            this.btnImageFiles.RoundedCornersMask = (byte)15;
+            this.btnImageFiles.Name = "btnImageFiles";
+            this.btnImageFiles.RoundedCornersMask = 15;
             this.btnImageFiles.RoundedCornersRadius = 0;
             this.btnImageFiles.Size = new Size(28, 28);
             this.btnImageFiles.TabIndex = 30;
@@ -1410,25 +881,25 @@ namespace VideoPlayer2
             this.btnImageFiles.Click += new EventHandler(this.btnImageFiles_Click);
             this.btn_Map.AllowAnimations = true;
             this.btn_Map.BackColor = Color.Transparent;
-            this.btn_Map.Font = new Font("VideoForm_126", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-            this.btn_Map.Image = (Image)Properties.Resources.map;
+            this.btn_Map.Font = new Font("Microsoft Sans Serif", 14.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+            this.btn_Map.Image = Properties.Resources.map;
             this.btn_Map.Location = new Point(4, 11);
-            this.btn_Map.Name = "VideoForm_127";
-            this.btn_Map.RoundedCornersMask = (byte)15;
+            this.btn_Map.Name = "btn_Map";
+            this.btn_Map.RoundedCornersMask = 15;
             this.btn_Map.RoundedCornersRadius = 0;
             this.btn_Map.Size = new Size(28, 28);
             this.btn_Map.TabIndex = 26;
-            this.btn_Map.Text = "VideoForm_128";
+            this.btn_Map.Text = "-";
             this.btn_Map.UseVisualStyleBackColor = false;
             this.btn_Map.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.btn_Map.Click += new EventHandler(this.btn_Map_Click);
             this.btnFiles.AllowAnimations = true;
             this.btnFiles.BackColor = Color.Transparent;
-            this.btnFiles.Font = new Font("VideoForm_129", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-            this.btnFiles.Image = (Image)Properties.Resources.folder2;
+            this.btnFiles.Font = new Font("Microsoft Sans Serif", 14.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+            this.btnFiles.Image = Properties.Resources.folder2;
             this.btnFiles.Location = new Point(106, 11);
-            this.btnFiles.Name = "VideoForm_130";
-            this.btnFiles.RoundedCornersMask = (byte)15;
+            this.btnFiles.Name = "btnFiles";
+            this.btnFiles.RoundedCornersMask = 15;
             this.btnFiles.RoundedCornersRadius = 0;
             this.btnFiles.Size = new Size(28, 28);
             this.btnFiles.TabIndex = 29;
@@ -1437,11 +908,11 @@ namespace VideoPlayer2
             this.btnFiles.Click += new EventHandler(this.btnFiles_Click);
             this.btnTags.AllowAnimations = true;
             this.btnTags.BackColor = Color.Transparent;
-            this.btnTags.Font = new Font("VideoForm_131", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-            this.btnTags.Image = (Image)Properties.Resources.tag;
+            this.btnTags.Font = new Font("Microsoft Sans Serif", 14.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+            this.btnTags.Image = Properties.Resources.tag;
             this.btnTags.Location = new Point(72, 11);
-            this.btnTags.Name = "VideoForm_132";
-            this.btnTags.RoundedCornersMask = (byte)15;
+            this.btnTags.Name = "btnTags";
+            this.btnTags.RoundedCornersMask = 15;
             this.btnTags.RoundedCornersRadius = 0;
             this.btnTags.Size = new Size(28, 28);
             this.btnTags.TabIndex = 28;
@@ -1450,11 +921,11 @@ namespace VideoPlayer2
             this.btnTags.Click += new EventHandler(this.btnTags_Click);
             this.btnThumbnails.AllowAnimations = true;
             this.btnThumbnails.BackColor = Color.Transparent;
-            this.btnThumbnails.Font = new Font("VideoForm_133", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-            this.btnThumbnails.Image = (Image)Properties.Resources.thumbnail;
+            this.btnThumbnails.Font = new Font("Microsoft Sans Serif", 14.25f, FontStyle.Regular, GraphicsUnit.Point, 0);
+            this.btnThumbnails.Image = Properties.Resources.thumbnail;
             this.btnThumbnails.Location = new Point(38, 11);
-            this.btnThumbnails.Name = "VideoForm_134";
-            this.btnThumbnails.RoundedCornersMask = (byte)15;
+            this.btnThumbnails.Name = "btnThumbnails";
+            this.btnThumbnails.RoundedCornersMask = 15;
             this.btnThumbnails.RoundedCornersRadius = 0;
             this.btnThumbnails.Size = new Size(28, 28);
             this.btnThumbnails.TabIndex = 27;
@@ -1463,15 +934,15 @@ namespace VideoPlayer2
             this.btnThumbnails.Click += new EventHandler(this.btnThumbnails_Click);
             this.HeaderPanel.BackColor = Color.FromArgb(64, 64, 64);
             this.HeaderPanel.BackgroundImageLayout = ImageLayout.Stretch;
-            this.HeaderPanel.Controls.Add((Control)this.lbl_ImageFileCount);
-            this.HeaderPanel.Controls.Add((Control)this.lbl_VideoFileCount);
-            this.HeaderPanel.Controls.Add((Control)this.lblVideoTitle);
-            this.HeaderPanel.Controls.Add((Control)this.btnCtrlPanel);
-            this.HeaderPanel.Controls.Add((Control)this.LogoPic);
-            this.HeaderPanel.Controls.Add((Control)this.btnClose);
+            this.HeaderPanel.Controls.Add(this.lbl_ImageFileCount);
+            this.HeaderPanel.Controls.Add(this.lbl_VideoFileCount);
+            this.HeaderPanel.Controls.Add(this.lblVideoTitle);
+            this.HeaderPanel.Controls.Add(this.btnCtrlPanel);
+            this.HeaderPanel.Controls.Add(this.LogoPic);
+            this.HeaderPanel.Controls.Add(this.btnClose);
             this.HeaderPanel.Dock = DockStyle.Top;
             this.HeaderPanel.Location = new Point(0, 0);
-            this.HeaderPanel.Name = "VideoForm_135";
+            this.HeaderPanel.Name = "HeaderPanel";
             this.HeaderPanel.Size = new Size(998, 45);
             this.HeaderPanel.TabIndex = 0;
             this.HeaderPanel.MouseDown += new MouseEventHandler(this.HeaderPanel_MouseDown);
@@ -1479,38 +950,38 @@ namespace VideoPlayer2
             this.lbl_ImageFileCount.BackColor = Color.Transparent;
             this.lbl_ImageFileCount.ForeColor = Color.White;
             this.lbl_ImageFileCount.Location = new Point(285, 25);
-            this.lbl_ImageFileCount.Name = "VideoForm_136";
+            this.lbl_ImageFileCount.Name = "lbl_ImageFileCount";
             this.lbl_ImageFileCount.Size = new Size(72, 13);
             this.lbl_ImageFileCount.TabIndex = 6;
-            this.lbl_ImageFileCount.Text = "VideoForm_137";
+            this.lbl_ImageFileCount.Text = "Image Files: 0";
             this.lbl_VideoFileCount.AutoSize = true;
             this.lbl_VideoFileCount.BackColor = Color.Transparent;
             this.lbl_VideoFileCount.ForeColor = Color.White;
             this.lbl_VideoFileCount.Location = new Point(285, 8);
-            this.lbl_VideoFileCount.Name = "VideoForm_138";
+            this.lbl_VideoFileCount.Name = "lbl_VideoFileCount";
             this.lbl_VideoFileCount.Size = new Size(70, 13);
             this.lbl_VideoFileCount.TabIndex = 5;
-            this.lbl_VideoFileCount.Text = "VideoForm_139";
+            this.lbl_VideoFileCount.Text = "Video Files: 0";
             this.lblVideoTitle.AutoSize = true;
             this.lblVideoTitle.BackColor = Color.Transparent;
-            this.lblVideoTitle.Font = new Font("VideoForm_140", 12f, FontStyle.Bold, GraphicsUnit.Point, (byte)0);
+            this.lblVideoTitle.Font = new Font("Microsoft Sans Serif", 12f, FontStyle.Bold, GraphicsUnit.Point, 0);
             this.lblVideoTitle.ForeColor = Color.White;
             this.lblVideoTitle.Location = new Point(53, 4);
-            this.lblVideoTitle.Name = "VideoForm_141";
+            this.lblVideoTitle.Name = "lblVideoTitle";
             this.lblVideoTitle.Size = new Size(141, 20);
             this.lblVideoTitle.TabIndex = 4;
-            this.lblVideoTitle.Text = "VideoForm_142";
+            this.lblVideoTitle.Text = "VIDEO REVIEW";
             this.lblVideoTitle.TextAlign = ContentAlignment.MiddleLeft;
             this.lblVideoTitle.MouseDown += new MouseEventHandler(this.lblVideoTitle_MouseDown);
             this.btnCtrlPanel.AllowAnimations = true;
             this.btnCtrlPanel.BackColor = Color.Transparent;
-            this.btnCtrlPanel.Image = (Image)Properties.Resources.showhide;
+            this.btnCtrlPanel.Image = Properties.Resources.showhide;
             this.btnCtrlPanel.Location = new Point(650, 5);
-            this.btnCtrlPanel.Name = "VideoForm_143";
+            this.btnCtrlPanel.Name = "btnCtrlPanel";
             this.btnCtrlPanel.PaintBorder = false;
             this.btnCtrlPanel.PaintDefaultBorder = false;
             this.btnCtrlPanel.PaintDefaultFill = false;
-            this.btnCtrlPanel.RoundedCornersMask = (byte)15;
+            this.btnCtrlPanel.RoundedCornersMask = 15;
             this.btnCtrlPanel.RoundedCornersRadius = 0;
             this.btnCtrlPanel.Size = new Size(36, 36);
             this.btnCtrlPanel.TabIndex = 2;
@@ -1518,9 +989,9 @@ namespace VideoPlayer2
             this.btnCtrlPanel.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.btnCtrlPanel.Click += new EventHandler(this.btnCtrlPanel_Click);
             this.LogoPic.BackColor = Color.Transparent;
-            this.LogoPic.Image = (Image)Properties.Resources.camlens2;
+            this.LogoPic.Image = Properties.Resources.camlens2;
             this.LogoPic.Location = new Point(8, 4);
-            this.LogoPic.Name = "VideoForm_144";
+            this.LogoPic.Name = "LogoPic";
             this.LogoPic.Size = new Size(36, 36);
             this.LogoPic.SizeMode = PictureBoxSizeMode.CenterImage;
             this.LogoPic.TabIndex = 1;
@@ -1529,45 +1000,45 @@ namespace VideoPlayer2
             this.btnClose.AllowAnimations = true;
             this.btnClose.BackColor = Color.Transparent;
             this.btnClose.Dock = DockStyle.Right;
-            this.btnClose.Image = (Image)Properties.Resources.close;
+            this.btnClose.Image = Properties.Resources.close;
             this.btnClose.Location = new Point(952, 0);
             this.btnClose.Margin = new Padding(0);
-            this.btnClose.Name = "VideoForm_145";
+            this.btnClose.Name = "btnClose";
             this.btnClose.PaintBorder = false;
             this.btnClose.PaintDefaultBorder = false;
             this.btnClose.PaintDefaultFill = false;
-            this.btnClose.RoundedCornersMask = (byte)15;
+            this.btnClose.RoundedCornersMask = 15;
             this.btnClose.RoundedCornersRadius = 0;
             this.btnClose.Size = new Size(46, 45);
             this.btnClose.TabIndex = 0;
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.btnClose.Click += new EventHandler(this.btnClose_Click);
-            this.openFileDialog1.FileName = "VideoForm_146";
+            this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Multiselect = true;
             this.timer1.Enabled = true;
             this.timer1.Interval = 500;
             this.timer1.Tick += new EventHandler(this.timer1_Tick);
-            this.AutoScaleDimensions = new SizeF(6f, 13f);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.ClientSize = new Size(1000, 650);
-            this.Controls.Add((Control)this.FormPanel);
-            this.FormBorderStyle = FormBorderStyle.None;
-            this.Icon = (Icon)Resources.VideoForm.VideoFormIcon;
-            this.Name = "VideoForm_148";
-            this.StartPosition = FormStartPosition.CenterParent;
-            this.Text = "VideoForm_149";
-            this.FormClosing += new FormClosingEventHandler(this.VideoForm_FormClosing);
-            this.Load += new EventHandler(this.VideoForm_Load);
+            base.AutoScaleDimensions = new SizeF(6f, 13f);
+            base.AutoScaleMode = AutoScaleMode.Font;
+            base.ClientSize = new Size(1000, 650);
+            base.Controls.Add(this.FormPanel);
+            base.FormBorderStyle = FormBorderStyle.None;
+            base.Icon = (Icon)Resources.VideoForm.VideoFormIcon;
+            base.Name = "VideoForm";
+            base.StartPosition = FormStartPosition.CenterParent;
+            this.Text = "Video Review";
+            base.FormClosing += new FormClosingEventHandler(this.VideoForm_FormClosing);
+            base.Load += new EventHandler(this.VideoForm_Load);
             this.FormPanel.ResumeLayout(false);
             this.VCRPanel.ResumeLayout(false);
             this.VCRPanel.PerformLayout();
             ((ISupportInitialize)this.VolPic).EndInit();
             ((ISupportInitialize)this.picEvidence).EndInit();
-            this.SpeedBar.EndInit();
-            this.VolumeBar.EndInit();
+            ((ISupportInitialize)this.SpeedBar).EndInit();
+            ((ISupportInitialize)this.VolumeBar).EndInit();
             this.VideoPanel.ResumeLayout(false);
-            this.vlc.EndInit();
+            ((ISupportInitialize)this.vlc).EndInit();
             this.TrackbarTable.ResumeLayout(false);
             this.TrackbarTable.PerformLayout();
             this.VideoMenu.ResumeLayout(false);
@@ -1576,7 +1047,645 @@ namespace VideoPlayer2
             this.HeaderPanel.ResumeLayout(false);
             this.HeaderPanel.PerformLayout();
             ((ISupportInitialize)this.LogoPic).EndInit();
-            this.ResumeLayout(false);
+            base.ResumeLayout(false);
+        }
+
+        private void lbl_File_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.HeaderMouseDown(e);
+        }
+
+        private void lblVideoTitle_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.HeaderMouseDown(e);
+        }
+
+        private void LoadGPS()
+        {
+            try
+            {
+                Mapper.ClearPoints();
+                Mapper.MapHide();
+                if (!string.IsNullOrEmpty(this.Media[this.fileIndex].Ext2))
+                {
+                    int num = this.Media[this.fileIndex].FileName.IndexOf('.');
+                    Mapper.LoadDataPoints(this.Media[this.fileIndex].FileName.Substring(0, num), this.Media[this.fileIndex].Ext2);
+                    if (Mapper.GPSDataPoints() > 0)
+                    {
+                        Mapper.MapShow();
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void LoadOptionControl(Control ctrl)
+        {
+            if (!this.OptionPanel.Controls.Contains(ctrl))
+            {
+                try
+                {
+                    this.OptionPanel.Controls.Clear();
+                    this.OptionPanel.Controls.Add(ctrl);
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        public void LoadVideoList(List<Guid> files, Guid AccountId)
+        {
+            this.vlc.Hide();
+            this.FileID = files;
+            this.AccountID = AccountId;
+            this.timer1.Start();
+        }
+
+        private void LogoPic_MouseDown(object sender, MouseEventArgs e)
+        {
+            this.HeaderMouseDown(e);
+        }
+
+        private void mapPanel_EVT_Compass(bool b)
+        {
+            Mapper.ShowCompass(b);
+        }
+
+        private void mnu_TagClear_Click(object sender, EventArgs e)
+        {
+            this.ClearTAG();
+        }
+
+        private void mnu_TagEnd_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(this.StartTag))
+            {
+                int value = this.VideoBar.Value;
+                this.EndMS = value;
+                this.EndFrame = value;
+                this.EndTag = string.Format("{0} ({1})", this.GetFrame(), this.lblTime.Text);
+                this.lbl_TagState.Text = string.Format(LangCtrl.GetString("vf_Mark2", "MARK {0} : {1}"), this.StartTag, this.EndTag);
+            }
+        }
+
+        private void mnu_TagLoop_Click(object sender, EventArgs e)
+        {
+            this.IsLoop = !this.IsLoop;
+            this.mnu_TagLoop.Checked = this.IsLoop;
+        }
+
+        private void mnu_TagSave_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                SaveTag saveTag = new SaveTag();
+                if (this.StartMS >= 0 && this.EndMS > 1 && saveTag.ShowDialog(this) == DialogResult.OK)
+                {
+                    this.vTag = new VideoTag()
+                    {
+                        ShortDesc = saveTag.Desc,
+                        StartFrame = (long)this.StartFrame,
+                        EndFrame = (long)this.EndFrame,
+                        StartTime = new double?((double)this.StartMS / 1000),
+                        EndTime = new double?((double)this.EndMS / 1000)
+                    };
+                    DataFile dataFile = new DataFile();
+                    using (RPM_DataFile rPMDataFile = new RPM_DataFile())
+                    {
+                        dataFile = rPMDataFile.GetDataFile(this.Media[this.fileIndex].FileID);
+                        dataFile.VideoTags.Add(this.vTag);
+                        rPMDataFile.SaveUpdate(dataFile);
+                        rPMDataFile.Save();
+                    }
+                    TimeSpan timeSpan = new TimeSpan(0, 0, Convert.ToInt32(this.vTag.StartTime));
+                    TimeSpan timeSpan1 = new TimeSpan(0, 0, Convert.ToInt32(this.vTag.EndTime));
+                    string str = string.Format("{0:00}:{1:00}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                    string str1 = string.Format("{0:00}:{1:00}:{2:D2}", timeSpan1.Hours, timeSpan1.Minutes, timeSpan1.Seconds);
+                    object[] storedFileName = new object[] { dataFile.StoredFileName, dataFile.FileExtension, str, str1, this.vTag.ShortDesc.ToUpper() };
+                    Global.Log("MARK-SAVE", string.Format("File: {0}{1} > {2} to {3} as {4}", storedFileName));
+                    this.tagPanel.ListTags(this.Media[this.fileIndex].FileID);
+                }
+            }
+            catch
+            {
+            }
+        }
+
+        private void mnu_TagStart_Click(object sender, EventArgs e)
+        {
+            int value = this.VideoBar.Value;
+            this.StartMS = value;
+            this.StartFrame = value;
+            this.StartTag = string.Format("{0} ({1})", this.GetFrame(), this.lblTime.Text);
+            this.lbl_TagState.Text = string.Format(LangCtrl.GetString("vf_Mark1", "MARK {0} : ?"), this.StartTag);
+        }
+
+        private void MoveToVideo()
+        {
+            this.ClearTAG();
+            Mapper.ClearPoints();
+            this.vlc.Show();
+            this.TagIndex = 0;
+            this.LoadGPS();
+            this.vlc.playlist.playItem(this.fileIndex);
+            this.GetFileLength();
+            this.lbl_File.Text = string.Format(LangCtrl.GetString("vf_File", "File {0} : {1}"), this.fileIndex + 1, this.Media.Count);
+            this.btnPlay.Image = Properties.Resources.pause;
+            this.UpdateVideoTime();
+            this.filePanel.LoadData(this.Media[this.fileIndex].FileID);
+        }
+
+        private void mVid_EVT_StopPlayer()
+        {
+            this.StopPlayer();
+        }
+
+        private void PlayTags(int t)
+        {
+            base.BeginInvoke(new MethodInvoker(() => {
+                if (this.FileLength <= 0 || this.TagIndex > this.tagPanel.TagList.Count - 1)
+                {
+                    this.EOF();
+                    return;
+                }
+                if (t <= this.VideoBar.Maximum)
+                {
+                    this.VideoBar.Value = t;
+                }
+                int endFrame = (int)this.tagPanel.TagList[this.TagIndex].EndFrame;
+                if (t > endFrame)
+                {
+                    this.TagIndex++;
+                    if (this.TagIndex > this.tagPanel.TagList.Count - 1 || this.tagPanel.TagList.Count == 0)
+                    {
+                        this.TagIndex = 0;
+                        this.EOF();
+                        this.filePanel.LoadData(this.Media[this.fileIndex].FileID);
+                    }
+                    if (this.tagPanel.TagList.Count <= 0)
+                    {
+                        this.EOF();
+                    }
+                    else
+                    {
+                        this.vlc.input.Time = (double)this.tagPanel.TagList[this.TagIndex].StartFrame;
+                    }
+                }
+                this.UpdateLabelsAndMap(t);
+            }));
+        }
+
+        private void PlayVideo()
+        {
+            try
+            {
+                if (this.Media.Count > 0 && this.vlc != null)
+                {
+                    this.vlc.Show();
+                    if (this.Media.Count > 1)
+                    {
+                        vButton _vButton = this.btnPrev;
+                        this.btnNext.Enabled = true;
+                        _vButton.Enabled = true;
+                    }
+                    if (this.vlc.playlist.isPlaying || this.IsPlaying)
+                    {
+                        this.btnPlay.Image = Properties.Resources.play;
+                        if (!this.vlc.playlist.isPlaying)
+                        {
+                            this.btnPlay.Image = Properties.Resources.pause;
+                        }
+                        this.vlc.playlist.togglePause();
+                    }
+                    else
+                    {
+                        this.LoadGPS();
+                        this.btnPlay.Image = Properties.Resources.pause;
+                        try
+                        {
+                            this.vlc.playlist.playItem(this.fileIndex);
+                        }
+                        catch (Exception exception)
+                        {
+                            string message = exception.Message;
+                        }
+                        this.GetFileLength();
+                        this.FPS = this.vlc.input.fps;
+                        if (this.FPS == 0)
+                        {
+                            this.FPS = 30;
+                        }
+                        this.IsPlaying = true;
+                    }
+                    this.UpdateVideoTime();
+                }
+            }
+            catch (Exception exception2)
+            {
+                Exception exception1 = exception2;
+                MessageBox.Show(this, string.Format("Video Error: {0}", exception1.Message), "Video", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
+        }
+
+        private void ProcessFiles()
+        {
+            if (this.vlc != null)
+            {
+                this.vlc.playlist.items.clear();
+            }
+            this.fileIndex = 0;
+            this.Media = new List<MediaFile>();
+            List<string> strs = new List<string>();
+            using (RPM_DataFile rPMDataFile = new RPM_DataFile())
+            {
+                string str = ".MPG.MP4.MPEG.MP2.MV4.3GP.AVI.MOV.WMV.DVX.MKV.FLV.OGV.OGG.RM.ASF.WAV";
+                string str1 = ".JPG.BMP.PNG.TIF";
+                foreach (Guid fileID in this.FileID)
+                {
+                    DataFile dataFile = rPMDataFile.GetDataFile(fileID);
+                    string str2 = Path.Combine(dataFile.UNCName, dataFile.UNCPath);
+                    string str3 = string.Concat(Path.Combine(str2, dataFile.StoredFileName), dataFile.FileExtension);
+                    if (!File.Exists(str3))
+                    {
+                        strs.Add(Path.GetFileName(str3));
+                    }
+                    else if (!str.Contains(dataFile.FileExtension.ToUpper()))
+                    {
+                        if (!str1.Contains(dataFile.FileExtension.ToUpper()))
+                        {
+                            continue;
+                        }
+                        ImageFile imageFile = new ImageFile()
+                        {
+                            FileName = str3,
+                            Thumbnail = Utilities.resizeImage(160, 100, Utilities.ByteArrayToImage(dataFile.Thumbnail))
+                        };
+                        this.Images.Add(imageFile);
+                    }
+                    else
+                    {
+                        MediaFile mediaFile = new MediaFile()
+                        {
+                            Classification = dataFile.Classification,
+                            FileDate = dataFile.FileTimestamp.Value,
+                            FileName = str3,
+                            IsEvidence = dataFile.IsEvidence,
+                            Security = dataFile.Security,
+                            Ext2 = dataFile.FileExtension2,
+                            FileID = dataFile.Id,
+                            Set = dataFile.SetName,
+                            UNCName = dataFile.UNCName,
+                            UNCPath = dataFile.UNCPath
+                        };
+                        this.Media.Add(mediaFile);
+                        Global.Log("VIDEO", string.Format("File: {0}", mediaFile.FileName));
+                        if (this.vlc == null)
+                        {
+                            continue;
+                        }
+                        this.vlc.playlist.@add(string.Concat("file:///", str3), null, null);
+                    }
+                }
+            }
+            this.lbl_VideoFileCount.Text = string.Format(LangCtrl.GetString("vf_VideoFiles", "Video Files: {0}"), this.Media.Count);
+            this.lbl_ImageFileCount.Text = string.Format(LangCtrl.GetString("vf_ImageFiles", "Image Files: {0}"), this.Images.Count);
+            Mapper.ClearPoints();
+            this.lbl_File.Text = string.Format(LangCtrl.GetString("vf_File", "File {0} : {1}"), 1, this.Media.Count);
+            if (this.Images.Count > 0)
+            {
+                this.imgPanel.LoadImages(this.Images);
+                this.LoadOptionControl(this.imgPanel);
+            }
+            if (this.Media.Count > 0)
+            {
+                this.vlc.Show();
+                this.PlayVideo();
+            }
+            if (this.Media.Count <= 0)
+            {
+                try
+                {
+                    this.vlc.Hide();
+                    if (this.Images.Count == 0)
+                    {
+                        string empty = string.Empty;
+                        int num = 1;
+                        foreach (string str4 in strs)
+                        {
+                            int num1 = num;
+                            num = num1 + 1;
+                            empty = string.Concat(empty, string.Format("{0:00} • {1}\n", num1, str4));
+                        }
+                        MessageBox.Show(this, string.Format(LangCtrl.GetString("vf_MissingFiles", "Missing Files:\n{0}\n\nPlease contact your system administrator."), empty), "Video", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                    }
+                }
+                catch
+                {
+                }
+            }
+            else
+            {
+                try
+                {
+                    this.filePanel.LoadData(this.Media[this.fileIndex].FileID);
+                }
+                catch (Exception exception1)
+                {
+                    Exception exception = exception1;
+                    MessageBox.Show(this, string.Format(LangCtrl.GetString("vf_VidError", "Video File Error: {0}"), exception.Message), "Video", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                }
+            }
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.None, ExactSpelling = false)]
+        public static extern bool ReleaseCapture();
+
+        [DllImport("user32.dll", CharSet = CharSet.None, ExactSpelling = false)]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+        private void SetToolTips()
+        {
+            ToolTip toolTip = new ToolTip();
+            toolTip.SetToolTip(this.picEvidence, LangCtrl.GetString("tt_picEvidence", "Evidence"));
+            toolTip.SetToolTip(this.btn_Map, LangCtrl.GetString("tt_Map", "Display Map Panel"));
+            toolTip.SetToolTip(this.btnFrameMinus, LangCtrl.GetString("tt_MinusFrame", "Minus 1 frame"));
+            toolTip.SetToolTip(this.btnFramePlus, LangCtrl.GetString("tt_PlusFrame", "Plus 1 frame"));
+            toolTip.SetToolTip(this.btnNext, LangCtrl.GetString("tt_NextVid", "Next video"));
+            toolTip.SetToolTip(this.btnPlay, LangCtrl.GetString("tt_Play", "Play / Pause"));
+            toolTip.SetToolTip(this.btnPrev, LangCtrl.GetString("tt_Prev", "Previous video"));
+            toolTip.SetToolTip(this.btnSnapshot, LangCtrl.GetString("tt_VidSnap", "Video Snapshot"));
+            toolTip.SetToolTip(this.btnStop, LangCtrl.GetString("tt_StopVid", "Stop video"));
+            toolTip.SetToolTip(this.btnTags, LangCtrl.GetString("tt_VidMarks", "Video Marks"));
+            toolTip.SetToolTip(this.btnThumbnails, LangCtrl.GetString("tt_VideoSnapshots", "Video Snapshots"));
+            toolTip.SetToolTip(this.SpeedBar, LangCtrl.GetString("tt_PlaySpeed", "Playback speed"));
+            toolTip.SetToolTip(this.VolumeBar, LangCtrl.GetString("tt_Volume", "Volume"));
+            toolTip.SetToolTip(this.btnImageFiles, LangCtrl.GetString("tt_ImageFiles", "Image Files"));
+        }
+
+        private void SpeedBar_Scroll(object sender, EventArgs e)
+        {
+            double num = (new double[] { 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 })[this.SpeedBar.Value - 1];
+            this.lblSpeed.Text = string.Format("{0}x", num);
+            this.vlc.input.rate = num;
+        }
+
+        private void StopPlayer()
+        {
+            this.VideoBar.Value = 0;
+            this.TagIndex = 0;
+            this.vlc.playlist.stop();
+            this.IsPlaying = false;
+            this.btnPlay.Image = Properties.Resources.play;
+            this.vlc.Hide();
+        }
+
+        private void tagPanel_EVT_MergeVideo(string folder)
+        {
+            if (this.Media.Count > 0)
+            {
+                MergeVideo mergeVideo = new MergeVideo();
+                mergeVideo.EVT_StopPlayer -= new MergeVideo.DEL_StopPlayer(this.mVid_EVT_StopPlayer);
+                mergeVideo.EVT_StopPlayer += new MergeVideo.DEL_StopPlayer(this.mVid_EVT_StopPlayer);
+                mergeVideo.VideoPath = folder;
+                mergeVideo.media = this.Media;
+                mergeVideo.ShowDialog(this);
+                mergeVideo.EVT_StopPlayer -= new MergeVideo.DEL_StopPlayer(this.mVid_EVT_StopPlayer);
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.timer1.Stop();
+            this.timer1.Enabled = false;
+            if (this.vlc != null)
+            {
+                this.vlc.MediaPlayerTimeChanged -= new AxAXVLC.DVLCEvents_MediaPlayerTimeChangedEventHandler(this.vlc_MediaPlayerTimeChanged);
+                this.vlc.MediaPlayerTimeChanged += new AxAXVLC.DVLCEvents_MediaPlayerTimeChangedEventHandler(this.vlc_MediaPlayerTimeChanged);
+                this.ProcessFiles();
+            }
+        }
+
+        private void Update(int t)
+        {
+            try
+            {
+                base.BeginInvoke(new MethodInvoker(() => {
+                    if (this.FileLength > 0)
+                    {
+                        if (t <= this.VideoBar.Maximum)
+                        {
+                            this.VideoBar.Value = t;
+                        }
+                        if (this.IsLoop && this.EndMS > 0 && t > this.EndMS)
+                        {
+                            t = this.StartMS;
+                            this.vlc.input.Time = (double)t;
+                        }
+                        this.UpdateLabelsAndMap(t);
+                    }
+                }));
+            }
+            catch
+            {
+            }
+        }
+
+        private void UpdateLabelsAndMap(int t)
+        {
+            TimeSpan timeSpan = TimeSpan.FromMilliseconds((double)t);
+            Label label = this.lblTime;
+            object[] hours = new object[] { timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds };
+            label.Text = string.Format("{0:D2}:{1:D2}:{2:D2}.{3:D3}", hours);
+            this.lblFrame.Text = string.Format("{0}", this.GetFrame());
+            Mapper.UpdatePosition(t / 1000);
+        }
+
+        private void UpdateVideoTime()
+        {
+            TimeSpan timeSpan = TimeSpan.FromMilliseconds((double)this.VideoBar.Maximum);
+            Label lblVideoTime = this.lbl_VideoTime;
+            object[] hours = new object[] { timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds };
+            lblVideoTime.Text = string.Format("{0:D2}:{1:D2}:{2:D2}.{3:D3}", hours);
+            this.lbl_SecurityLevel.BackColor = Color.White;
+            this.lbl_SecurityLevel.ForeColor = Color.Black;
+            switch (this.Media[this.fileIndex].Security)
+            {
+                case SECURITY.TOPSECRET:
+                    {
+                        this.lbl_SecurityLevel.ForeColor = Color.White;
+                        this.lbl_SecurityLevel.BackColor = Color.Red;
+                        break;
+                    }
+                case SECURITY.SECRET:
+                    {
+                        this.lbl_SecurityLevel.BackColor = Color.Orange;
+                        this.lbl_SecurityLevel.ForeColor = Color.Black;
+                        break;
+                    }
+                case SECURITY.OFFICIAL:
+                    {
+                        this.lbl_SecurityLevel.BackColor = Color.Yellow;
+                        this.lbl_SecurityLevel.ForeColor = Color.Black;
+                        break;
+                    }
+            }
+            this.picEvidence.Visible = false;
+            if (this.Media[this.fileIndex].IsEvidence)
+            {
+                this.picEvidence.Visible = true;
+            }
+            this.lbl_SecurityLevel.Text = AccountSecurity.GetSecurityDesc(this.Media[this.fileIndex].Security);
+            this.lbl_Classification.Text = this.Media[this.fileIndex].Classification;
+            Label lblFiledate = this.lbl_Filedate;
+            DateTime fileDate = this.Media[this.fileIndex].FileDate;
+            lblFiledate.Text = fileDate.ToString();
+            this.lblSet.Text = this.Media[this.fileIndex].Set;
+            this.thumbPanel.SetFileID(this.Media[this.fileIndex].FileID);
+            this.tagPanel.ListTags(this.Media[this.fileIndex].FileID);
+        }
+
+        private void VideoBar_Scroll(object sender, ScrollEventArgs e)
+        {
+            this.CheckScroll();
+        }
+
+        private void VideoForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+        }
+
+        private void VideoForm_Load(object sender, EventArgs e)
+        {
+            if (Global.IS_WOLFCOM)
+            {
+                this.HeaderPanel.BackgroundImage = Properties.Resources.topbar45;
+                this.VideoPanel.BackColor = Color.FromArgb(64, 64, 64);
+                this.btnClose.VIBlendTheme = VIBLEND_THEME.NERO;
+            }
+            LangCtrl.reText(this);
+            LangCtrl.reText(this.VideoMenu);
+            Global.Log("OPEN", "Media Player");
+            this.VolumeBar.Value = 100;
+            this.InitControls();
+            this.SetToolTips();
+        }
+
+        private void vlc_MediaPlayerEndReached(object sender, EventArgs e)
+        {
+            this.EOF();
+        }
+
+        private void vlc_MediaPlayerTimeChanged(object sender, DVLCEvents_MediaPlayerTimeChangedEvent e)
+        {
+            if (this.IsPlayTags)
+            {
+                this.PlayTags(e.time);
+                return;
+            }
+            this.Update(e.time);
+        }
+
+        private void VolPic_MouseClick(object sender, MouseEventArgs e)
+        {
+            AxVLCPlugin2 axVLCPlugin2 = this.vlc;
+            this.VolumeBar.Value = 0;
+            axVLCPlugin2.Volume = 0;
+            this.VolPic.Image = Properties.Resources.volume_mute;
+        }
+
+        private void VolumeBar_Scroll(object sender, EventArgs e)
+        {
+            this.vlc.Volume = this.VolumeBar.Value;
+            this.VolPic.Image = Properties.Resources.volume;
+            if (this.VolumeBar.Value == 0)
+            {
+                this.VolPic.Image = Properties.Resources.volume_mute;
+            }
+        }
+
+        private void WriteSnapshot()
+        {
+            try
+            {
+                string str = string.Format("{0}.jpg", Guid.NewGuid());
+                DateTime now = DateTime.Now;
+                object[] id = new object[] { Global.GlobalAccount.Id, now.Year, now.Month, now.Day };
+                string uNCPath = string.Format("{0}\\{1}\\{2:00}\\{3:00}", id);
+                uNCPath = this.Media[this.fileIndex].UNCPath;
+                string str1 = Path.Combine(Global.UNCServer, Global.RelativePath);
+                str1 = Path.Combine(str1, uNCPath);
+                if (!str1.Contains(":"))
+                {
+                    if (!str1.StartsWith("\\\\"))
+                    {
+                        str1 = string.Concat("\\\\", str1);
+                    }
+                }
+                else if (str1.Contains(":") && !str1.Contains(":\\"))
+                {
+                    str1 = str1.Replace(":", ":\\");
+                }
+                if (!Directory.Exists(str1))
+                {
+                    Directory.CreateDirectory(str1);
+                }
+                Network.SetAcl(str1);
+                Image image = null;
+                string str2 = Path.Combine(str1, str);
+                Network.SetAcl(str1);
+                try
+                {
+                    float value = (float)(this.VideoBar.Value / 1000);
+                    Global.Log("SNAPSHOT", string.Format("Video: {0} - Frame: {1}", this.Media[this.fileIndex].FileName, value));
+                    FFMpegConverter fFMpegConverter = new FFMpegConverter();
+                    fFMpegConverter.GetVideoThumbnail(this.Media[this.fileIndex].FileName, str2, new float?(value));
+                    Thread.Sleep(500);
+                    if (File.Exists(str2))
+                    {
+                        using (FileStream fileStream = new FileStream(str2, FileMode.Open, FileAccess.Read))
+                        {
+                            image = Image.FromStream(fileStream);
+                        }
+                    }
+                }
+                catch (Exception exception1)
+                {
+                    Exception exception = exception1;
+                    base.BeginInvoke(new MethodInvoker(() => MessageBox.Show(this, string.Format("Snapshot Error: {0}", exception.Message), "Media", MessageBoxButtons.OK, MessageBoxIcon.Hand)));
+                }
+                if (image != null)
+                {
+                    Snapshot snapshot = new Snapshot();
+                    using (RPM_Snapshot rPMSnapshot = new RPM_Snapshot())
+                    {
+                        snapshot.DataFileId = this.Media[this.fileIndex].FileID;
+                        snapshot.FileAddedTimestamp = new DateTime?(DateTime.Now);
+                        snapshot.FileExtension = ".jpg";
+                        image = Utilities.resizeImage(160, 100, Image.FromFile(str2));
+                        snapshot.Thumbnail = Utilities.ImageToByte(image);
+                        snapshot.StoredFileName = str;
+                        snapshot.FrameNumber = Convert.ToInt32(this.lblFrame.Text);
+                        snapshot.UNCName = Path.Combine(Global.UNCServer, Global.RelativePath);
+                        snapshot.UNCPath = uNCPath;
+                        snapshot.FileHash = string.Empty;
+                        rPMSnapshot.SaveUpdate(snapshot);
+                        rPMSnapshot.Save();
+                    }
+                    base.BeginInvoke(new MethodInvoker(() => {
+                        this.btnSnapshot.Enabled = true;
+                        if (this.thumbPanel != null)
+                        {
+                            this.thumbPanel.AddImage(snapshot, image);
+                        }
+                    }));
+                }
+            }
+            catch (Exception exception2)
+            {
+                string message = exception2.Message;
+            }
         }
     }
 }

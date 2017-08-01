@@ -44,10 +44,10 @@ namespace FileTreeCtrl
         
         private void SetLanguage()
         {
-            LangCtrl.reText((Control)this);
-            mnu_ClearSelection.Text = LangCtrl.GetString("FileTree_1", "FileTree_2");
-            mnu_RefreshView.Text = LangCtrl.GetString("FileTree_3", "FileTree_4");
-            mnu_TreeLines.Text = LangCtrl.GetString("FileTree_5", "FileTree_6");
+            LangCtrl.reText(this);
+            mnu_ClearSelection.Text = LangCtrl.GetString("mnu_ClearSelection", "Clear Selection");
+            mnu_RefreshView.Text = LangCtrl.GetString("mnu_RefreshView", "Refresh View");
+            mnu_TreeLines.Text = LangCtrl.GetString("mnu_TreeLines", "Tree Lines");
         }
 
         
@@ -63,7 +63,7 @@ namespace FileTreeCtrl
         {
             vTree.Nodes.Clear();
             NodeRecord nodeRecord = new NodeRecord();
-            nodeRecord.Name = LangCtrl.GetString("FileTree_7", "FileTree_8");
+            nodeRecord.Name = LangCtrl.GetString("node_FilesByDate", "Files By Date Uploaded");
             nodeRecord.RecType = NodeType.ROOT_NODE;
             nodeRecord.ImgIdx = 0;
             nodeRecord.FolderPath = string.Empty;
@@ -77,35 +77,45 @@ namespace FileTreeCtrl
         
         private void LoadYears()
         {
-            string path2 = string.Format("FileTree_9", Global.RelativePath, Account_ID);
-            string path1 = Global.UNCServer;
-            if (!path1.Contains("FileTree_10"))
+            string str = string.Format("{0}\\{1}", Global.RelativePath, Account_ID);
+            string uNCServer = Global.UNCServer;
+            if (!uNCServer.Contains(":"))
             {
-                if (!path1.StartsWith("FileTree_11"))
-                    path1 = "FileTree_12" + path1;
-            }
-            else if (path1.Contains("FileTree_12") && !path1.Contains("FileTree_13"))
-                path1 = path1.Replace("FileTree_14", "FileTree_15");
-            RootPath = Path.Combine(path1, path2);
-            if (!Directory.Exists(RootPath))
-                return;
-            string[] directories = Directory.GetDirectories(RootPath);
-            if (directories.Length <= 0)
-                return;
-            foreach (string path in directories)
-            {
-                string fileName = Path.GetFileName(path);
-                ROOT.Nodes.Add(new vTreeNode(fileName)
+                if (!uNCServer.StartsWith("\\\\"))
                 {
-                    Tag = new NodeRecord()
+                    uNCServer = string.Concat("\\\\", uNCServer);
+                }
+            }
+            else if (uNCServer.Contains(":") && !uNCServer.Contains(":\\"))
+            {
+                uNCServer = uNCServer.Replace(":", ":\\");
+            }
+            RootPath = Path.Combine(uNCServer, str);
+            if (Directory.Exists(RootPath))
+            {
+                string[] directories = Directory.GetDirectories(RootPath);
+                if (directories.Length > 0)
+                {
+                    string[] strArrays = directories;
+                    for (int i = 0; i < (int)strArrays.Length; i++)
                     {
-                        Name = fileName,
-                        ImgIdx = 1,
-                        RecType = NodeType.YEAR,
-                        FolderPath = path
-                    },
-                    ImageIndex = 1
-                });
+                        string str1 = strArrays[i];
+                        string fileName = Path.GetFileName(str1);
+                        NodeRecord nodeRecord = new NodeRecord()
+                        {
+                            Name = fileName,
+                            ImgIdx = 1,
+                            RecType = NodeType.YEAR,
+                            FolderPath = str1
+                        };
+                        vTreeNode _vTreeNode = new vTreeNode(fileName)
+                        {
+                            Tag = nodeRecord,
+                            ImageIndex = 1
+                        };
+                        ROOT.Nodes.Add(_vTreeNode);
+                    }
+                }
             }
         }
 
@@ -190,7 +200,7 @@ namespace FileTreeCtrl
                                 nodeRecord.RecType = NodeType.DAY;
                                 nodeRecord.FolderPath = path;
                                 nodeRecord.date = this.ParseDateFromPath(path, DATETYPE.DAY);
-                                nodeRecord.Name = string.Format("FileTree_16", fileName, nodeRecord.date.DayOfWeek);
+                                nodeRecord.Name = string.Format("{0} • {1}", fileName, nodeRecord.date.DayOfWeek);
                                 e.Node.Nodes.Add(new vTreeNode(nodeRecord.Name)
                                 {
                                     Tag = nodeRecord,
@@ -210,7 +220,7 @@ namespace FileTreeCtrl
             try
             {
                 NodeRecord tag = (NodeRecord)e.Node.Tag;
-                lblDOY.Text = string.Format("FileTree_17", tag.date.DayOfYear, tag.date.DayOfWeek);
+                lblDOY.Text = string.Format("{0} • {1}", tag.date.DayOfYear, tag.date.DayOfWeek);
                 Callback(this, new CmdDateSelectEventArgs(tag.date.ToString()));
             }
             catch
@@ -270,84 +280,80 @@ namespace FileTreeCtrl
             this.mnu_TreeLines = new ToolStripMenuItem();
             this.PanelHeader.SuspendLayout();
             this.TreeMenu.SuspendLayout();
-            this.SuspendLayout();
-            this.imageList1.ImageStream = Resources.FileTree.imageList1_ImageStream;
+            base.SuspendLayout();
+            this.imageList1.ImageStream = (ImageListStreamer)Resources.FileTree.imageList1_ImageStream;
             this.imageList1.TransparentColor = Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "FileTree_19");
-            this.imageList1.Images.SetKeyName(1, "FileTree_20");
-            this.imageList1.Images.SetKeyName(2, "FileTree_21");
-            this.imageList1.Images.SetKeyName(3, "FileTree_23");
-            this.PanelHeader.Controls.Add((Control)this.lblDOY);
-            this.PanelHeader.Controls.Add((Control)this.lbl_DayOfYear);
+            this.imageList1.Images.SetKeyName(0, "catalog.png");
+            this.imageList1.Images.SetKeyName(1, "year.png");
+            this.imageList1.Images.SetKeyName(2, "month.png");
+            this.imageList1.Images.SetKeyName(3, "day.png");
+            this.PanelHeader.Controls.Add(this.lblDOY);
+            this.PanelHeader.Controls.Add(this.lbl_DayOfYear);
             this.PanelHeader.Dock = DockStyle.Top;
             this.PanelHeader.Location = new Point(0, 0);
-            this.PanelHeader.Name = "FileTree_24";
+            this.PanelHeader.Name = "PanelHeader";
             this.PanelHeader.Size = new Size(321, 34);
             this.PanelHeader.TabIndex = 0;
             this.lblDOY.AutoSize = true;
             this.lblDOY.Location = new Point(158, 11);
-            this.lblDOY.Name = "FileTree_25";
+            this.lblDOY.Name = "lblDOY";
             this.lblDOY.Size = new Size(13, 13);
             this.lblDOY.TabIndex = 5;
-            this.lblDOY.Text = "FileTree_26";
+            this.lblDOY.Text = "0";
             this.lbl_DayOfYear.AutoSize = true;
             this.lbl_DayOfYear.Location = new Point(16, 11);
-            this.lbl_DayOfYear.Name = "FileTree_27";
+            this.lbl_DayOfYear.Name = "lbl_DayOfYear";
             this.lbl_DayOfYear.Size = new Size(81, 13);
             this.lbl_DayOfYear.TabIndex = 4;
-            this.lbl_DayOfYear.Text = "FileTree_28";
-            this.vTree.AccessibleName = "FileTree_29";
+            this.lbl_DayOfYear.Text = "Day of the Year";
+            this.vTree.AccessibleName = "TreeView";
             this.vTree.AccessibleRole = AccessibleRole.List;
             this.vTree.BorderColor = Color.Transparent;
             this.vTree.ContextMenuStrip = this.TreeMenu;
             this.vTree.Dock = DockStyle.Fill;
             this.vTree.ImageList = this.imageList1;
             this.vTree.Location = new Point(0, 34);
-            this.vTree.Name = "FileTree_30";
+            this.vTree.Name = "vTree";
             this.vTree.ScrollPosition = new Point(0, 0);
-            this.vTree.SelectedNode = (vTreeNode)null;
+            this.vTree.SelectedNode = null;
             this.vTree.Size = new Size(321, 418);
             this.vTree.TabIndex = 1;
-            this.vTree.Text = "FileTree_31";
+            this.vTree.Text = "vTreeView1";
             this.vTree.UseThemeBorderColor = false;
             this.vTree.VIBlendScrollBarsTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.vTree.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.vTree.NodeMouseUp += new vTreeViewMouseEventHandler(this.vTree_NodeMouseUp);
-            this.TreeMenu.Items.AddRange(new ToolStripItem[4]
-            {
-        (ToolStripItem) this.mnu_ClearSelection,
-        (ToolStripItem) this.toolStripMenuItem1,
-        (ToolStripItem) this.mnu_RefreshView,
-        (ToolStripItem) this.mnu_TreeLines
-            });
-            this.TreeMenu.Name = "FileTree_32";
+            ToolStripItemCollection items = this.TreeMenu.Items;
+            ToolStripItem[] mnuClearSelection = new ToolStripItem[] { this.mnu_ClearSelection, this.toolStripMenuItem1, this.mnu_RefreshView, this.mnu_TreeLines };
+            this.TreeMenu.Items.AddRange(mnuClearSelection);
+            this.TreeMenu.Name = "TreeMenu";
             this.TreeMenu.Size = new Size(153, 76);
-            this.mnu_ClearSelection.Name = "FileTree_33";
+            this.mnu_ClearSelection.Name = "mnu_ClearSelection";
             this.mnu_ClearSelection.Size = new Size(152, 22);
-            this.mnu_ClearSelection.Text = "FileTree_34";
+            this.mnu_ClearSelection.Text = "Clear Selection";
             this.mnu_ClearSelection.Click += new EventHandler(this.mnu_ClearSelection_Click);
-            this.toolStripMenuItem1.Name = "FileTree_35";
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new Size(149, 6);
-            this.mnu_RefreshView.Name = "FileTree_36";
+            this.mnu_RefreshView.Name = "mnu_RefreshView";
             this.mnu_RefreshView.Size = new Size(152, 22);
-            this.mnu_RefreshView.Text = "FileTree_37";
+            this.mnu_RefreshView.Text = "Refresh View";
             this.mnu_RefreshView.Click += new EventHandler(this.mnu_RefreshView_Click);
-            this.mnu_TreeLines.Name = "FileTree_38";
+            this.mnu_TreeLines.Name = "mnu_TreeLines";
             this.mnu_TreeLines.Size = new Size(152, 22);
-            this.mnu_TreeLines.Text = "FileTree_39";
+            this.mnu_TreeLines.Text = "Tree Lines";
             this.mnu_TreeLines.Click += new EventHandler(this.mnu_TreeLines_Click);
-            this.AutoScaleDimensions = new SizeF(6f, 13f);
-            this.AutoScaleMode = AutoScaleMode.Font;
+            base.AutoScaleDimensions = new SizeF(6f, 13f);
+            base.AutoScaleMode = AutoScaleMode.Font;
             this.BackColor = Color.White;
-            this.Controls.Add((Control)this.vTree);
-            this.Controls.Add((Control)this.PanelHeader);
-            this.Name = "FileTree_40";
-            this.Size = new Size(321, 452);
-            this.Load += new EventHandler(this.FileTree_Load);
+            base.Controls.Add(this.vTree);
+            base.Controls.Add(this.PanelHeader);
+            base.Name = "FileTree";
+            base.Size = new Size(321, 452);
+            base.Load += new EventHandler(this.FileTree_Load);
             this.PanelHeader.ResumeLayout(false);
             this.PanelHeader.PerformLayout();
             this.TreeMenu.ResumeLayout(false);
-            this.ResumeLayout(false);
+            base.ResumeLayout(false);
         }
 
         public delegate void DEL_DateSelectCallback(object sender, CmdDateSelectEventArgs args);

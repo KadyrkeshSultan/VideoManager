@@ -10,7 +10,7 @@ namespace VMInterfaces.Entity_Configs
         public CFG_GlobalConfig()
         {
             HasKey(globalConfig => globalConfig.Id).Property(globalConfig => globalConfig.Id).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
-            Property(globalConfig => globalConfig.Key).IsRequired().HasMaxLength(new int?(32)).HasColumnAnnotation("CFG_GlobalConfig_unknown1", new IndexAnnotation(new IndexAttribute()
+            Property(globalConfig => globalConfig.Key).IsRequired().HasMaxLength(new int?(32)).HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()
             {
                 IsUnique = true
             }));

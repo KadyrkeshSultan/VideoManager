@@ -12,7 +12,7 @@ namespace VMInterfaces.Entity_Configs
             Property(evidence => evidence.ItemType).HasMaxLength(new int?(64));
             Property(evidence => evidence.ItemDesc).HasMaxLength(new int?(128));
             Property(evidence => evidence.FileNumber).HasMaxLength(new int?(32));
-            Property(evidence => evidence.Picture).HasColumnType("CFG_Evidence_unknown1");
+            Property(evidence => evidence.Picture).HasColumnType("image");
         }
     }
 }

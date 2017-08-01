@@ -26,7 +26,7 @@ namespace AccountSelector
         
         private void SelectorForm_Load(object sender, EventArgs e)
         {
-            LangCtrl.GetString("AccountSelector_SlctForm_1", "AccountSelector_SlctForm_2");
+            LangCtrl.GetString("dlg_AccountSelector", "Account Selector");
             accounts.EVT_NodeCallback += new AcctCtrl.DEL_NodeCallback(accounts_EVT_NodeCallback);
             accounts.InitTree();
             accounts.IsShowCurrentAccount = this.IsShowCurrentAccount;
@@ -64,9 +64,9 @@ namespace AccountSelector
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new Size(476, 408);
             this.FormBorderStyle = FormBorderStyle.SizableToolWindow;
-            this.Name = "AccountSelector_SlctForm_3";
+            this.Name = "Selector Form";
             this.StartPosition = FormStartPosition.CenterParent;
-            this.Text = "AccountSelector_SlctForm_4";
+            this.Text = "Account Selector";
             this.Load += new EventHandler(this.SelectorForm_Load);
             this.ResumeLayout(false);
         }

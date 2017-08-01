@@ -21,7 +21,7 @@ namespace VMInterfaces.Entity_Configs
             Property(person => person.LicenseID).HasMaxLength(new int?(64));
             Property(person => person.LicenseState).HasMaxLength(new int?(64));
             Property(person => person.Email).HasMaxLength(new int?(128));
-            Property(person => person.PassportPic).HasColumnType("CFG_Person_unknown1");
+            Property(person => person.PassportPic).HasColumnType("image");
         }
     }
 }

@@ -10,7 +10,7 @@ namespace VMInterfaces.Entity_Configs
         public CFG_RightsProfile()
         {
             HasKey(rightsProfile => rightsProfile.Id).Property(rightsProfile => rightsProfile.Id).HasDatabaseGeneratedOption(new DatabaseGeneratedOption?(DatabaseGeneratedOption.Identity));
-            Property(rightsProfile => rightsProfile.Name).IsRequired().HasMaxLength(new int?(32)).HasColumnAnnotation("CFG_RightsProfile_unknown1", new IndexAnnotation(new IndexAttribute()
+            Property(rightsProfile => rightsProfile.Name).IsRequired().HasMaxLength(new int?(32)).HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()
             {
                 IsUnique = true
             }));

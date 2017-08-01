@@ -12,337 +12,467 @@ namespace VMInterfaces
 {
     public class RPM_DataFile : IDataFiles, IDisposable
     {
-        private Guid AccountId;
-        private VMContext context;
+        private Guid AccountId = Guid.Empty;
 
-        public string Msg {  get;  set; }
+        private VMContext context = new VMContext();
 
-        
-        public RPM_DataFile()
+        public string Msg
         {
-            AccountId = Guid.Empty;
-            context = new VMContext();
+            get;
+            set;
         }
 
-        
+        public RPM_DataFile()
+        {
+        }
+
         public void AddClassification(DFClass rec)
         {
             if (rec.Id == Guid.Empty)
             {
-                WriteLog(VMGlobal.LOG_ACTION.SAVE, string.Format("RPM_DataFile_unknown1", rec.Name), AccountId);
+                WriteLog(VMGlobal.LOG_ACTION.SAVE, string.Format("Classification: {0}", rec.Name), AccountId);
                 context.DFClasses.Add(rec);
+                return;
             }
-            else
-            {
-                this.WriteLog(VMGlobal.LOG_ACTION.UPDATE, string.Format("RPM_DataFile_unknown2", rec.Name), AccountId);
-                context.Entry(rec).State = EntityState.Modified;
-            }
+            WriteLog(VMGlobal.LOG_ACTION.UPDATE, string.Format("{0}", rec.Name), this.AccountId);
+            context.Entry(rec).State = EntityState.Modified;
         }
 
-        
-        public List<DFClass> GetClassList(Guid Id)
+        public void DeleteAllClasses(Guid Id)
         {
-            return context.DFClasses.Where(dfClass => dfClass.DataFileId == Id).OrderBy(dfClass => dfClass.Name).ToList();
+            context.DFClasses.RemoveRange(
+                from x in context.DFClasses
+                where x.DataFileId == Id
+                select x);
         }
 
-        
-        public List<Classification> GetRetentionClasses()
-        {
-            return context.Classifications.Where(classification => classification.IsRetention == true).OrderBy(classification => classification.Name).ToList();
-        }
-
-        
-        public List<Guid> GetRetentionFilesByClass(string className, int days)
-        {
-            DateTime purgeDate = DateTime.Now.AddDays(-days);
-            return context.DataFiles.Where(dataFile => dataFile.Classification == className && dataFile.IsPurged == false && dataFile.IsIndefinite == false && dataFile.FileAddedTimestamp < purgeDate).Select(dataFile => dataFile.Id).ToList();
-        }
-
-        
         public void DeleteClassification(Guid Id)
         {
-            DeleteClassification(context.DFClasses.Find(Id));
+            DbSet<DFClass> dbSet0 = context.DFClasses;
+            object[] id = new object[] { Id };
+            DeleteClassification(dbSet0.Find(id));
         }
 
-        
         public void DeleteClassification(DFClass rec)
         {
             context.DFClasses.Remove(rec);
         }
 
-        
-        public void DeleteAllClasses(Guid Id)
-        {
-            context.DFClasses.RemoveRange(context.DFClasses.Where(dfClass => dfClass.DataFileId == Id));
-        }
-
-        
-        public List<DataFile> GetPurgeFilesByAccountID(DateTime Start, DateTime End, Guid Id)
-        {
-            return context.DataFiles.Where(dataFile => dataFile.IsPurged == true && dataFile.AccountId == Id && dataFile.PurgeTimestamp >= Start && dataFile.PurgeTimestamp <= End).OrderBy(dataFile => dataFile.PurgeTimestamp).ToList();
-        }
-
-        
-        public List<DataFile> QryGlobalCatalog(bool byFileDate, DateTime sDate, DateTime eDate, string rms, string cad, string set, bool bEvidence)
-        {
-            IQueryable<DataFile> source;
-            if (byFileDate)
-                source = context.DataFiles.Where(dataFile => dataFile.FileTimestamp >= sDate && dataFile.FileTimestamp <= eDate);
-            else
-                source = context.DataFiles.Where(dataFile => dataFile.FileAddedTimestamp >= sDate && dataFile.FileAddedTimestamp <= eDate);
-            if (!string.IsNullOrEmpty(rms))
-            {
-                if (rms.Contains("RPM_DataFile_unknown3"))
-                {
-                    rms = rms.Replace("RPM_DataFile_unknown4", "");
-                    source = source.Where(dataFile => dataFile.RMSNumber.Contains(rms));
-                }
-                else
-                    source = source.Where(dataFile => dataFile.RMSNumber == rms);
-            }
-            if (!string.IsNullOrEmpty(cad))
-            {
-                if (cad.Contains("RPM_DataFile_unknown5"))
-                {
-                    cad = cad.Replace("RPM_DataFile_unknown6", "");
-                    source = source.Where(dataFile => dataFile.CADNumber.Contains(cad));
-                }
-                else
-                    source = source.Where(dataFile => dataFile.CADNumber == cad);
-            }
-            if (!string.IsNullOrEmpty(set))
-            {
-                if (set.Contains("RPM_DataFile_unknown7"))
-                {
-                    set = set.Replace("RPM_DataFile_unknown8", "");
-                    source = source.Where(dataFile => dataFile.SetName.Contains(set));
-                }
-                else
-                    source = source.Where(dataFile => dataFile.SetName == set);
-            }
-            if (bEvidence)
-                source = source.Where(dataFile => dataFile.IsEvidence == true);
-            return source.OrderBy(dataFile => dataFile.AccountId).ToList();
-        }
-
-        
-        public void SetAccountId(Guid Id)
-        {
-            AccountId = Id;
-        }
-
-        
-        private void WriteLog(VMGlobal.LOG_ACTION action, string memo, Guid Id)
-        {
-            if (Id != Guid.Empty)
-            {
-                Account account = context.Accounts.Find(Id);
-                memo = string.Format("RPM_DataFile_unknown9", account.ToString(), account.BadgeNumber) + memo;
-            }
-            AccountLog log = new AccountLog();
-            log.Action = action.ToString();
-            log.Memo = memo;
-            using (RPM_Logs rpmLogs = new RPM_Logs())
-                rpmLogs.LogAccount(log);
-        }
-
-        
-        public List<DataFile> GetSetList(Guid AccountID, string SetName, DateTime From, DateTime To)
-        {
-            List<DataFile> dataFileList = new List<DataFile>();
-            IQueryable<DataFile> source = context.DataFiles.Where(dataFile => dataFile.AccountId == AccountID && dataFile.SetName.Contains(SetName) && dataFile.FileTimestamp >= From && dataFile.FileTimestamp <= To && dataFile.IsPurged == false).GroupBy(dataFile => dataFile.SetName).Select(grouping => grouping.FirstOrDefault());
-            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("RPM_DataFile_unknown10", SetName, From, To), AccountID);
-            return source.ToList();
-        }
-
-        
-        public List<DataFile> LoadByDate(Guid AccountID, DateTime From, DateTime To)
-        {
-            List<DataFile> dataFileList = new List<DataFile>();
-            IQueryable<DataFile> source = context.DataFiles.Where(dataFile => dataFile.AccountId == AccountID && dataFile.FileAddedTimestamp >= From && dataFile.FileAddedTimestamp <= To && dataFile.IsPurged == false);
-            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("RPM_DataFile_unknown11", From, To), AccountID);
-            return source.ToList();
-        }
-
-        
-        public List<DataFile> GetSet(Guid AccountID, string SetName)
-        {
-            IQueryable<DataFile> source = context.DataFiles.Where(dataFile => dataFile.AccountId == AccountID && dataFile.SetName == SetName && dataFile.IsPurged == false);
-            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("RPM_DataFile_unknown12", SetName), AccountID);
-            return source.ToList();
-        }
-
-        
-        public FileMemo GetMemo(Guid Id)
-        {
-            FileMemo fileMemo = context.FileMemos.Find(Id);
-            WriteLog(VMGlobal.LOG_ACTION.VIEW, string.Format("RPM_DataFile_unknown13", fileMemo.ShortDesc, fileMemo.Timestamp, fileMemo.DataFile.Id, fileMemo.DataFile.ShortDesc), Guid.Empty);
-            return fileMemo;
-        }
-
-        
-        public int GetMemoCount(Guid Id)
-        {
-            return context.FileMemos.Count(fileMemo => fileMemo.DataFile.Id == Id);
-        }
-
-        
-        public void ViewFileData(Guid Id)
-        {
-            DataFile dataFile = context.DataFiles.Find(Id);
-            WriteLog(VMGlobal.LOG_ACTION.VIEW, string.Format("RPM_DataFile_unknown14", dataFile.ShortDesc, dataFile.StoredFileName, dataFile.FileExtension), dataFile.AccountId);
-        }
-
-        
-        public List<DataFile> QueryDataFile(CatalogFilter filter)
-        {
-            List<DataFile> dataFileList = new List<DataFile>();
-            IQueryable<DataFile> source1 = context.DataFiles.Where(dataFile => dataFile.AccountId.Equals(filter.AccountID));
-            if (!string.IsNullOrEmpty(filter.FileType))
-                source1 = source1.Where(dataFile => dataFile.FileExtension == filter.FileType);
-            if (!string.IsNullOrEmpty(filter.Classification))
-                source1 = source1.Where(dataFile => dataFile.Classification == filter.Classification);
-            if (!string.IsNullOrEmpty(filter.RMS))
-                source1 = source1.Where(dataFile => dataFile.RMSNumber == filter.RMS);
-            if (!string.IsNullOrEmpty(filter.CAD))
-                source1 = source1.Where(dataFile => dataFile.CADNumber == filter.CAD);
-            if (filter.Rating > 0)
-                source1 = source1.Where(dataFile => dataFile.Rating == filter.Rating);
-            if (filter.IsSecurityFilter)
-                source1 = source1.Where(dataFile => (int)dataFile.Security == (int)filter.SecurityLevel);
-            if (filter.IsEvidence)
-                source1 = source1.Where(dataFile => dataFile.IsEvidence == filter.IsEvidence);
-            if (!string.IsNullOrEmpty(filter.WordPhrase))
-                source1 = source1.Where(dataFile => dataFile.ShortDesc.Contains(filter.WordPhrase));
-            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("RPM_DataFile_unknown15", filter.StartDate, filter.EndDate, filter.Classification), filter.AccountID);
-            return source1.Where(dataFile => dataFile.IsPurged == false).Where(dataFile => dataFile.FileTimestamp >= filter.StartDate && dataFile.FileTimestamp <= filter.EndDate).OrderByDescending(dataFile => dataFile.FileTimestamp).ToList();
-        }
-
-        
-        public List<DataFile> GetListByDateRange(DateTime d1, DateTime d2)
-        {
-            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("RPM_DataFile_unknown16", d1, d2), Guid.Empty);
-            return context.DataFiles.Where(dataFile => dataFile.FileTimestamp >= d1 && dataFile.IsPurged == false && dataFile.FileTimestamp <= d2).ToList();
-        }
-
-        
-        public List<DataFile> GetListByDateRange(Guid Id, DateTime d1, DateTime d2)
-        {
-            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("RPM_DataFile_unknown17", d1, d2), Id);
-            return context.DataFiles.Where(dataFile => dataFile.AccountId.Equals(Id) && dataFile.IsPurged == false && dataFile.FileTimestamp >= d1 && dataFile.FileTimestamp <= d2).OrderByDescending(dataFile => dataFile.FileTimestamp).ToList();
-        }
-
-        
-        public List<DataFile> GetAll()
-        {
-            WriteLog(VMGlobal.LOG_ACTION.LIST, "RPM_DataFile_unknown18", Guid.Empty);
-            return context.DataFiles.Where(dataFile => dataFile.IsPurged == false).OrderBy(dataFile => dataFile.FileTimestamp).ToList();
-        }
-
-        
-        public List<string> GetFileExtensions()
-        {
-            List<string> stringList = new List<string>();
-            return context.DataFiles.GroupBy(dataFile => dataFile.FileExtension, dataFile => dataFile.FileExtension2).Select(grouping => grouping.FirstOrDefault()).ToList();
-        }
-
-        
-        public List<DataFile> GetLastDays(Guid Id, int n)
-        {
-            DateTime CurrentDT = DateTime.Now;
-            DateTime StartDT = CurrentDT.AddDays(-n);
-            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("RPM_DataFile_unknown19", n, CurrentDT, StartDT), Id);
-            return context.DataFiles.Where(dataFile => dataFile.AccountId.Equals(Id) && dataFile.IsPurged == false && dataFile.FileTimestamp >= StartDT && dataFile.FileTimestamp <= CurrentDT).ToList();
-        }
-
-        
-        public void GroupSet(List<DataFile> files, string SetName)
-        {
-        }
-
-        
-        public List<DataFile> GetBySetName(string SetName)
-        {
-            IQueryable<DataFile> source = context.DataFiles.Where(dataFile => dataFile.IsPurged == false && dataFile.SetName.Equals(SetName));
-            WriteLog(VMGlobal.LOG_ACTION.VIEW, string.Format("RPM_DataFile_unknown20", SetName), Guid.Empty);
-            return source.ToList();
-        }
-
-        
-        public DataFile GetDataFile(Guid Id)
-        {
-            return context.DataFiles.Find(Id);
-        }
-
-        
         public void DeleteDataFile(Guid Id)
         {
             DeleteDataFile(GetDataFile(Id));
         }
 
-        
         public void DeleteDataFile(DataFile rec)
         {
-            WriteLog(VMGlobal.LOG_ACTION.DELETE, string.Format("RPM_DataFile_unknown21", rec.Id, rec.StoredFileName, rec.FileExtension), rec.AccountId);
+            WriteLog(VMGlobal.LOG_ACTION.DELETE, string.Format("File {0}\n{1}{2}", rec.Id, rec.StoredFileName, rec.FileExtension), rec.AccountId);
             context.DataFiles.Remove(rec);
         }
 
-        
-        public void SaveUpdate(DataFile rec)
+        public void Dispose()
         {
-            if (rec.Id == Guid.Empty)
-            {
-                WriteLog(VMGlobal.LOG_ACTION.UPLOAD, string.Format("RPM_DataFile_unknown22", rec.StoredFileName, rec.FileExtension, rec.OriginalFileName, rec.SourcePath), rec.AccountId);
-                context.DataFiles.Add(rec);
-            }
-            else
-            {
-                WriteLog(VMGlobal.LOG_ACTION.UPDATE, string.Format("RPM_DataFile_unknown23", rec.StoredFileName, rec.FileExtension), rec.AccountId);
-                context.Entry(rec).State = EntityState.Modified;
-            }
+            this.context.Dispose();
         }
 
-        
+        public List<DataFile> GetAll()
+        {
+            this.WriteLog(VMGlobal.LOG_ACTION.LIST, "Files - List All", Guid.Empty);
+            IOrderedQueryable<DataFile> dataFiles =
+                from c in context.DataFiles
+                where c.IsPurged == false
+                orderby c.FileTimestamp
+                select c;
+            return dataFiles.ToList();
+        }
+
+        public List<DataFile> GetBySetName(string SetName)
+        {
+            IQueryable<DataFile> dataFiles =
+                from c in context.DataFiles
+                where c.IsPurged == false && c.SetName.Equals(SetName)
+                select c;
+            WriteLog(VMGlobal.LOG_ACTION.VIEW, string.Format("Set By Name: {0}", SetName), Guid.Empty);
+            return dataFiles.ToList();
+        }
+
+        public List<DFClass> GetClassList(Guid Id)
+        {
+            IOrderedQueryable<DFClass> dbSet0 =
+                from c in context.DFClasses
+                where c.DataFileId == Id
+                orderby c.Name
+                select c;
+            return dbSet0.ToList();
+        }
+
+        public DataFile GetDataFile(Guid Id)
+        {
+            return context.DataFiles.Find(new object[] { Id });
+        }
+
+        public List<string> GetFileExtensions()
+        {
+            List<string> strs = new List<string>();
+            IQueryable<string> dataFiles =
+                from c in context.DataFiles
+                group c.FileExtension by c.FileExtension into ext
+                select ext.FirstOrDefault();
+            return dataFiles.ToList();
+        }
+
+        public List<DataFile> GetLastDays(Guid Id, int n)
+        {
+            DateTime now = DateTime.Now;
+            DateTime dateTime = now.AddDays((double)(-n));
+            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("Files By Last Days: {0} - Days\n {1} to {2}", n, now, dateTime), Id);
+            return (
+                from e in context.DataFiles
+                where e.AccountId.Equals(Id) && e.IsPurged == false && (e.FileTimestamp >= dateTime) && (e.FileTimestamp <= now)
+                select e).ToList();
+        }
+
+        public List<DataFile> GetListByDateRange(DateTime d1, DateTime d2)
+        {
+            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("Files by Date Range: {0} to {1}", d1, d2), Guid.Empty);
+            return (
+                from e in context.DataFiles
+                where (e.FileTimestamp >= d1) && e.IsPurged == false && (e.FileTimestamp <= d2)
+                select e).ToList();
+        }
+
+        public List<DataFile> GetListByDateRange(Guid Id, DateTime d1, DateTime d2)
+        {
+            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("Files by Date Range: {0} to {1}", d1, d2), Id);
+            return (
+                from e in context.DataFiles
+                where e.AccountId.Equals(Id) && e.IsPurged == false && (e.FileTimestamp >= d1) && (e.FileTimestamp <= d2)
+                orderby e.FileTimestamp descending
+                select e).ToList();
+        }
+
+        public FileMemo GetMemo(Guid Id)
+        {
+            DbSet<FileMemo> fileMemos = context.FileMemos;
+            object[] id = new object[] { Id };
+            FileMemo fileMemo = fileMemos.Find(id);
+            object[] shortDesc = new object[] { fileMemo.ShortDesc, fileMemo.Timestamp, fileMemo.DataFile.Id, fileMemo.DataFile.ShortDesc };
+            WriteLog(VMGlobal.LOG_ACTION.VIEW, string.Format("Memo: {0}\nMemo Date: {1}\nData File ID: {2}\nData File Desc: {3}", shortDesc), Guid.Empty);
+            return fileMemo;
+        }
+
+        public int GetMemoCount(Guid Id)
+        {
+            return context.FileMemos.Count((FileMemo t) => t.DataFile.Id == Id);
+        }
+
+        public List<DataFile> GetPurgeFilesByAccountID(DateTime Start, DateTime End, Guid Id)
+        {
+            IOrderedQueryable<DataFile> dataFiles =
+                from c in context.DataFiles
+                where c.IsPurged == true && (c.AccountId == Id) && (c.PurgeTimestamp >= Start) && (c.PurgeTimestamp <= End)
+                orderby c.PurgeTimestamp
+                select c;
+            return dataFiles.ToList();
+        }
+
+        public List<Classification> GetRetentionClasses()
+        {
+            IOrderedQueryable<Classification> classifications =
+                from c in context.Classifications
+                where c.IsRetention
+                orderby c.Name
+                select c;
+            return classifications.ToList();
+        }
+
+        public List<Guid> GetRetentionFilesByClass(string className, int days)
+        {
+            DateTime dateTime = DateTime.Now.AddDays((double)(-days));
+            IQueryable<Guid> dataFiles =
+                from c in context.DataFiles
+                where (c.Classification == className) && c.IsPurged == false && !c.IsIndefinite && (c.FileAddedTimestamp < dateTime)
+                select c.Id;
+            return dataFiles.ToList();
+        }
+
+        public List<DataFile> GetSet(Guid AccountID, string SetName)
+        {
+            IQueryable<DataFile> dataFiles =
+                from c in context.DataFiles
+                where (c.AccountId == AccountID) && (c.SetName == SetName) && c.IsPurged == false
+                select c;
+            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("Get Set By Name: {0}", SetName), AccountID);
+            return dataFiles.ToList();
+        }
+
+        public List<DataFile> GetSetList(Guid AccountID, string SetName, DateTime From, DateTime To)
+        {
+            List<DataFile> dataFiles = new List<DataFile>();
+            IQueryable<DataFile> dataFiles1 =
+                from c in context.DataFiles
+                where (c.AccountId == AccountID) && c.SetName.Contains(SetName) && (c.FileTimestamp >= From) && (c.FileTimestamp <= To) && c.IsPurged == false
+                group c by c.SetName into set
+                select set.FirstOrDefault<DataFile>();
+            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("Get Set List: {0}\nFrom: {1} To: {2}", SetName, From, To), AccountID);
+            return dataFiles1.ToList<DataFile>();
+        }
+
+        public void GroupSet(List<DataFile> files, string SetName)
+        {
+        }
+
+        public List<DataFile> LoadByDate(Guid AccountID, DateTime From, DateTime To)
+        {
+            List<DataFile> dataFiles = new List<DataFile>();
+            IQueryable<DataFile> dataFiles1 =
+                from c in context.DataFiles
+                where (c.AccountId == AccountID) && (c.FileAddedTimestamp >= From) && (c.FileAddedTimestamp <= To) && c.IsPurged == false
+                select c;
+            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("Catalog Files by Date: {0} To: {1}", From, To), AccountID);
+            return dataFiles1.ToList();
+        }
+
+        public List<DataFile> QryGlobalCatalog(bool byFileDate, DateTime sDate, DateTime eDate, string rms, string cad, string set, bool bEvidence)
+        {
+            string str = rms;
+            string str1 = cad;
+            string str2 = set;
+            IQueryable<DataFile> rMSNumber = null;
+            rMSNumber = (!byFileDate ?
+                from c in context.DataFiles
+                where (c.FileAddedTimestamp >= sDate) && (c.FileAddedTimestamp <= eDate)
+                select c :
+                from c in context.DataFiles
+                where (c.FileTimestamp >= sDate) && (c.FileTimestamp <= eDate)
+                select c);
+            if (!string.IsNullOrEmpty(str))
+            {
+                if (!str.Contains("*"))
+                {
+                    rMSNumber =
+                        from c in rMSNumber
+                        where c.RMSNumber == str
+                        select c;
+                }
+                else
+                {
+                    str = str.Replace("*", "");
+                    rMSNumber =
+                        from c in rMSNumber
+                        where c.RMSNumber.Contains(str)
+                        select c;
+                }
+            }
+            if (!string.IsNullOrEmpty(str1))
+            {
+                if (!str1.Contains("*"))
+                {
+                    rMSNumber =
+                        from c in rMSNumber
+                        where c.CADNumber == str1
+                        select c;
+                }
+                else
+                {
+                    str1 = str1.Replace("*", "");
+                    rMSNumber =
+                        from c in rMSNumber
+                        where c.CADNumber.Contains(str1)
+                        select c;
+                }
+            }
+            if (!string.IsNullOrEmpty(str2))
+            {
+                if (!str2.Contains("*"))
+                {
+                    rMSNumber =
+                        from c in rMSNumber
+                        where c.SetName == str2
+                        select c;
+                }
+                else
+                {
+                    str2 = str2.Replace("*", "");
+                    rMSNumber =
+                        from c in rMSNumber
+                        where c.SetName.Contains(str2)
+                        select c;
+                }
+            }
+            if (bEvidence)
+            {
+                rMSNumber =
+                    from c in rMSNumber
+                    where c.IsEvidence
+                    select c;
+            }
+            rMSNumber =
+                from c in rMSNumber
+                orderby c.AccountId
+                select c;
+            return rMSNumber.ToList();
+        }
+
+        public List<DataFile> QueryDataFile(CatalogFilter filter)
+        {
+            List<DataFile> dataFiles = new List<DataFile>();
+            IQueryable<DataFile> fileExtension =
+                from c in context.DataFiles
+                where c.AccountId.Equals(filter.AccountID)
+                select c;
+            if (!string.IsNullOrEmpty(filter.FileType))
+            {
+                fileExtension =
+                    from c in fileExtension
+                    where c.FileExtension == filter.FileType
+                    select c;
+            }
+            if (!string.IsNullOrEmpty(filter.Classification))
+            {
+                fileExtension =
+                    from c in fileExtension
+                    where c.Classification == filter.Classification
+                    select c;
+            }
+            if (!string.IsNullOrEmpty(filter.RMS))
+            {
+                fileExtension =
+                    from c in fileExtension
+                    where c.RMSNumber == filter.RMS
+                    select c;
+            }
+            if (!string.IsNullOrEmpty(filter.CAD))
+            {
+                fileExtension =
+                    from c in fileExtension
+                    where c.CADNumber == filter.CAD
+                    select c;
+            }
+            if (filter.Rating > 0)
+            {
+                fileExtension =
+                    from c in fileExtension
+                    where c.Rating == filter.Rating
+                    select c;
+            }
+            if (filter.IsSecurityFilter)
+            {
+                fileExtension =
+                    from c in fileExtension
+                    where (int)c.Security == (int)filter.SecurityLevel
+                    select c;
+            }
+            if (filter.IsEvidence)
+            {
+                fileExtension =
+                    from c in fileExtension
+                    where c.IsEvidence == filter.IsEvidence
+                    select c;
+            }
+            if (!string.IsNullOrEmpty(filter.WordPhrase))
+            {
+                fileExtension =
+                    from c in fileExtension
+                    where c.ShortDesc.Contains(filter.WordPhrase)
+                    select c;
+            }
+            fileExtension =
+                from c in fileExtension
+                where c.IsPurged == (bool?)false
+                select c;
+            fileExtension =
+                from c in fileExtension
+                where (c.FileTimestamp >= filter.StartDate) && (c.FileTimestamp <= filter.EndDate)
+                orderby c.FileTimestamp descending
+                select c;
+            WriteLog(VMGlobal.LOG_ACTION.LIST, string.Format("{0} to {1}\nClassification: {2}", filter.StartDate, filter.EndDate, filter.Classification), filter.AccountID);
+            return fileExtension.ToList<DataFile>();
+        }
+
         public bool Save()
         {
             bool flag = false;
-            using (DbContextTransaction contextTransaction = context.Database.BeginTransaction())
+            using (DbContextTransaction dbContextTransaction = context.Database.BeginTransaction())
             {
                 try
                 {
                     context.SaveChanges();
-                    contextTransaction.Commit();
+                    dbContextTransaction.Commit();
                     flag = true;
                 }
-                catch (DbUpdateException ex)
+                catch (DbUpdateException dbUpdateException1)
                 {
-                    contextTransaction.Rollback();
-                    string message = ex.Message;
-                    ex.InnerException.ToString();
+                    DbUpdateException dbUpdateException = dbUpdateException1;
+                    dbContextTransaction.Rollback();
+                    string message = dbUpdateException.Message;
+                    dbUpdateException.InnerException.ToString();
                 }
-                catch (DbEntityValidationException ex)
+                catch (DbEntityValidationException dbEntityValidationException1)
                 {
-                    contextTransaction.Rollback();
-                    foreach (DbEntityValidationResult entityValidationError in ex.EntityValidationErrors)
+                    DbEntityValidationException dbEntityValidationException = dbEntityValidationException1;
+                    dbContextTransaction.Rollback();
+                    foreach (DbEntityValidationResult entityValidationError in dbEntityValidationException.EntityValidationErrors)
                     {
                         foreach (DbValidationError validationError in entityValidationError.ValidationErrors)
-                            Msg += string.Format("RPM_DataFile_unknown21", validationError.PropertyName, validationError.ErrorMessage);
+                        {
+                            RPM_DataFile rPMDataFile = this;
+                            rPMDataFile.Msg = string.Concat(rPMDataFile.Msg, string.Format("Property: {0} Error: {1}\n", validationError.PropertyName, validationError.ErrorMessage));
+                        }
                     }
                 }
             }
             return flag;
         }
 
-        
-        public void Dispose()
+        public void SaveUpdate(DataFile rec)
+        {
+            if (rec.Id != Guid.Empty)
+            {
+                WriteLog(VMGlobal.LOG_ACTION.UPDATE, string.Format("{0}{1}", rec.StoredFileName, rec.FileExtension), rec.AccountId);
+                context.Entry(rec).State = EntityState.Modified;
+                return;
+            }
+            object[] storedFileName = new object[] { rec.StoredFileName, rec.FileExtension, rec.OriginalFileName, rec.SourcePath };
+            WriteLog(VMGlobal.LOG_ACTION.UPLOAD, string.Format("{0}{1}\n{2}\n{3}", storedFileName), rec.AccountId);
+            context.DataFiles.Add(rec);
+        }
+
+        public void SetAccountId(Guid Id)
+        {
+            AccountId = Id;
+        }
+
+        void System.IDisposable.Dispose()
         {
             context.Dispose();
         }
 
-        
-        void IDisposable.Dispose()
+        public void ViewFileData(Guid Id)
         {
-            context.Dispose();
+            DbSet<DataFile> dataFiles = context.DataFiles;
+            object[] id = new object[] { Id };
+            DataFile dataFile = dataFiles.Find(id);
+            WriteLog(VMGlobal.LOG_ACTION.VIEW, string.Format("{0}\n{1}{2}", dataFile.ShortDesc, dataFile.StoredFileName, dataFile.FileExtension), dataFile.AccountId);
+        }
+
+        private void WriteLog(VMGlobal.LOG_ACTION action, string memo, Guid Id)
+        {
+            if (Id != Guid.Empty)
+            {
+                DbSet<Account> accounts = context.Accounts;
+                object[] id = new object[] { Id };
+                Account account = accounts.Find(id);
+                memo = string.Concat(string.Format("{0} [{1}]\n", account.ToString(), account.BadgeNumber), memo);
+            }
+            AccountLog accountLog = new AccountLog()
+            {
+                Action = action.ToString(),
+                Memo = memo
+            };
+            using (RPM_Logs rPMLog = new RPM_Logs())
+            {
+                rPMLog.LogAccount(accountLog);
+            }
         }
     }
 }

@@ -76,7 +76,7 @@ namespace MemoEditor
             InitializeComponent();
             DocList = new List<DOCData>();
             textControl1.CreateControl();
-            Text = string.Format("MemoEditor_1", SlideNumber);
+            Text = string.Format("Memo Editor [Slide {0}]", SlideNumber);
             Height = SystemInformation.VirtualScreen.Height - 60;
             Top = 10;
         }
@@ -95,28 +95,28 @@ namespace MemoEditor
         private void SetLanguage()
         {
             LangCtrl.reText(this);
-            this.printToolStripMenuItem.Text = LangCtrl.GetString("MemoEditor_2", "MemoEditor_3");
-            this.mnuPrint.Text = LangCtrl.GetString("MemoEditor_4", "MemoEditor_5");
-            this.mnu_Save.Text = LangCtrl.GetString("MemoEditor_6", "MemoEditor_7");
-            this.mnu_LoadFile.Text = LangCtrl.GetString("MemoEditor_8", "MemoEditor_9");
-            this.mnu_Close.Text = LangCtrl.GetString("MemoEditor_10", "MemoEditor_11");
-            this.menu_Speech.Text = LangCtrl.GetString("MemoEditor_12", "MemoEditor_13");
-            this.mnu_PlayFile.Text = LangCtrl.GetString("MemoEditor_14", "MemoEditor_15");
-            this.mnu_StopPlayback.Text = LangCtrl.GetString("MemoEditor_16", "MemoEditor_17");
-            this.mnu_Voices.Text = LangCtrl.GetString("MemoEditor_18", "MemoEditor_19");
-            this.mnu_PlaySpeed.Text = LangCtrl.GetString("MemoEditor_20", "MemoEditor_21");
-            this.mnu_Faster.Text = LangCtrl.GetString("MemoEditor_22", "MemoEditor_23");
-            this.mnu_Slower.Text = LangCtrl.GetString("MemoEditor_24", "MemoEditor_25");
-            this.mnu_NormalSpeed.Text = LangCtrl.GetString("MemoEditor_26", "MemoEditor_27");
-            this.menu_File.Text = LangCtrl.GetString("MemoEditor_28", "MemoEditor_29");
-            this.mnuPrintPreview.Text = LangCtrl.GetString("MemoEditor_30", "MemoEditor_31");
+            this.printToolStripMenuItem.Text = LangCtrl.GetString("printToolStripMenuItem", "Print");
+            this.mnuPrint.Text = LangCtrl.GetString("mnuPrint", "Print Document");
+            this.mnu_Save.Text = LangCtrl.GetString("mnu_Save", "Save");
+            this.mnu_LoadFile.Text = LangCtrl.GetString("mnu_LoadFile", "Load File");
+            this.mnu_Close.Text = LangCtrl.GetString("mnu_Close", "Close");
+            this.menu_Speech.Text = LangCtrl.GetString("menu_Speech", "Speech");
+            this.mnu_PlayFile.Text = LangCtrl.GetString("mnu_PlayFile", "Play File");
+            this.mnu_StopPlayback.Text = LangCtrl.GetString("mnu_StopPlayback", "Stop Playback");
+            this.mnu_Voices.Text = LangCtrl.GetString("mnu_Voices", "Voices");
+            this.mnu_PlaySpeed.Text = LangCtrl.GetString("mnu_PlaySpeed", "Play Speed");
+            this.mnu_Faster.Text = LangCtrl.GetString("mnu_Faster", "Faster");
+            this.mnu_Slower.Text = LangCtrl.GetString("mnu_Slower", "Slower");
+            this.mnu_NormalSpeed.Text = LangCtrl.GetString("mnu_NormalSpeed", "Normal");
+            this.menu_File.Text = LangCtrl.GetString("menu_File", "File");
+            this.mnuPrintPreview.Text = LangCtrl.GetString("mnuPrintPreview", "Print Preview");
         }
 
         
         private void EditorForm_Load(object sender, EventArgs e)
         {
             SetLanguage();
-            Text = LangCtrl.GetString("MemoEditor_32", "MemoEditor_33");
+            Text = LangCtrl.GetString("dlg_MemoEditor", "Memo Editor");
             LoadVoices();
             if (DocList.Equals(null))
                 DocList = new List<DOCData>();
@@ -195,7 +195,7 @@ namespace MemoEditor
                 return;
             textControl1.Save(out this.RTF, StringStreamType.RichTextFormat);
             DocText = textControl1.Text;
-            if (Hash == RTF.GetHashCode() || MessageBox.Show(this, LangCtrl.GetString("MemoEditor_34", "MemoEditor_35"), "MemoEditor_36", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+            if (Hash == RTF.GetHashCode() || MessageBox.Show(this, LangCtrl.GetString("msg_DocChanged", "Document has changed. Do you want to save?"), "Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
                 return;
             DialogResult = DialogResult.OK;
         }
@@ -319,7 +319,7 @@ namespace MemoEditor
             int keyValue = e.KeyValue;
             if (!(e.Control & e.KeyValue == 82))
                 return;
-            if (this.textControl1.Selection.TextBackColor.Name.Equals("MemoEditor_37"))
+            if (this.textControl1.Selection.TextBackColor.Name.Equals("ffd3d3d3"))
                 this.textControl1.Selection.TextBackColor = Color.White;
             else
                 this.textControl1.Selection.TextBackColor = Color.LightGray;
@@ -365,207 +365,132 @@ namespace MemoEditor
             this.menuStrip1.SuspendLayout();
             this.EditMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_File,
-            this.printToolStripMenuItem,
-            this.menu_Speech});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            ToolStripItemCollection items = this.menuStrip1.Items;
+            ToolStripItem[] menuFile = new ToolStripItem[] { this.menu_File, this.printToolStripMenuItem, this.menu_Speech };
+            this.menuStrip1.Items.AddRange(menuFile);
+            this.menuStrip1.Location = new Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(936, 24);
+            this.menuStrip1.Size = new Size(936, 24);
             this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "MemoEditor_38";
-            // 
-            // menu_File
-            // 
-            this.menu_File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_LoadFile,
-            this.mnu_Save,
-            this.toolStripMenuItem1,
-            this.mnu_Close});
+            this.menuStrip1.Text = "menuStrip1";
+            ToolStripItemCollection dropDownItems = this.menu_File.DropDownItems;
+            ToolStripItem[] mnuLoadFile = new ToolStripItem[] { this.mnu_LoadFile, this.mnu_Save, this.toolStripMenuItem1, this.mnu_Close };
+            this.menu_File.DropDownItems.AddRange(mnuLoadFile);
             this.menu_File.Name = "menu_File";
-            this.menu_File.Size = new System.Drawing.Size(102, 20);
-            this.menu_File.Text = "MemoEditor_40";
-            // 
-            // mnu_LoadFile
-            // 
+            this.menu_File.Size = new Size(37, 20);
+            this.menu_File.Text = "File";
             this.mnu_LoadFile.Name = "mnu_LoadFile";
-            this.mnu_LoadFile.Size = new System.Drawing.Size(157, 22);
-            this.mnu_LoadFile.Text = "MemoEditor_42";
-            this.mnu_LoadFile.Click += new System.EventHandler(this.mnu_LoadFile_Click);
-            // 
-            // mnu_Save
-            // 
+            this.mnu_LoadFile.Size = new Size(103, 22);
+            this.mnu_LoadFile.Text = "Load";
+            this.mnu_LoadFile.Click += new EventHandler(this.mnu_LoadFile_Click);
             this.mnu_Save.Name = "mnu_Save";
-            this.mnu_Save.Size = new System.Drawing.Size(157, 22);
-            this.mnu_Save.Text = "MemoEditor_44";
-            this.mnu_Save.Click += new System.EventHandler(this.mnu_Save_Click);
-            // 
-            // toolStripMenuItem1
-            // 
+            this.mnu_Save.Size = new Size(103, 22);
+            this.mnu_Save.Text = "Save";
+            this.mnu_Save.Click += new EventHandler(this.mnu_Save_Click);
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(154, 6);
-            // 
-            // mnu_Close
-            // 
+            this.toolStripMenuItem1.Size = new Size(100, 6);
             this.mnu_Close.Name = "mnu_Close";
-            this.mnu_Close.Size = new System.Drawing.Size(157, 22);
-            this.mnu_Close.Text = "MemoEditor_47";
-            this.mnu_Close.Click += new System.EventHandler(this.mnu_Close_Click);
-            // 
-            // printToolStripMenuItem
-            // 
-            this.printToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuPrintPreview,
-            this.mnuPrint});
+            this.mnu_Close.Size = new Size(103, 22);
+            this.mnu_Close.Text = "Close";
+            this.mnu_Close.Click += new EventHandler(this.mnu_Close_Click);
+            ToolStripItemCollection toolStripItemCollections = this.printToolStripMenuItem.DropDownItems;
+            ToolStripItem[] toolStripItemArray = new ToolStripItem[] { this.mnuPrintPreview, this.mnuPrint };
+            this.printToolStripMenuItem.DropDownItems.AddRange(toolStripItemArray);
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(102, 20);
-            this.printToolStripMenuItem.Text = "MemoEditor_49";
-            // 
-            // mnuPrintPreview
-            // 
+            this.printToolStripMenuItem.Size = new Size(44, 20);
+            this.printToolStripMenuItem.Text = "Print";
             this.mnuPrintPreview.Name = "mnuPrintPreview";
-            this.mnuPrintPreview.Size = new System.Drawing.Size(157, 22);
-            this.mnuPrintPreview.Text = "MemoEditor_51";
-            this.mnuPrintPreview.Click += new System.EventHandler(this.mnuPrintPreview_Click);
-            // 
-            // mnuPrint
-            // 
+            this.mnuPrintPreview.Size = new Size(180, 22);
+            this.mnuPrintPreview.Text = "Print Preview...";
+            this.mnuPrintPreview.Click += new EventHandler(this.mnuPrintPreview_Click);
             this.mnuPrint.Name = "mnuPrint";
-            this.mnuPrint.Size = new System.Drawing.Size(157, 22);
-            this.mnuPrint.Text = "MemoEditor_53";
-            this.mnuPrint.Click += new System.EventHandler(this.mnuPrint_Click);
-            // 
-            // menu_Speech
-            // 
-            this.menu_Speech.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_PlayFile,
-            this.mnu_StopPlayback,
-            this.toolStripMenuItem2,
-            this.mnu_Voices,
-            this.mnu_PlaySpeed});
+            this.mnuPrint.Size = new Size(180, 22);
+            this.mnuPrint.Text = "Print Document(s)...";
+            this.mnuPrint.Click += new EventHandler(this.mnuPrint_Click);
+            ToolStripItemCollection dropDownItems1 = this.menu_Speech.DropDownItems;
+            ToolStripItem[] mnuPlayFile = new ToolStripItem[] { this.mnu_PlayFile, this.mnu_StopPlayback, this.toolStripMenuItem2, this.mnu_Voices, this.mnu_PlaySpeed };
+            this.menu_Speech.DropDownItems.AddRange(mnuPlayFile);
             this.menu_Speech.Name = "menu_Speech";
-            this.menu_Speech.Size = new System.Drawing.Size(102, 20);
-            this.menu_Speech.Text = "MemoEditor_55";
-            // 
-            // mnu_PlayFile
-            // 
+            this.menu_Speech.Size = new Size(57, 20);
+            this.menu_Speech.Text = "Speech";
             this.mnu_PlayFile.Name = "mnu_PlayFile";
-            this.mnu_PlayFile.Size = new System.Drawing.Size(157, 22);
-            this.mnu_PlayFile.Text = "MemoEditor_57";
-            this.mnu_PlayFile.Click += new System.EventHandler(this.mnu_PlayFile_Click);
-            // 
-            // mnu_StopPlayback
-            // 
+            this.mnu_PlayFile.Size = new Size(148, 22);
+            this.mnu_PlayFile.Text = "Play File";
+            this.mnu_PlayFile.Click += new EventHandler(this.mnu_PlayFile_Click);
             this.mnu_StopPlayback.Name = "mnu_StopPlayback";
-            this.mnu_StopPlayback.Size = new System.Drawing.Size(157, 22);
-            this.mnu_StopPlayback.Text = "MemoEditor_59";
-            this.mnu_StopPlayback.Click += new System.EventHandler(this.mnu_StopPlayback_Click);
-            // 
-            // toolStripMenuItem2
-            // 
+            this.mnu_StopPlayback.Size = new Size(148, 22);
+            this.mnu_StopPlayback.Text = "Stop Playback";
+            this.mnu_StopPlayback.Click += new EventHandler(this.mnu_StopPlayback_Click);
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(154, 6);
-            // 
-            // mnu_Voices
-            // 
-            this.mnu_Voices.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.cboVoices});
+            this.toolStripMenuItem2.Size = new Size(145, 6);
+            this.mnu_Voices.DropDownItems.AddRange(new ToolStripItem[] { this.cboVoices });
             this.mnu_Voices.Name = "mnu_Voices";
-            this.mnu_Voices.Size = new System.Drawing.Size(157, 22);
-            this.mnu_Voices.Text = "MemoEditor_62";
-            // 
-            // cboVoices
-            // 
+            this.mnu_Voices.Size = new Size(148, 22);
+            this.mnu_Voices.Text = "Voices";
             this.cboVoices.Name = "cboVoices";
-            this.cboVoices.Size = new System.Drawing.Size(121, 23);
-            this.cboVoices.SelectedIndexChanged += new System.EventHandler(this.cboVoices_SelectedIndexChanged);
-            // 
-            // mnu_PlaySpeed
-            // 
-            this.mnu_PlaySpeed.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_Faster,
-            this.mnu_Slower,
-            this.mnu_NormalSpeed});
+            this.cboVoices.Size = new Size(121, 23);
+            this.cboVoices.SelectedIndexChanged += new EventHandler(this.cboVoices_SelectedIndexChanged);
+            ToolStripItemCollection toolStripItemCollections1 = this.mnu_PlaySpeed.DropDownItems;
+            ToolStripItem[] mnuFaster = new ToolStripItem[] { this.mnu_Faster, this.mnu_Slower, this.mnu_NormalSpeed };
+            this.mnu_PlaySpeed.DropDownItems.AddRange(mnuFaster);
             this.mnu_PlaySpeed.Name = "mnu_PlaySpeed";
-            this.mnu_PlaySpeed.Size = new System.Drawing.Size(157, 22);
-            this.mnu_PlaySpeed.Text = "MemoEditor_65";
-            // 
-            // mnu_Faster
-            // 
+            this.mnu_PlaySpeed.Size = new Size(148, 22);
+            this.mnu_PlaySpeed.Text = "Play Speed";
             this.mnu_Faster.Name = "mnu_Faster";
-            this.mnu_Faster.Size = new System.Drawing.Size(157, 22);
-            this.mnu_Faster.Text = "MemoEditor_67";
-            this.mnu_Faster.Click += new System.EventHandler(this.mnu_Faster_Click);
-            // 
-            // mnu_Slower
-            // 
+            this.mnu_Faster.Size = new Size(114, 22);
+            this.mnu_Faster.Text = "Faster";
+            this.mnu_Faster.Click += new EventHandler(this.mnu_Faster_Click);
             this.mnu_Slower.Name = "mnu_Slower";
-            this.mnu_Slower.Size = new System.Drawing.Size(157, 22);
-            this.mnu_Slower.Text = "MemoEditor_69";
-            this.mnu_Slower.Click += new System.EventHandler(this.mnu_Slower_Click);
-            // 
-            // mnu_NormalSpeed
-            // 
+            this.mnu_Slower.Size = new Size(114, 22);
+            this.mnu_Slower.Text = "Slower";
+            this.mnu_Slower.Click += new EventHandler(this.mnu_Slower_Click);
             this.mnu_NormalSpeed.Name = "mnu_NormalSpeed";
-            this.mnu_NormalSpeed.Size = new System.Drawing.Size(157, 22);
-            this.mnu_NormalSpeed.Text = "MemoEditor_71";
-            this.mnu_NormalSpeed.Click += new System.EventHandler(this.mnu_NormalSpeed_Click);
-            // 
-            // EditMenu
-            // 
-            this.EditMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnu_StartRedact,
-            this.mnu_EndRedact});
-            this.EditMenu.Name = "MemoEditor_74";
-            this.EditMenu.Size = new System.Drawing.Size(158, 48);
-            // 
-            // mnu_StartRedact
-            // 
+            this.mnu_NormalSpeed.Size = new Size(114, 22);
+            this.mnu_NormalSpeed.Text = "Normal";
+            this.mnu_NormalSpeed.Click += new EventHandler(this.mnu_NormalSpeed_Click);
+            this.textControl1.ContextMenuStrip = this.EditMenu;
+            this.textControl1.Dock = DockStyle.Fill;
+            this.textControl1.Font = new Font("Arial", 10f);
+            this.textControl1.Location = new Point(0, 24);
+            this.textControl1.Name = "textControl1";
+            this.textControl1.RulerBar = this.rulerBar1;
+            this.textControl1.Size = new Size(936, 904);
+            this.textControl1.StatusBar = this.statusBar1;
+            this.textControl1.TabIndex = 1;
+            this.textControl1.VerticalRulerBar = this.rulerBar2;
+            this.textControl1.KeyUp += new KeyEventHandler(this.textControl1_KeyUp);
+            ToolStripItemCollection items1 = this.EditMenu.Items;
+            ToolStripItem[] mnuStartRedact = new ToolStripItem[] { this.mnu_StartRedact, this.mnu_EndRedact };
+            this.EditMenu.Items.AddRange(mnuStartRedact);
+            this.EditMenu.Name = "EditMenu";
+            this.EditMenu.Size = new Size(141, 48);
             this.mnu_StartRedact.Name = "mnu_StartRedact";
-            this.mnu_StartRedact.Size = new System.Drawing.Size(157, 22);
-            this.mnu_StartRedact.Text = "MemoEditor_76";
-            this.mnu_StartRedact.Click += new System.EventHandler(this.mnu_StartRedact_Click);
-            // 
-            // mnu_EndRedact
-            // 
+            this.mnu_StartRedact.Size = new Size(140, 22);
+            this.mnu_StartRedact.Text = "Redact Text";
+            this.mnu_StartRedact.Click += new EventHandler(this.mnu_StartRedact_Click);
             this.mnu_EndRedact.Name = "mnu_EndRedact";
-            this.mnu_EndRedact.Size = new System.Drawing.Size(157, 22);
-            this.mnu_EndRedact.Text = "MemoEditor_78";
-            this.mnu_EndRedact.Click += new System.EventHandler(this.mnu_EndRedact_Click);
-            // 
-            // rulerBar1
-            // 
-            this.rulerBar1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.rulerBar1.Location = new System.Drawing.Point(0, 24);
+            this.mnu_EndRedact.Size = new Size(140, 22);
+            this.mnu_EndRedact.Text = "Clear Redact";
+            this.mnu_EndRedact.Click += new EventHandler(this.mnu_EndRedact_Click);
+            this.rulerBar1.Dock = DockStyle.Top;
+            this.rulerBar1.Location = new Point(0, 24);
             this.rulerBar1.Name = "rulerBar1";
-            this.rulerBar1.Size = new System.Drawing.Size(936, 25);
+            this.rulerBar1.Size = new Size(936, 25);
             this.rulerBar1.TabIndex = 3;
-            this.rulerBar1.Text = "MemoEditor_80";
-            // 
-            // statusBar1
-            // 
-            this.statusBar1.BackColor = System.Drawing.SystemColors.Control;
-            this.statusBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.statusBar1.Location = new System.Drawing.Point(0, 719);
+            this.rulerBar1.Text = "rulerBar1";
+            this.statusBar1.BackColor = SystemColors.Control;
+            this.statusBar1.Dock = DockStyle.Bottom;
+            this.statusBar1.Location = new Point(0, 928);
             this.statusBar1.Name = "statusBar1";
-            this.statusBar1.Size = new System.Drawing.Size(936, 22);
+            this.statusBar1.Size = new Size(936, 22);
             this.statusBar1.TabIndex = 2;
-            // 
-            // rulerBar2
-            // 
-            this.rulerBar2.Alignment = TXTextControl.RulerBarAlignment.Left;
-            this.rulerBar2.Dock = System.Windows.Forms.DockStyle.Left;
-            this.rulerBar2.Location = new System.Drawing.Point(0, 49);
+            this.rulerBar2.Alignment = RulerBarAlignment.Left;
+            this.rulerBar2.Dock = DockStyle.Left;
+            this.rulerBar2.Location = new Point(0, 49);
             this.rulerBar2.Name = "rulerBar2";
-            this.rulerBar2.Size = new System.Drawing.Size(25, 670);
+            this.rulerBar2.Size = new Size(25, 879);
             this.rulerBar2.TabIndex = 4;
-            this.rulerBar2.Text = "MemoEditor_83";
-            // 
-            // EditorForm
-            // 
+            this.rulerBar2.Text = "rulerBar2";
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(936, 741);
@@ -573,12 +498,13 @@ namespace MemoEditor
             this.Controls.Add(this.rulerBar1);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.statusBar1);
-            this.Icon = global::MemoEditor.Resources.EditorForm.EditorFormIcon;
+            this.Controls.Add(this.textControl1);
+            this.Icon = Resources.EditorForm.EditorFormIcon;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "EditorForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "MemoEditor_86";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EditorForm_FormClosing);
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.Text = "Memo Editor";
+            this.FormClosing += new FormClosingEventHandler(this.EditorForm_FormClosing);
             this.Load += new System.EventHandler(this.EditorForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
