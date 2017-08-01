@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
@@ -882,38 +881,41 @@ namespace VideoPlayer2
                         using (FileStream fileStream = new FileStream(str2, FileMode.Open, FileAccess.Read))
                             tNail = Image.FromStream(fileStream);
                     }
-                    //TODO : Доделать завтра
                 }
                 catch (Exception ex)
                 {
+                    //TODO: Delegate
                     VideoForm videoForm = this;
                     int num;
-                    this.BeginInvoke((Delegate)(() => num = (int)MessageBox.Show((IWin32Window)videoForm, string.Format(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(12358), (object)ex.Message), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(12400), MessageBoxButtons.OK, MessageBoxIcon.Hand)));
+                    Func<int> p1;
+                    BeginInvoke((p1 = () => num = (int)MessageBox.Show(videoForm, string.Format("VideoForm_56", ex.Message), "VideoForm_56", MessageBoxButtons.OK, MessageBoxIcon.Hand)));
                 }
                 if (tNail == null)
                     return;
                 Snapshot rec = new Snapshot();
                 using (RPM_Snapshot rpmSnapshot = new RPM_Snapshot())
                 {
-                    rec.DataFileId = this.Media[this.fileIndex].FileID;
+                    rec.DataFileId = Media[fileIndex].FileID;
                     rec.FileAddedTimestamp = new DateTime?(DateTime.Now);
-                    rec.FileExtension = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9040);
-                    tNail = Unity.Utilities.resizeImage(160, 100, Image.FromFile(str2));
-                    rec.Thumbnail = Unity.Utilities.ImageToByte(tNail);
+                    rec.FileExtension = "VideoForm_57";
+                    tNail = Utilities.resizeImage(160, 100, Image.FromFile(str2));
+                    rec.Thumbnail = Utilities.ImageToByte(tNail);
                     rec.StoredFileName = path2;
-                    rec.FrameNumber = Convert.ToInt32(this.lblFrame.Text);
+                    rec.FrameNumber = Convert.ToInt32(lblFrame.Text);
                     rec.UNCName = Path.Combine(Global.UNCServer, Global.RelativePath);
                     rec.UNCPath = uncPath;
                     rec.FileHash = string.Empty;
                     rpmSnapshot.SaveUpdate(rec);
                     rpmSnapshot.Save();
                 }
-                this.BeginInvoke((Delegate)(() =>
+                //TODO: Delegate
+                Action p2;
+                this.BeginInvoke((p2 = () =>
                 {
-                    this.btnSnapshot.Enabled = true;
-                    if (this.thumbPanel == null)
+                    btnSnapshot.Enabled = true;
+                    if (thumbPanel == null)
                         return;
-                    this.thumbPanel.AddImage(rec, tNail);
+                    thumbPanel.AddImage(rec, tNail);
                 }));
             }
             catch (Exception ex)
@@ -925,39 +927,39 @@ namespace VideoPlayer2
         
         private void chk_TagsOnly_CheckedChanged(object sender, EventArgs e)
         {
-            this.IsPlayTags = !this.IsPlayTags;
-            if (this.IsPlayTags)
+            IsPlayTags = !IsPlayTags;
+            if (IsPlayTags)
             {
-                this.TagIndex = 0;
-                this.VideoBar.Enabled = false;
-                this.PlayTags(0);
-                this.lbl_TagState.Text = LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9052), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9084));
+                TagIndex = 0;
+                VideoBar.Enabled = false;
+                PlayTags(0);
+                lbl_TagState.Text = LangCtrl.GetString("VideoForm_58", "VideoForm_59");
             }
             else
             {
-                this.VideoBar.Enabled = true;
-                this.lbl_TagState.Text = LangCtrl.GetString(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9116), eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9134));
+                VideoBar.Enabled = true;
+                lbl_TagState.Text = LangCtrl.GetString("VideoForm_60", "VideoForm_61");
             }
         }
 
         
         private void tagPanel_EVT_MergeVideo(string folder)
         {
-            if (this.Media.Count <= 0)
+            if (Media.Count <= 0)
                 return;
             MergeVideo mergeVideo = new MergeVideo();
-            mergeVideo.EVT_StopPlayer -= new MergeVideo.DEL_StopPlayer(this.mVid_EVT_StopPlayer);
-            mergeVideo.EVT_StopPlayer += new MergeVideo.DEL_StopPlayer(this.mVid_EVT_StopPlayer);
+            mergeVideo.EVT_StopPlayer -= new MergeVideo.DEL_StopPlayer(mVid_EVT_StopPlayer);
+            mergeVideo.EVT_StopPlayer += new MergeVideo.DEL_StopPlayer(mVid_EVT_StopPlayer);
             mergeVideo.VideoPath = folder;
-            mergeVideo.media = this.Media;
-            int num = (int)mergeVideo.ShowDialog((IWin32Window)this);
-            mergeVideo.EVT_StopPlayer -= new MergeVideo.DEL_StopPlayer(this.mVid_EVT_StopPlayer);
+            mergeVideo.media = Media;
+            int num = (int)mergeVideo.ShowDialog(this);
+            mergeVideo.EVT_StopPlayer -= new MergeVideo.DEL_StopPlayer(mVid_EVT_StopPlayer);
         }
 
         
         private void mVid_EVT_StopPlayer()
         {
-            this.StopPlayer();
+            StopPlayer();
         }
 
         
@@ -971,7 +973,7 @@ namespace VideoPlayer2
         
         private void InitializeComponent()
         {
-            this.components = (IContainer)new Container();
+            this.components = new Container();
             ComponentResourceManager componentResourceManager = new ComponentResourceManager(typeof(VideoForm));
             this.FormPanel = new Panel();
             this.VCRPanel = new Panel();
@@ -1048,9 +1050,9 @@ namespace VideoPlayer2
             this.FormPanel.Controls.Add((Control)this.ControlPanel);
             this.FormPanel.Controls.Add((Control)this.HeaderPanel);
             this.FormPanel.Dock = DockStyle.Fill;
-            this.FormPanel.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9146), 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.FormPanel.Font = new Font("VideoForm_62", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
             this.FormPanel.Location = new Point(0, 0);
-            this.FormPanel.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9190);
+            this.FormPanel.Name = "VideoForm_63";
             this.FormPanel.Size = new Size(1000, 650);
             this.FormPanel.TabIndex = 0;
             this.VCRPanel.Controls.Add((Control)this.VolPic);
@@ -1074,13 +1076,13 @@ namespace VideoPlayer2
             this.VCRPanel.Controls.Add((Control)this.VolumeBar);
             this.VCRPanel.Dock = DockStyle.Bottom;
             this.VCRPanel.Location = new Point(0, 544);
-            this.VCRPanel.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9212);
+            this.VCRPanel.Name = "VideoForm_64";
             this.VCRPanel.Size = new Size(647, 104);
             this.VCRPanel.TabIndex = 2;
             this.VolPic.Cursor = Cursors.Hand;
-            this.VolPic.Image = (Image)Resources.volume;
+            this.VolPic.Image = (Image)Properties.Resources.volume;
             this.VolPic.Location = new Point(401, 75);
-            this.VolPic.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9232);
+            this.VolPic.Name = "VideoForm_65";
             this.VolPic.Size = new Size(20, 20);
             this.VolPic.SizeMode = PictureBoxSizeMode.CenterImage;
             this.VolPic.TabIndex = 42;
@@ -1088,9 +1090,9 @@ namespace VideoPlayer2
             this.VolPic.MouseClick += new MouseEventHandler(this.VolPic_MouseClick);
             this.btnStop.AllowAnimations = true;
             this.btnStop.BackColor = Color.Transparent;
-            this.btnStop.Image = (Image)Resources.stop;
+            this.btnStop.Image = (Image)Properties.Resources.stop;
             this.btnStop.Location = new Point(58, 3);
-            this.btnStop.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9248);
+            this.btnStop.Name = "VideoForm_66";
             this.btnStop.RoundedCornersMask = (byte)15;
             this.btnStop.RoundedCornersRadius = 0;
             this.btnStop.Size = new Size(28, 28);
@@ -1100,9 +1102,9 @@ namespace VideoPlayer2
             this.btnStop.Click += new EventHandler(this.btnStop_Click);
             this.btnPlay.AllowAnimations = true;
             this.btnPlay.BackColor = Color.Transparent;
-            this.btnPlay.Image = (Image)Resources.pause;
+            this.btnPlay.Image = (Image)Properties.Resources.pause;
             this.btnPlay.Location = new Point(24, 3);
-            this.btnPlay.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9266);
+            this.btnPlay.Name = "VideoForm_67";
             this.btnPlay.RoundedCornersMask = (byte)15;
             this.btnPlay.RoundedCornersRadius = 0;
             this.btnPlay.Size = new Size(28, 28);
@@ -1110,47 +1112,47 @@ namespace VideoPlayer2
             this.btnPlay.UseVisualStyleBackColor = false;
             this.btnPlay.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.btnPlay.Click += new EventHandler(this.btnPlay_Click);
-            this.picEvidence.Image = (Image)Resources.star;
+            this.picEvidence.Image = (Image)Properties.Resources.star;
             this.picEvidence.Location = new Point(462, 4);
-            this.picEvidence.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9284);
+            this.picEvidence.Name = "VideoForm_68";
             this.picEvidence.Size = new Size(20, 20);
             this.picEvidence.SizeMode = PictureBoxSizeMode.CenterImage;
             this.picEvidence.TabIndex = 41;
             this.picEvidence.TabStop = false;
             this.lblTime.BorderStyle = BorderStyle.FixedSingle;
-            this.lblTime.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9310), 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.lblTime.Font = new Font("VideoForm_69", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
             this.lblTime.Location = new Point(24, 41);
-            this.lblTime.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9354);
+            this.lblTime.Name = "VideoForm_70";
             this.lblTime.Size = new Size(130, 23);
             this.lblTime.TabIndex = 19;
-            this.lblTime.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9372);
+            this.lblTime.Text = "VideoForm_71";
             this.lblTime.TextAlign = ContentAlignment.MiddleCenter;
             this.lblSet.AutoSize = true;
             this.lblSet.Location = new Point(462, 80);
-            this.lblSet.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9400);
+            this.lblSet.Name = "VideoForm_72";
             this.lblSet.Size = new Size(23, 13);
             this.lblSet.TabIndex = 40;
-            this.lblSet.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9416);
+            this.lblSet.Text = "VideoForm_73";
             this.lblFrame.BorderStyle = BorderStyle.FixedSingle;
-            this.lblFrame.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9426), 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.lblFrame.Font = new Font("VideoForm_74", 8.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
             this.lblFrame.Location = new Point(24, 72);
-            this.lblFrame.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9470);
+            this.lblFrame.Name = "VideoForm_75";
             this.lblFrame.Size = new Size(130, 23);
             this.lblFrame.TabIndex = 20;
-            this.lblFrame.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9490);
+            this.lblFrame.Text = "VideoForm_76";
             this.lblFrame.TextAlign = ContentAlignment.MiddleCenter;
             this.lbl_Classification.AutoSize = true;
             this.lbl_Classification.Location = new Point(462, 63);
-            this.lbl_Classification.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9496);
+            this.lbl_Classification.Name = "VideoForm_77";
             this.lbl_Classification.Size = new Size(68, 13);
             this.lbl_Classification.TabIndex = 39;
-            this.lbl_Classification.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9536);
+            this.lbl_Classification.Text = "VideoForm_78";
             this.btnPrev.AllowAnimations = true;
             this.btnPrev.BackColor = Color.Transparent;
             this.btnPrev.Enabled = false;
-            this.btnPrev.Image = (Image)Resources.file_prev;
+            this.btnPrev.Image = (Image)Properties.Resources.file_prev;
             this.btnPrev.Location = new Point(92, 3);
-            this.btnPrev.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9568);
+            this.btnPrev.Name = "VideoForm_79";
             this.btnPrev.RoundedCornersMask = (byte)15;
             this.btnPrev.RoundedCornersRadius = 0;
             this.btnPrev.Size = new Size(28, 28);
@@ -1160,16 +1162,16 @@ namespace VideoPlayer2
             this.btnPrev.Click += new EventHandler(this.btnPrev_Click);
             this.lbl_Filedate.AutoSize = true;
             this.lbl_Filedate.Location = new Point(462, 46);
-            this.lbl_Filedate.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9586);
+            this.lbl_Filedate.Name = "VideoForm_80";
             this.lbl_Filedate.Size = new Size(158, 13);
             this.lbl_Filedate.TabIndex = 37;
-            this.lbl_Filedate.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9614);
+            this.lbl_Filedate.Text = "VideoForm_81";
             this.btnNext.AllowAnimations = true;
             this.btnNext.BackColor = Color.Transparent;
             this.btnNext.Enabled = false;
-            this.btnNext.Image = (Image)Resources.filenext;
+            this.btnNext.Image = (Image)Properties.Resources.filenext;
             this.btnNext.Location = new Point(126, 3);
-            this.btnNext.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9678);
+            this.btnNext.Name = "VideoForm_82";
             this.btnNext.RoundedCornersMask = (byte)15;
             this.btnNext.RoundedCornersRadius = 0;
             this.btnNext.Size = new Size(28, 28);
@@ -1179,57 +1181,57 @@ namespace VideoPlayer2
             this.btnNext.Click += new EventHandler(this.btnNext_Click);
             this.chk_TagsOnly.BackColor = Color.Transparent;
             this.chk_TagsOnly.Location = new Point(172, 41);
-            this.chk_TagsOnly.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9696);
+            this.chk_TagsOnly.Name = "VideoForm_83";
             this.chk_TagsOnly.Size = new Size(118, 24);
             this.chk_TagsOnly.TabIndex = 36;
-            this.chk_TagsOnly.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9724);
+            this.chk_TagsOnly.Text = "VideoForm_84";
             this.chk_TagsOnly.UseVisualStyleBackColor = false;
             this.chk_TagsOnly.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.chk_TagsOnly.CheckedChanged += new EventHandler(this.chk_TagsOnly_CheckedChanged);
             this.btnFrameMinus.AllowAnimations = true;
             this.btnFrameMinus.BackColor = Color.Transparent;
-            this.btnFrameMinus.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9760), 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.btnFrameMinus.Font = new Font("VideoForm_85", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
             this.btnFrameMinus.Location = new Point(172, 3);
-            this.btnFrameMinus.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9804);
+            this.btnFrameMinus.Name = "VideoForm_86";
             this.btnFrameMinus.RoundedCornersMask = (byte)15;
             this.btnFrameMinus.RoundedCornersRadius = 0;
             this.btnFrameMinus.Size = new Size(28, 28);
             this.btnFrameMinus.TabIndex = 23;
-            this.btnFrameMinus.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9834);
+            this.btnFrameMinus.Text = "VideoForm_87";
             this.btnFrameMinus.UseVisualStyleBackColor = false;
             this.btnFrameMinus.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.btnFrameMinus.Click += new EventHandler(this.btnFrameMinus_Click);
             this.lbl_SecurityLevel.AutoSize = true;
             this.lbl_SecurityLevel.BorderStyle = BorderStyle.FixedSingle;
             this.lbl_SecurityLevel.Location = new Point(462, 27);
-            this.lbl_SecurityLevel.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9840);
+            this.lbl_SecurityLevel.Name = "VideoForm_88";
             this.lbl_SecurityLevel.Size = new Size(66, 15);
             this.lbl_SecurityLevel.TabIndex = 35;
-            this.lbl_SecurityLevel.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9878);
+            this.lbl_SecurityLevel.Text = "VideoForm_89";
             this.btnFramePlus.AllowAnimations = true;
             this.btnFramePlus.BackColor = Color.Transparent;
-            this.btnFramePlus.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9906), 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.btnFramePlus.Font = new Font("VideoForm_90", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
             this.btnFramePlus.Location = new Point(206, 3);
-            this.btnFramePlus.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9950);
+            this.btnFramePlus.Name = "VideoForm_91";
             this.btnFramePlus.RoundedCornersMask = (byte)15;
             this.btnFramePlus.RoundedCornersRadius = 0;
             this.btnFramePlus.Size = new Size(28, 28);
             this.btnFramePlus.TabIndex = 25;
-            this.btnFramePlus.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9978);
+            this.btnFramePlus.Text = "VideoForm_92";
             this.btnFramePlus.UseVisualStyleBackColor = false;
             this.btnFramePlus.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.btnFramePlus.Click += new EventHandler(this.btnFramePlus_Click);
             this.lblSpeed.Location = new Point((int)byte.MaxValue, 81);
-            this.lblSpeed.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(9984);
+            this.lblSpeed.Name = "VideoForm_93";
             this.lblSpeed.Size = new Size(49, 14);
             this.lblSpeed.TabIndex = 33;
-            this.lblSpeed.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10004);
+            this.lblSpeed.Text = "VideoForm_94";
             this.lblSpeed.TextAlign = ContentAlignment.MiddleRight;
             this.SpeedBar.AutoSize = false;
             this.SpeedBar.Location = new Point(310, 3);
             this.SpeedBar.Maximum = 8;
             this.SpeedBar.Minimum = 1;
-            this.SpeedBar.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10012);
+            this.SpeedBar.Name = "VideoForm_95";
             this.SpeedBar.Orientation = Orientation.Vertical;
             this.SpeedBar.Size = new Size(40, 98);
             this.SpeedBar.TabIndex = 29;
@@ -1237,9 +1239,9 @@ namespace VideoPlayer2
             this.SpeedBar.Scroll += new EventHandler(this.SpeedBar_Scroll);
             this.btnSnapshot.AllowAnimations = true;
             this.btnSnapshot.BackColor = Color.Transparent;
-            this.btnSnapshot.Image = (Image)Resources.snapshot;
+            this.btnSnapshot.Image = (Image)Properties.Resources.snapshot;
             this.btnSnapshot.Location = new Point(240, 3);
-            this.btnSnapshot.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10032);
+            this.btnSnapshot.Name = "VideoForm_96";
             this.btnSnapshot.RoundedCornersMask = (byte)15;
             this.btnSnapshot.RoundedCornersRadius = 0;
             this.btnSnapshot.Size = new Size(28, 28);
@@ -1250,7 +1252,7 @@ namespace VideoPlayer2
             this.VolumeBar.AutoSize = false;
             this.VolumeBar.Location = new Point(357, 3);
             this.VolumeBar.Maximum = 100;
-            this.VolumeBar.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10058);
+            this.VolumeBar.Name = "VideoForm_97";
             this.VolumeBar.Orientation = Orientation.Vertical;
             this.VolumeBar.Size = new Size(40, 98);
             this.VolumeBar.TabIndex = 30;
@@ -1259,20 +1261,20 @@ namespace VideoPlayer2
             this.VolumeBar.Value = 50;
             this.VolumeBar.Scroll += new EventHandler(this.VolumeBar_Scroll);
             this.VideoPanel.BackColor = Color.Black;
-            this.VideoPanel.BackgroundImage = (Image)Resources.video;
+            this.VideoPanel.BackgroundImage = (Image)Properties.Resources.video;
             this.VideoPanel.BackgroundImageLayout = ImageLayout.Center;
             this.VideoPanel.Controls.Add((Control)this.vlc);
             this.VideoPanel.Dock = DockStyle.Top;
             this.VideoPanel.Location = new Point(0, 45);
-            this.VideoPanel.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10080);
+            this.VideoPanel.Name = "VideoForm_98";
             this.VideoPanel.Padding = new Padding(0, 1, 0, 0);
             this.VideoPanel.Size = new Size(647, 451);
             this.VideoPanel.TabIndex = 0;
             this.vlc.Dock = DockStyle.Fill;
             this.vlc.Enabled = true;
             this.vlc.Location = new Point(0, 1);
-            this.vlc.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10104);
-            this.vlc.OcxState = (AxHost.State)componentResourceManager.GetObject(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10114));
+            this.vlc.Name = "VideoForm_99";
+            this.vlc.OcxState = (AxHost.State)Resources.VideoForm.vlc_OcxState;
             this.vlc.Size = new Size(647, 450);
             this.vlc.TabIndex = 0;
             this.vlc.MediaPlayerEndReached += new EventHandler(this.vlc_MediaPlayerEndReached);
@@ -1287,7 +1289,7 @@ namespace VideoPlayer2
             this.TrackbarTable.Controls.Add((Control)this.lbl_TagState, 1, 1);
             this.TrackbarTable.Controls.Add((Control)this.lbl_VideoTime, 3, 1);
             this.TrackbarTable.Location = new Point(0, 499);
-            this.TrackbarTable.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10142);
+            this.TrackbarTable.Name = "VideoForm_100";
             this.TrackbarTable.RowCount = 2;
             this.TrackbarTable.RowStyles.Add(new RowStyle(SizeType.Percent, 100f));
             this.TrackbarTable.RowStyles.Add(new RowStyle(SizeType.Absolute, 14f));
@@ -1298,7 +1300,7 @@ namespace VideoPlayer2
             this.VideoBar.ContextMenuStrip = this.VideoMenu;
             this.VideoBar.Dock = DockStyle.Fill;
             this.VideoBar.Location = new Point(23, 3);
-            this.VideoBar.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10172);
+            this.VideoBar.Name = "VideoForm_101";
             this.VideoBar.RoundedCornersMask = (byte)15;
             this.VideoBar.RoundedCornersMaskThumb = (byte)15;
             this.VideoBar.RoundedCornersRadius = 0;
@@ -1317,57 +1319,57 @@ namespace VideoPlayer2
         (ToolStripItem) this.mnu_TagSave,
         (ToolStripItem) this.mnu_TagLoop
             });
-            this.VideoMenu.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10192);
+            this.VideoMenu.Name = "VideoForm_102";
             this.VideoMenu.Size = new Size(170, 120);
-            this.mnu_TagStart.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10214);
+            this.mnu_TagStart.Name = "VideoForm_103";
             this.mnu_TagStart.Size = new Size(169, 22);
-            this.mnu_TagStart.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10242);
+            this.mnu_TagStart.Text = "VideoForm_104";
             this.mnu_TagStart.Click += new EventHandler(this.mnu_TagStart_Click);
-            this.mnu_TagEnd.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10270);
+            this.mnu_TagEnd.Name = "VideoForm_105";
             this.mnu_TagEnd.Size = new Size(169, 22);
-            this.mnu_TagEnd.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10294);
+            this.mnu_TagEnd.Text = "VideoForm_106";
             this.mnu_TagEnd.Click += new EventHandler(this.mnu_TagEnd_Click);
-            this.mnu_TagClear.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10318);
+            this.mnu_TagClear.Name = "VideoForm_107";
             this.mnu_TagClear.Size = new Size(169, 22);
-            this.mnu_TagClear.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10346);
+            this.mnu_TagClear.Text = "VideoForm_108";
             this.mnu_TagClear.Click += new EventHandler(this.mnu_TagClear_Click);
-            this.toolStripMenuItem1.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10374);
+            this.toolStripMenuItem1.Name = "VideoForm_109";
             this.toolStripMenuItem1.Size = new Size(166, 6);
-            this.mnu_TagSave.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10414);
+            this.mnu_TagSave.Name = "VideoForm_110";
             this.mnu_TagSave.Size = new Size(169, 22);
-            this.mnu_TagSave.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10440);
+            this.mnu_TagSave.Text = "VideoForm_111";
             this.mnu_TagSave.Click += new EventHandler(this.mnu_TagSave_Click);
-            this.mnu_TagLoop.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10474);
+            this.mnu_TagLoop.Name = "VideoForm_112";
             this.mnu_TagLoop.Size = new Size(169, 22);
-            this.mnu_TagLoop.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10500);
+            this.mnu_TagLoop.Text = "VideoForm_113";
             this.mnu_TagLoop.Click += new EventHandler(this.mnu_TagLoop_Click);
             this.lbl_File.AutoSize = true;
             this.lbl_File.Dock = DockStyle.Fill;
             this.lbl_File.Location = new Point(265, 28);
-            this.lbl_File.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10536);
+            this.lbl_File.Name = "VideoForm_114";
             this.lbl_File.Size = new Size(115, 14);
             this.lbl_File.TabIndex = 34;
-            this.lbl_File.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10556);
+            this.lbl_File.Text = "VideoForm_115";
             this.lbl_File.TextAlign = ContentAlignment.MiddleCenter;
             this.lbl_TagState.AutoSize = true;
             this.lbl_TagState.Dock = DockStyle.Fill;
-            this.lbl_TagState.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10580), 6.75f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.lbl_TagState.Font = new Font("VideoForm_116", 6.75f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
             this.lbl_TagState.ForeColor = Color.FromArgb(64, 64, 64);
             this.lbl_TagState.Location = new Point(23, 28);
-            this.lbl_TagState.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10624);
+            this.lbl_TagState.Name = "VideoForm_117";
             this.lbl_TagState.Size = new Size(236, 14);
             this.lbl_TagState.TabIndex = 1;
-            this.lbl_TagState.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10652);
+            this.lbl_TagState.Text = "VideoForm_118";
             this.lbl_VideoTime.AutoSize = true;
             this.lbl_VideoTime.Dock = DockStyle.Fill;
-            this.lbl_VideoTime.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10664), 6.75f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.lbl_VideoTime.Font = new Font("VideoForm_119", 6.75f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
             this.lbl_VideoTime.ForeColor = Color.FromArgb(64, 64, 64);
             this.lbl_VideoTime.Location = new Point(386, 28);
             this.lbl_VideoTime.Margin = new Padding(3, 0, 0, 0);
-            this.lbl_VideoTime.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10708);
+            this.lbl_VideoTime.Name = "VideoForm_119";
             this.lbl_VideoTime.Size = new Size(239, 14);
             this.lbl_VideoTime.TabIndex = 2;
-            this.lbl_VideoTime.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10738);
+            this.lbl_VideoTime.Text = "VideoForm_120";
             this.lbl_VideoTime.TextAlign = ContentAlignment.MiddleRight;
             this.ControlPanel.AutoScroll = true;
             this.ControlPanel.Controls.Add((Control)this.OptionPanel);
@@ -1375,12 +1377,12 @@ namespace VideoPlayer2
             this.ControlPanel.Dock = DockStyle.Right;
             this.ControlPanel.Location = new Point(647, 45);
             this.ControlPanel.Margin = new Padding(0);
-            this.ControlPanel.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10766);
+            this.ControlPanel.Name = "VideoForm_121";
             this.ControlPanel.Size = new Size(351, 603);
             this.ControlPanel.TabIndex = 2;
             this.OptionPanel.Dock = DockStyle.Fill;
             this.OptionPanel.Location = new Point(0, 0);
-            this.OptionPanel.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10794);
+            this.OptionPanel.Name = "VideoForm_122";
             this.OptionPanel.Size = new Size(351, 553);
             this.OptionPanel.TabIndex = 1;
             this.MenuPanel.Controls.Add((Control)this.btnImageFiles);
@@ -1390,15 +1392,15 @@ namespace VideoPlayer2
             this.MenuPanel.Controls.Add((Control)this.btnThumbnails);
             this.MenuPanel.Dock = DockStyle.Bottom;
             this.MenuPanel.Location = new Point(0, 553);
-            this.MenuPanel.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10820);
+            this.MenuPanel.Name = "VideoForm_123";
             this.MenuPanel.Size = new Size(351, 50);
             this.MenuPanel.TabIndex = 0;
             this.btnImageFiles.AllowAnimations = true;
             this.btnImageFiles.BackColor = Color.Transparent;
-            this.btnImageFiles.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10842), 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-            this.btnImageFiles.Image = (Image)Resources.picture_2;
+            this.btnImageFiles.Font = new Font("VideoForm_124", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.btnImageFiles.Image = (Image)Properties.Resources.picture_2;
             this.btnImageFiles.Location = new Point(140, 11);
-            this.btnImageFiles.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10886);
+            this.btnImageFiles.Name = "VideoForm_125";
             this.btnImageFiles.RoundedCornersMask = (byte)15;
             this.btnImageFiles.RoundedCornersRadius = 0;
             this.btnImageFiles.Size = new Size(28, 28);
@@ -1408,24 +1410,24 @@ namespace VideoPlayer2
             this.btnImageFiles.Click += new EventHandler(this.btnImageFiles_Click);
             this.btn_Map.AllowAnimations = true;
             this.btn_Map.BackColor = Color.Transparent;
-            this.btn_Map.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10916), 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-            this.btn_Map.Image = (Image)Resources.map;
+            this.btn_Map.Font = new Font("VideoForm_126", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.btn_Map.Image = (Image)Properties.Resources.map;
             this.btn_Map.Location = new Point(4, 11);
-            this.btn_Map.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10960);
+            this.btn_Map.Name = "VideoForm_127";
             this.btn_Map.RoundedCornersMask = (byte)15;
             this.btn_Map.RoundedCornersRadius = 0;
             this.btn_Map.Size = new Size(28, 28);
             this.btn_Map.TabIndex = 26;
-            this.btn_Map.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10978);
+            this.btn_Map.Text = "VideoForm_128";
             this.btn_Map.UseVisualStyleBackColor = false;
             this.btn_Map.VIBlendTheme = VIBLEND_THEME.OFFICE2010SILVER;
             this.btn_Map.Click += new EventHandler(this.btn_Map_Click);
             this.btnFiles.AllowAnimations = true;
             this.btnFiles.BackColor = Color.Transparent;
-            this.btnFiles.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(10984), 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-            this.btnFiles.Image = (Image)Resources.folder2;
+            this.btnFiles.Font = new Font("VideoForm_129", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.btnFiles.Image = (Image)Properties.Resources.folder2;
             this.btnFiles.Location = new Point(106, 11);
-            this.btnFiles.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11028);
+            this.btnFiles.Name = "VideoForm_130";
             this.btnFiles.RoundedCornersMask = (byte)15;
             this.btnFiles.RoundedCornersRadius = 0;
             this.btnFiles.Size = new Size(28, 28);
@@ -1435,10 +1437,10 @@ namespace VideoPlayer2
             this.btnFiles.Click += new EventHandler(this.btnFiles_Click);
             this.btnTags.AllowAnimations = true;
             this.btnTags.BackColor = Color.Transparent;
-            this.btnTags.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11048), 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-            this.btnTags.Image = (Image)Resources.tag;
+            this.btnTags.Font = new Font("VideoForm_131", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.btnTags.Image = (Image)Properties.Resources.tag;
             this.btnTags.Location = new Point(72, 11);
-            this.btnTags.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11092);
+            this.btnTags.Name = "VideoForm_132";
             this.btnTags.RoundedCornersMask = (byte)15;
             this.btnTags.RoundedCornersRadius = 0;
             this.btnTags.Size = new Size(28, 28);
@@ -1448,10 +1450,10 @@ namespace VideoPlayer2
             this.btnTags.Click += new EventHandler(this.btnTags_Click);
             this.btnThumbnails.AllowAnimations = true;
             this.btnThumbnails.BackColor = Color.Transparent;
-            this.btnThumbnails.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11110), 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
-            this.btnThumbnails.Image = (Image)Resources.thumbnail;
+            this.btnThumbnails.Font = new Font("VideoForm_133", 14.25f, FontStyle.Regular, GraphicsUnit.Point, (byte)0);
+            this.btnThumbnails.Image = (Image)Properties.Resources.thumbnail;
             this.btnThumbnails.Location = new Point(38, 11);
-            this.btnThumbnails.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11154);
+            this.btnThumbnails.Name = "VideoForm_134";
             this.btnThumbnails.RoundedCornersMask = (byte)15;
             this.btnThumbnails.RoundedCornersRadius = 0;
             this.btnThumbnails.Size = new Size(28, 28);
@@ -1469,7 +1471,7 @@ namespace VideoPlayer2
             this.HeaderPanel.Controls.Add((Control)this.btnClose);
             this.HeaderPanel.Dock = DockStyle.Top;
             this.HeaderPanel.Location = new Point(0, 0);
-            this.HeaderPanel.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11184);
+            this.HeaderPanel.Name = "VideoForm_135";
             this.HeaderPanel.Size = new Size(998, 45);
             this.HeaderPanel.TabIndex = 0;
             this.HeaderPanel.MouseDown += new MouseEventHandler(this.HeaderPanel_MouseDown);
@@ -1477,34 +1479,34 @@ namespace VideoPlayer2
             this.lbl_ImageFileCount.BackColor = Color.Transparent;
             this.lbl_ImageFileCount.ForeColor = Color.White;
             this.lbl_ImageFileCount.Location = new Point(285, 25);
-            this.lbl_ImageFileCount.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11210);
+            this.lbl_ImageFileCount.Name = "VideoForm_136";
             this.lbl_ImageFileCount.Size = new Size(72, 13);
             this.lbl_ImageFileCount.TabIndex = 6;
-            this.lbl_ImageFileCount.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11250);
+            this.lbl_ImageFileCount.Text = "VideoForm_137";
             this.lbl_VideoFileCount.AutoSize = true;
             this.lbl_VideoFileCount.BackColor = Color.Transparent;
             this.lbl_VideoFileCount.ForeColor = Color.White;
             this.lbl_VideoFileCount.Location = new Point(285, 8);
-            this.lbl_VideoFileCount.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11282);
+            this.lbl_VideoFileCount.Name = "VideoForm_138";
             this.lbl_VideoFileCount.Size = new Size(70, 13);
             this.lbl_VideoFileCount.TabIndex = 5;
-            this.lbl_VideoFileCount.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11322);
+            this.lbl_VideoFileCount.Text = "VideoForm_139";
             this.lblVideoTitle.AutoSize = true;
             this.lblVideoTitle.BackColor = Color.Transparent;
-            this.lblVideoTitle.Font = new Font(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11354), 12f, FontStyle.Bold, GraphicsUnit.Point, (byte)0);
+            this.lblVideoTitle.Font = new Font("VideoForm_140", 12f, FontStyle.Bold, GraphicsUnit.Point, (byte)0);
             this.lblVideoTitle.ForeColor = Color.White;
             this.lblVideoTitle.Location = new Point(53, 4);
-            this.lblVideoTitle.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11398);
+            this.lblVideoTitle.Name = "VideoForm_141";
             this.lblVideoTitle.Size = new Size(141, 20);
             this.lblVideoTitle.TabIndex = 4;
-            this.lblVideoTitle.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11428);
+            this.lblVideoTitle.Text = "VideoForm_142";
             this.lblVideoTitle.TextAlign = ContentAlignment.MiddleLeft;
             this.lblVideoTitle.MouseDown += new MouseEventHandler(this.lblVideoTitle_MouseDown);
             this.btnCtrlPanel.AllowAnimations = true;
             this.btnCtrlPanel.BackColor = Color.Transparent;
-            this.btnCtrlPanel.Image = (Image)Resources.showhide;
+            this.btnCtrlPanel.Image = (Image)Properties.Resources.showhide;
             this.btnCtrlPanel.Location = new Point(650, 5);
-            this.btnCtrlPanel.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11456);
+            this.btnCtrlPanel.Name = "VideoForm_143";
             this.btnCtrlPanel.PaintBorder = false;
             this.btnCtrlPanel.PaintDefaultBorder = false;
             this.btnCtrlPanel.PaintDefaultFill = false;
@@ -1516,9 +1518,9 @@ namespace VideoPlayer2
             this.btnCtrlPanel.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.btnCtrlPanel.Click += new EventHandler(this.btnCtrlPanel_Click);
             this.LogoPic.BackColor = Color.Transparent;
-            this.LogoPic.Image = (Image)Resources.camlens2;
+            this.LogoPic.Image = (Image)Properties.Resources.camlens2;
             this.LogoPic.Location = new Point(8, 4);
-            this.LogoPic.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11484);
+            this.LogoPic.Name = "VideoForm_144";
             this.LogoPic.Size = new Size(36, 36);
             this.LogoPic.SizeMode = PictureBoxSizeMode.CenterImage;
             this.LogoPic.TabIndex = 1;
@@ -1527,10 +1529,10 @@ namespace VideoPlayer2
             this.btnClose.AllowAnimations = true;
             this.btnClose.BackColor = Color.Transparent;
             this.btnClose.Dock = DockStyle.Right;
-            this.btnClose.Image = (Image)Resources.close;
+            this.btnClose.Image = (Image)Properties.Resources.close;
             this.btnClose.Location = new Point(952, 0);
             this.btnClose.Margin = new Padding(0);
-            this.btnClose.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11502);
+            this.btnClose.Name = "VideoForm_145";
             this.btnClose.PaintBorder = false;
             this.btnClose.PaintDefaultBorder = false;
             this.btnClose.PaintDefaultFill = false;
@@ -1541,7 +1543,7 @@ namespace VideoPlayer2
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.VIBlendTheme = VIBLEND_THEME.VISTABLUE;
             this.btnClose.Click += new EventHandler(this.btnClose_Click);
-            this.openFileDialog1.FileName = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11522);
+            this.openFileDialog1.FileName = "VideoForm_146";
             this.openFileDialog1.Multiselect = true;
             this.timer1.Enabled = true;
             this.timer1.Interval = 500;
@@ -1551,10 +1553,10 @@ namespace VideoPlayer2
             this.ClientSize = new Size(1000, 650);
             this.Controls.Add((Control)this.FormPanel);
             this.FormBorderStyle = FormBorderStyle.None;
-            this.Icon = (Icon)componentResourceManager.GetObject(eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11556));
-            this.Name = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11580);
+            this.Icon = (Icon)Resources.VideoForm.VideoFormIcon;
+            this.Name = "VideoForm_148";
             this.StartPosition = FormStartPosition.CenterParent;
-            this.Text = eNQ3Jf6G6vENo1KFlF.eacsfnmlb(11602);
+            this.Text = "VideoForm_149";
             this.FormClosing += new FormClosingEventHandler(this.VideoForm_FormClosing);
             this.Load += new EventHandler(this.VideoForm_Load);
             this.FormPanel.ResumeLayout(false);
