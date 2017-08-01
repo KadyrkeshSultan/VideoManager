@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F43D841E-6FFA-410F-BAC1-EB3D41364FD7}</ProjectGuid>
+    <ProjectGuid>{D571E802-2326-4045-925A-3AE40B8FCA92}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GlobalCat</RootNamespace>
@@ -43,9 +43,6 @@
     <Reference Include="VIBlend.WinForms.Controls">
       <HintPath>..\packages\VIBlend.WinForms.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="VIBlend.WinForms.DataGridView">
-      <HintPath>..\packages\VIBlend.WinForms.DataGridView.dll</HintPath>
-    </Reference>
     <Reference Include="VIBlend.WinForms.Utilities">
       <HintPath>..\packages\VIBlend.WinForms.Utilities.dll</HintPath>
     </Reference>
@@ -57,8 +54,29 @@
     <Compile Include="CatalogObject.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="DataProfile.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GlobalCatForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\GlobalCatForm.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlobalCatForm.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AppGlobal\AppGlobal.csproj">
@@ -73,6 +91,10 @@
       <Project>{52730ad8-14b1-4d0f-8eed-a9aa18fc5cbb}</Project>
       <Name>Unity</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VideoPlayer2\VideoPlayer2.csproj">
+      <Project>{e4e4361e-a61e-4c99-86c5-22790170dcf1}</Project>
+      <Name>VideoPlayer2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VMInterfaces\VMInterfaces.csproj">
       <Project>{6cc85f9f-a0e7-4ded-9e09-22dec6d2cb5c}</Project>
       <Name>VMInterfaces</Name>
@@ -85,6 +107,26 @@
       <Project>{97368f01-29d4-4bad-9048-6766a3391938}</Project>
       <Name>WinReg</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\GlobalCatForm.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>GlobalCatForm.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
