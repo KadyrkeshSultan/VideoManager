@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{887E5BE5-1FAE-47BE-954D-BD2855667DCA}</ProjectGuid>
+    <ProjectGuid>{3C1C6799-6CFB-441F-A125-711A1637AE47}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>UploadCtrl</RootNamespace>
-    <AssemblyName>UploadCtrl</AssemblyName>
+    <RootNamespace>HDP_Progressbar</RootNamespace>
+    <AssemblyName>HDP_Progressbar</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NReco.VideoConverter">
-      <HintPath>..\packages\NReco.VideoConverter.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -43,50 +40,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="VIBlend.WinForms.Controls">
-      <HintPath>..\packages\VIBlend.WinForms.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="VIBlend.WinForms.Utilities">
-      <HintPath>..\packages\VIBlend.WinForms.Utilities.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CmdEventArgs.cs" />
-    <Compile Include="FileData.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Upload.cs">
+    <Compile Include="Progressbar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AppGlobal\AppGlobal.csproj">
-      <Project>{eb59aa2b-fa0e-4076-a69a-e4906846ab01}</Project>
-      <Name>AppGlobal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Unity\Unity.csproj">
-      <Project>{52730ad8-14b1-4d0f-8eed-a9aa18fc5cbb}</Project>
-      <Name>Unity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VMInterfaces\VMInterfaces.csproj">
-      <Project>{6cc85f9f-a0e7-4ded-9e09-22dec6d2cb5c}</Project>
-      <Name>VMInterfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VMModels\VMModels.csproj">
-      <Project>{e29bf9ba-3e01-4e3c-9c28-b517075ce0b6}</Project>
-      <Name>VMModels</Name>
-    </ProjectReference>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
