@@ -157,7 +157,7 @@ namespace Unity
             return flag;
         }
 
-        public static string smethod_0()
+        public static string IPAddress()
         {
             string str = (
                 from o in (IEnumerable<IPAddress>)Dns.GetHostEntry(Dns.GetHostName()).AddressList
