@@ -71,6 +71,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBDetect", "USBDetect\USBD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogPanel", "CatalogPanel\CatalogPanel.csproj", "{F8D95A5A-A486-4783-A4C7-111603F2BDFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cite", "Cite\Cite.csproj", "{10D98750-15F3-4BEB-8276-B9BE820DB495}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -213,6 +215,10 @@ Global
 		{F8D95A5A-A486-4783-A4C7-111603F2BDFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8D95A5A-A486-4783-A4C7-111603F2BDFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8D95A5A-A486-4783-A4C7-111603F2BDFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10D98750-15F3-4BEB-8276-B9BE820DB495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D98750-15F3-4BEB-8276-B9BE820DB495}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D98750-15F3-4BEB-8276-B9BE820DB495}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D98750-15F3-4BEB-8276-B9BE820DB495}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

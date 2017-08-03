@@ -48,30 +48,81 @@
     <Reference Include="VIBlend.WinForms.Controls">
       <HintPath>..\packages\VIBlend.WinForms.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="VIBlend.WinForms.DataGridView">
-      <HintPath>..\packages\VIBlend.WinForms.DataGridView.dll</HintPath>
-    </Reference>
     <Reference Include="VIBlend.WinForms.Utilities">
       <HintPath>..\packages\VIBlend.WinForms.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="WinSparkle.Net">
+      <HintPath>..\packages\WinSparkle.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Wolfcom.Vision">
+      <HintPath>..\packages\Wolfcom.Vision.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="About.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="AppLogout.cs">
+      <SubType>Form</SubType>
     </Compile>
+    <Compile Include="CiteCamera.cs" />
+    <Compile Include="DBConnection.cs" />
+    <Compile Include="Download.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EmailForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="License.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NTPTime.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <Compile Include="PwdReset.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegDB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Resources\About.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>About.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\EmailForm.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EmailForm.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\License.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>License.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Login.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Login.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\MainForm.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MainForm.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SplashScreen.cs">
+      <SubType>Form</SubType>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -88,17 +139,49 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AccountCtrl2\AccountCtrl2.csproj">
+      <Project>{b4ecae20-0cdc-419b-9f5c-66ebcfb4f2d0}</Project>
+      <Name>AccountCtrl2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AppGlobal\AppGlobal.csproj">
       <Project>{eb59aa2b-fa0e-4076-a69a-e4906846ab01}</Project>
       <Name>AppGlobal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AssetMgr\AssetMgr.csproj">
+      <Project>{0d982c26-4d80-4175-9252-8b410e078bb5}</Project>
+      <Name>AssetMgr</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CatalogPanel\CatalogPanel.csproj">
+      <Project>{f8d95a5a-a486-4783-a4c7-111603f2bdff}</Project>
+      <Name>CatalogPanel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Cite\Cite.csproj">
+      <Project>{10d98750-15f3-4beb-8276-b9be820db495}</Project>
+      <Name>Cite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GlobalCat\GlobalCat.csproj">
+      <Project>{d571e802-2326-4045-925a-3ae40b8fca92}</Project>
+      <Name>GlobalCat</Name>
     </ProjectReference>
     <ProjectReference Include="..\Logger\Logger.csproj">
       <Project>{5e4c3064-8b71-4c43-8db5-ca2328b19490}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ReportMgr\ReportMgr.csproj">
+      <Project>{9f47530e-574a-4adc-846e-498bbd9942bc}</Project>
+      <Name>ReportMgr</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Unity\Unity.csproj">
       <Project>{52730ad8-14b1-4d0f-8eed-a9aa18fc5cbb}</Project>
       <Name>Unity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UploadCtrl\UploadCtrl.csproj">
+      <Project>{887e5be5-1fae-47be-954d-bd2855667dca}</Project>
+      <Name>UploadCtrl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\USBDetect\USBDetect.csproj">
+      <Project>{c1511cdd-6541-46df-b528-6a52fc89df81}</Project>
+      <Name>USBDetect</Name>
     </ProjectReference>
     <ProjectReference Include="..\VMInterfaces\VMInterfaces.csproj">
       <Project>{6cc85f9f-a0e7-4ded-9e09-22dec6d2cb5c}</Project>
@@ -108,6 +191,60 @@
       <Project>{e29bf9ba-3e01-4e3c-9c28-b517075ce0b6}</Project>
       <Name>VMModels</Name>
     </ProjectReference>
+    <ProjectReference Include="..\VMStudio\VMStudio.csproj">
+      <Project>{ac128230-3aad-4a56-8c64-06c0b6fcea71}</Project>
+      <Name>VMStudio</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VMSUtil\VMSUtil.csproj">
+      <Project>{a89258a6-cb48-4e71-b94f-2f925f0e67a9}</Project>
+      <Name>VMSUtil</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WinReg\WinReg.csproj">
+      <Project>{97368f01-29d4-4bad-9048-6766a3391938}</Project>
+      <Name>WinReg</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\About.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>About.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\EmailForm.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EmailForm.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\License.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>License.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Login.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Login.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\MainForm.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>MainForm.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
