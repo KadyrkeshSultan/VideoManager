@@ -67,6 +67,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlideCtrl2", "SlideCtrl2\Sl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportMgr", "ReportMgr\ReportMgr.csproj", "{9F47530E-574A-4ADC-846E-498BBD9942BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "USBDetect", "USBDetect\USBDetect.csproj", "{C1511CDD-6541-46DF-B528-6A52FC89DF81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogPanel", "CatalogPanel\CatalogPanel.csproj", "{F8D95A5A-A486-4783-A4C7-111603F2BDFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +205,14 @@ Global
 		{9F47530E-574A-4ADC-846E-498BBD9942BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F47530E-574A-4ADC-846E-498BBD9942BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F47530E-574A-4ADC-846E-498BBD9942BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1511CDD-6541-46DF-B528-6A52FC89DF81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1511CDD-6541-46DF-B528-6A52FC89DF81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1511CDD-6541-46DF-B528-6A52FC89DF81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1511CDD-6541-46DF-B528-6A52FC89DF81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8D95A5A-A486-4783-A4C7-111603F2BDFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8D95A5A-A486-4783-A4C7-111603F2BDFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8D95A5A-A486-4783-A4C7-111603F2BDFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8D95A5A-A486-4783-A4C7-111603F2BDFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
